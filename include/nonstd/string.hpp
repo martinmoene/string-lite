@@ -233,6 +233,7 @@
 #include <locale>
 #include <limits>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #if string_HAVE_STRING_VIEW
@@ -573,7 +574,7 @@ namespace detail {
 //
 
 template< typename CharT >
-[[nodiscard]] CharT nullchr() noexcept
+string_nodiscard string_constexpr CharT nullchr() noexcept
 {
     return 0;
 }
@@ -595,13 +596,13 @@ to_string( std17::basic_string_view<CharT> v )
 // Transform case (character):
 
 template< typename CharT >
-[[nodiscard]] CharT to_lowercase( CharT chr )
+string_nodiscard CharT to_lowercase( CharT chr )
 {
     return std::tolower( chr, std::locale() );
 }
 
 template< typename CharT >
-[[nodiscard]] CharT to_uppercase( CharT chr )
+string_nodiscard CharT to_uppercase( CharT chr )
 {
     return std::toupper( chr, std::locale() );
 }
@@ -609,7 +610,7 @@ template< typename CharT >
 // Transform case; serve both CharT* and StringT&:
 
 template< typename CharT, typename Fn >
-[[nodiscard]] std::basic_string<CharT> to_case( std::basic_string<CharT> text, Fn fn ) noexcept
+string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text, Fn fn ) noexcept
 {
     std::transform(
         std::begin( text ), std::end( text )
@@ -633,7 +634,7 @@ using namespace string;
 // TODO: length()
 
 #define string_MK_LENGTH(T) \
-    [[nodiscard]] inline std::size_t length( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline std::size_t length( std17::basic_string_view<T> text ) noexcept \
     { \
         return text.length(); \
     }\
@@ -641,7 +642,7 @@ using namespace string;
 // TODO: size()
 
 #define string_MK_SIZE(T) \
-    [[nodiscard]] inline std::size_t size( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline std::size_t size( std17::basic_string_view<T> text ) noexcept \
     { \
         return text.size(); \
     }\
@@ -649,7 +650,7 @@ using namespace string;
 // TODO: is_empty()
 
 #define string_MK_IS_EMPTY(T) \
-    [[nodiscard]] inline bool is_empty( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline bool is_empty( std17::basic_string_view<T> text ) noexcept \
     { \
         return text.empty(); \
     }\
@@ -663,7 +664,7 @@ using namespace string;
 #define string_MK_FIND_FIRST(T) /*TODO*/
 
 template< typename SeekT >
-[[nodiscard]] std::size_t find_first( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & seek )
 {
     return text.find( seek );
 }
@@ -675,7 +676,7 @@ template< typename SeekT >
 #define string_MK_FIND_LAST(T) /*TODO*/
 
 template< typename SeekT >
-[[nodiscard]] std::size_t find_last( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_last( std17::string_view text, SeekT const & seek )
 {
     return text.rfind( seek );
 }
@@ -687,7 +688,7 @@ template< typename SeekT >
 #define string_MK_FIND_FIRST_OF(T) /*TODO*/
 
 template< typename SeekT >
-[[nodiscard]] std::size_t find_first_of( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_first_of( std17::string_view text, SeekT const & seek )
 {
     return text.find_first_of( seek );
 }
@@ -697,7 +698,7 @@ template< typename SeekT >
 #define string_MK_FIND_LAST_OF(T) /*TODO*/
 
 template< typename SeekT >
-[[nodiscard]] std::size_t find_last_of( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_last_of( std17::string_view text, SeekT const & seek )
 {
     return text.find_last_of( seek );
 }
@@ -707,7 +708,7 @@ template< typename SeekT >
 #define string_MK_FIND_FIRST_NOT_OF(T) /*TODO*/
 
 template< typename SeekT >
-[[nodiscard]] std::size_t find_first_not_of( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_first_not_of( std17::string_view text, SeekT const & seek )
 {
     return text.find_first_not_of( seek );
 }
@@ -717,7 +718,7 @@ template< typename SeekT >
 #define string_MK_FIND_LAST_NOT_OF(T) /*TODO*/
 
 template< typename SeekT >
-[[nodiscard]] std::size_t find_last_not_of( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_last_not_of( std17::string_view text, SeekT const & seek )
 {
     return text.find_last_not_of( seek );
 }
@@ -727,7 +728,7 @@ template< typename SeekT >
 #define string_MK_CONTAINS(T) /*TODO*/
 
 template< typename SeekT >
-[[nodiscard]] bool contains( std17::string_view text, SeekT const & seek )
+string_nodiscard bool contains( std17::string_view text, SeekT const & seek )
 {
 #if string_CPP23_OR_GREATER
     return text.contains( seek );
@@ -743,7 +744,7 @@ template< typename SeekT >
 #define string_MK_STARTS_WITH(T) /*TODO*/
 
 template< typename SeekT >
-[[nodiscard]] bool starts_with( std17::string_view text, SeekT const & seek )
+string_nodiscard bool starts_with( std17::string_view text, SeekT const & seek )
 {
 #if string_CPP20_OR_GREATER
     return text.starts_with( seek );
@@ -765,7 +766,7 @@ template< typename SeekT >
 #define string_MK_ENDS_WITH(T) /*TODO*/
 
 template< typename SeekT >
-[[nodiscard]] bool ends_with( std17::string_view text, SeekT const & seek )
+string_nodiscard bool ends_with( std17::string_view text, SeekT const & seek )
 {
 #if string_CPP20_OR_GREATER
     return text.ends_with( seek );
@@ -789,21 +790,27 @@ template< typename SeekT >
 // to_lowercase()
 // to_uppercase()
 
-// template [[nodiscard]] std::basic_string<char> to_lowercase( std17::basic_string_view<char> text ) noexcept;
+// template string_nodiscard std::basic_string<char> to_lowercase( std17::basic_string_view<char> text ) noexcept;
 
 #define string_MK_TO_CASE(T, Function) \
-    [[nodiscard]] inline std::basic_string<T> to_ ## Function( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline std::basic_string<T> to_ ## Function( std17::basic_string_view<T> text ) noexcept \
     { \
         return detail::to_case( std::basic_string<T>(text), detail::to_ ## Function<T> ); \
     }\
+
+// template< typename StringT >
+// inline StringT const default_strip_set()
+// {
+//     return " \t\n";
+// }
 
 // TODO: strip_left()
 
 #define string_MK_STRIP_LEFT(T) /*TODO*/
 
 template< typename SetT >
-[[nodiscard]] std::string
-strip_left( std::string text, SetT const & set )
+string_nodiscard std::string
+strip_left( std::string text, SetT const & set  )
 {
     return text.erase( 0, text.find_first_not_of( set ) );
 }
@@ -813,7 +820,7 @@ strip_left( std::string text, SetT const & set )
 #define string_MK_STRIP_RIGHT(T) /*TODO*/
 
 template< typename SetT >
-[[nodiscard]] std::string
+string_nodiscard std::string
 strip_right( std::string text, SetT const & set )
 {
     return text.erase( text.find_last_not_of( set ) + 1 );
@@ -824,7 +831,7 @@ strip_right( std::string text, SetT const & set )
 #define string_MK_STRIP(T) /*TODO*/
 
 template< typename SetT >
-[[nodiscard]] std::string
+string_nodiscard std::string
 strip( std::string text, SetT const & set )
 {
     return strip_right( strip_left( text, set ), set);
@@ -835,7 +842,7 @@ strip( std::string text, SetT const & set )
 #define string_MK_REPLACE_ALL(T) /*TODO*/
 
 template< typename WhatT, typename WithT >
-[[nodiscard]] std::string
+string_nodiscard std::string
 replace_all( std::string text, WhatT const & what, WithT const & with )
 {
     #pragma message("TODO: Implement replace_all().")
@@ -847,7 +854,7 @@ replace_all( std::string text, WhatT const & what, WithT const & with )
 #define string_MK_REPLACE_FIRST(T) /*TODO*/
 
 template< typename WhatT, typename WithT >
-[[nodiscard]] std::string
+string_nodiscard std::string
 replace_first( std::string text, WhatT const & what, WithT const & with )
 {
     #pragma message("TODO: Implement replace_first().")
@@ -859,7 +866,7 @@ replace_first( std::string text, WhatT const & what, WithT const & with )
 #define string_MK_REPLACE_LAST(T) /*TODO*/
 
 template< typename WhatT, typename WithT >
-[[nodiscard]] std::string
+string_nodiscard std::string
 replace_last( std::string text, WhatT const & what, WithT const & with )
 {
     #pragma message("TODO: Implement replace_last().")
@@ -875,7 +882,7 @@ replace_last( std::string text, WhatT const & what, WithT const & with )
 #define string_MK_APPEND(T) /*TODO*/
 
 template< typename TailT >
-[[nodiscard]] std::string
+string_nodiscard std::string
 append( std::string text, TailT const & tail )
 {
 #if string_CPP17_000
@@ -893,7 +900,7 @@ namespace string {
 namespace detail {
 
 template< typename Coll, typename SepT, typename Result >
-[[nodiscard]] Result
+string_nodiscard Result
 join( Coll const & coll, SepT const & sep, Result result )
 {
     typename Coll::const_iterator const coll_begin = coll.cbegin();
@@ -919,7 +926,7 @@ join( Coll const & coll, SepT const & sep, Result result )
 #define string_MK_JOIN(T) /*TODO*/
 
 template< typename Coll, typename SepT >
-[[nodiscard]] std::string
+string_nodiscard std::string
 join( Coll const & coll, SepT const & sep )
 {
     return detail::join( coll, sep, std::string() );
