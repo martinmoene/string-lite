@@ -660,11 +660,29 @@ CASE( "append: Return string with second string append to first string - string-
 
 // substring()
 
-CASE( "substring: Return string with second string append to first string - char*-pos" "[.TODO]" ) {}
-CASE( "substring: Return string with second string append to first string - string-pos" "[.TODO]" ) {}
-CASE( "substring: Return string with second string append to first string - string_view-pos" "[.TODO]" ) {}
-CASE( "substring: Return string with second string append to first string - string-regex" "[.TODO]" ) {}
-CASE( "substring_re: Return string with second string append to first string - string-char*" "[.TODO]" ) {}
+CASE( "substring: Return substring given position and length - char*-pos" ) 
+{
+    EXPECT( substring("abcxyz", 2, 3) == "cxy" );
+    EXPECT( substring("abcxyz", 2   ) == "cxyz" );
+    EXPECT( substring("abcxyz"      ) == "abcxyz" );
+}
+
+CASE( "substring: Return substring given position and length - string-pos" ) 
+{
+    EXPECT( substring(std::string("abcxyz"), 2, 3) == "cxy" );
+    EXPECT( substring(std::string("abcxyz"), 2   ) == "cxyz" );
+    EXPECT( substring(std::string("abcxyz")      ) == "abcxyz" );
+}
+
+CASE( "substring: Return substring given position and length - string_view-pos" ) 
+{
+    EXPECT( substring(std20::string_view("abcxyz"), 2, 3) == "cxy" );
+    EXPECT( substring(std20::string_view("abcxyz"), 2   ) == "cxyz" );
+    EXPECT( substring(std20::string_view("abcxyz")      ) == "abcxyz" );
+}
+
+CASE( "substring: Return substring given regex - string-regex" "[.TODO]" ) {}
+CASE( "substring_re: Return substring given regex - string-char*" "[.TODO]" ) {}
 
 // strip_left()
 

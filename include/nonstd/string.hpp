@@ -264,7 +264,7 @@ namespace nonstd {
 //
 
 namespace string {
-    
+
 namespace detail {
 
 // npos
@@ -1055,11 +1055,20 @@ append( std::string text, TailT const & tail )
 
 #define string_MK_SUBSTRING(T) /*TODO*/
 
+string_nodiscard inline std::string
+to_string( std20::string_view text )
+{
+#if string_HAVE_STRING_VIEW_20
+    return text;
+#else
+    return std::string( text.begin(), text.end() );
+#endif
+}
+
 string_nodiscard inline std::string 
 substring( std20::string_view text, size_t pos = 0, size_t count = detail::npos )
 {
-    #pragma message("TODO: Implement substring().")
-    return "[Implement substring()]";
+    return to_string( text.substr( pos, count ) );
 }
 
 string_nodiscard inline std::string 

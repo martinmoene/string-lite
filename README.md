@@ -86,11 +86,11 @@ to_uppercase: Return string in uppercase - string_view
 append: Return string with second string append to first string - string-char*
 append: Return string with second string append to first string - string-string
 append: Return string with second string append to first string - string-string_view
-substring: Return string with second string append to first string - char*-pos[.TODO]
-substring: Return string with second string append to first string - string-pos[.TODO]
-substring: Return string with second string append to first string - string_view-pos[.TODO]
-substring: Return string with second string append to first string - string-regex[.TODO]
-substring_re: Return string with second string append to first string - string-char*[.TODO]
+substring: Return substring given position and length - char*-pos
+substring: Return substring given position and length - string-pos
+substring: Return substring given position and length - string_view-pos
+substring: Return substring given regex - string-regex[.TODO]
+substring_re: Return substring given regex - string-char*[.TODO]
 strip_left: Remove characters in set from left of string [" \t\n"] - C-string
 strip_left: Remove characters in set from left of string [" \t\n"] - string
 strip_left: Remove characters in set from left of string [" \t\n"] - other
