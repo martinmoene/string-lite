@@ -56,7 +56,7 @@ find_last: position of sub string in string - string-string
 find_last: position of sub string in string - string-string_view
 find_last: position of sub string in string_view - string_view-string_view
 find_last: position of regex in string: string-std::regex[.TODO]
-find_first_re: position of regex in string: string-char*[.TODO]
+find_last_re: position of regex in string: string-char*[.TODO]
 find_first_of: position of sub string in string - char*-char*
 find_first_of: position of sub string in string - string-char*
 find_first_of: position of sub string in string - string-string
@@ -99,6 +99,11 @@ replace_last_re: Return string with last occurrence of regex changed - string-ch
 append: Return string with second string append to first string - string-char*
 append: Return string with second string append to first string - string-string
 append: Return string with second string append to first string - string-string_view
+substring: Return string with second string append to first string - char*-pos[.TODO]
+substring: Return string with second string append to first string - string-pos[.TODO]
+substring: Return string with second string append to first string - string_view-pos[.TODO]
+substring: Return string with second string append to first string - string-regex[.TODO]
+substring_re: Return string with second string append to first string - string-char*[.TODO]
 strip_left: Remove characters in set from left of string [" \t\n"] - C-string
 strip_left: Remove characters in set from left of string [" \t\n"] - string
 strip_left: Remove characters in set from left of string [" \t\n"] - other

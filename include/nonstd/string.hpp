@@ -6,6 +6,16 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// TODO: Plan
+// - [x] use C++20 std::string_view, not C++17 for presence of ctor(char* begin, char* end) 
+// - [ ] implement functions
+// - [] support string_view as source?
+// - [] constexpr / string_constexpr / string_constexpr14
+// - [] nodiscard / string_nodiscard
+// - [] noexcept / string_noexcept
+// - [] MK macros
+// - [] create functions via MK macros
+
 #ifndef NONSTD_STRING_BARE_HPP
 #define NONSTD_STRING_BARE_HPP
 
@@ -247,14 +257,6 @@
 # include <regex>
 #endif
 
-// use C++20 std::string_view, not C++17 for presence of ctor(char* begin, char* end) 
-// TODO: supprt string_view as source?
-// TODO: constexpr / string_constexpr / string_constexpr14
-// TODO: nodiscard / string_nodiscard
-// TODO: noexcept / string_noexcept
-// TODO: MK macros
-// TODO: create functions via MK macros
-
 namespace nonstd {
 
 //
@@ -262,6 +264,20 @@ namespace nonstd {
 //
 
 namespace string {
+    
+namespace detail {
+
+// npos
+
+#if string_CPP17_OR_GREATER
+    static string_constexpr size_type npos = size_t(-1);
+#elif string_CPP11_OR_GREATER
+    enum : size_t { npos = size_t(-1) };
+#else
+    enum { npos = size_t(-1) };
+#endif
+
+} // namespace detail
 
 namespace std14 {
 } // namespace std14
@@ -331,6 +347,10 @@ public:
 
     typedef std::size_t     size_type;
     typedef std::ptrdiff_t  difference_type;
+
+    // Constants:
+
+    static const auto npos = detail::npos;
 
     // 24.4.2.1 Construction and assignment:
 
@@ -498,16 +518,6 @@ public:
     string_nodiscard string_constexpr const_reverse_iterator crbegin() const string_noexcept { return rbegin(); }
     string_nodiscard string_constexpr const_reverse_iterator crend()   const string_noexcept { return rend();   }
 
-    // Constants:
-
-#if string_CPP17_OR_GREATER
-    static string_constexpr size_type npos = size_type(-1);
-#elif string_CPP11_OR_GREATER
-    enum : size_type { npos = size_type(-1) };
-#else
-    enum { npos = size_type(-1) };
-#endif
-
 private:
     struct not_in_view
     {
@@ -661,7 +671,7 @@ using namespace string;
 // Searching:
 //
 
-// TODO: find_first()
+// find_first()
 
 #define string_MK_FIND_FIRST(T) /*TODO*/
 
@@ -676,9 +686,11 @@ string_nodiscard inline std::size_t find_first( std20::string_view text, char se
     return find_first( text, std20::string_view( &seek, &seek + 1 ) );
 }
 
-string_nodiscard inline std::size_t find_first( std20::string_view text, std::regex const & seek )
+// TODO: find_first(regex)
+
+string_nodiscard inline std::size_t find_first( std20::string_view text, std::regex const & re )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
 
 // TODO: find_first_re()
@@ -686,10 +698,10 @@ string_nodiscard inline std::size_t find_first( std20::string_view text, std::re
 template< typename SeekT >
 string_nodiscard std::size_t find_first_re( std20::string_view text, SeekT const & seek )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
 
-// TODO: find_last()
+// find_last()
 
 #define string_MK_FIND_LAST(T) /*TODO*/
 
@@ -704,9 +716,11 @@ string_nodiscard inline std::size_t find_last( std20::string_view text, char see
     return find_last( text, std20::string_view( &seek, &seek + 1 ) );
 }
 
-string_nodiscard inline std::size_t find_last( std20::string_view text, std::regex const & seek )
+// TODO: find_last(regex)
+
+string_nodiscard inline std::size_t find_last( std20::string_view text, std::regex const & re )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
 
 // TODO: find_last_re()
@@ -714,10 +728,10 @@ string_nodiscard inline std::size_t find_last( std20::string_view text, std::reg
 template< typename SeekT >
 string_nodiscard std::size_t find_last_re( std20::string_view text, SeekT const & seek )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
 
-// TODO: find_first_of()
+// find_first_of()
 
 #define string_MK_FIND_FIRST_OF(T) /*TODO*/
 
@@ -727,18 +741,22 @@ string_nodiscard std::size_t find_first_of( std20::string_view text, SeekT const
     return text.find_first_of( seek );
 }
 
-string_nodiscard inline std::size_t find_first_of( std20::string_view text, std::regex const & seek )
+// TODO: find_first_of(regex)
+
+string_nodiscard inline std::size_t find_first_of( std20::string_view text, std::regex const & re )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
+
+// TODO: find_first_of_re()
 
 template< typename SeekT >
 string_nodiscard inline std::size_t find_first_of_re( std20::string_view text, SeekT const & seek )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
 
-// TODO: find_last_of()
+// find_last_of()
 
 #define string_MK_FIND_LAST_OF(T) /*TODO*/
 
@@ -748,15 +766,19 @@ string_nodiscard std::size_t find_last_of( std20::string_view text, SeekT const 
     return text.find_last_of( seek );
 }
 
-string_nodiscard inline std::size_t find_last_of( std20::string_view text, std::regex const & seek )
+// TODO: find_last_of(regex)
+
+string_nodiscard inline std::size_t find_last_of( std20::string_view text, std::regex const & re )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
+
+// TODO: find_last_of_re()
 
 template< typename SeekT >
 string_nodiscard inline std::size_t find_last_of_re( std20::string_view text, SeekT const & seek )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
 
 // TODO: find_first_not_of()
@@ -769,15 +791,19 @@ string_nodiscard std::size_t find_first_not_of( std20::string_view text, SeekT c
     return text.find_first_not_of( seek );
 }
 
-string_nodiscard inline std::size_t find_first_not_of( std20::string_view text, std::regex const & seek )
+// TODO: find_first_not_of_(regex)
+
+string_nodiscard inline std::size_t find_first_not_of( std20::string_view text, std::regex const & re )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
+
+// TODO: find_last_not_of_re()
 
 template< typename SeekT >
 string_nodiscard inline std::size_t find_first_not_of_re( std20::string_view text, SeekT const & seek )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
 
 // TODO: find_last_not_of()
@@ -790,18 +816,22 @@ string_nodiscard std::size_t find_last_not_of( std20::string_view text, SeekT co
     return text.find_last_not_of( seek );
 }
 
-string_nodiscard inline std::size_t find_last_not_of( std20::string_view text, std::regex const & seek )
+// TODO: find_last_not_of_re(regex)
+
+string_nodiscard inline std::size_t find_last_not_of( std20::string_view text, std::regex const & re )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
+
+// TODO: find_last_not_of_re()
 
 template< typename SeekT >
 string_nodiscard inline std::size_t find_last_not_of_re( std20::string_view text, SeekT const & seek )
 {
-    return std20::string_view::npos;
+    return detail::npos;
 }
 
-// TODO: contains() - C++23
+// contains() - C++23
 
 #define string_MK_CONTAINS(T) /*TODO*/
 
@@ -811,11 +841,13 @@ string_nodiscard bool contains( std20::string_view text, SeekT const & seek )
 #if string_CPP23_OR_GREATER
     return text.contains( seek );
 #else
-    return std20::string_view::npos != find_first(text, seek);
+    return detail::npos != find_first(text, seek);
 #endif
 }
 
-string_nodiscard inline bool contains( std20::string_view text, std::regex const & seek )
+// TODO: contains(regex)
+
+string_nodiscard inline bool contains( std20::string_view text, std::regex const & re )
 {
     return false;
 }
@@ -830,7 +862,7 @@ string_nodiscard bool contains_re( std20::string_view text, SeekT const & seek )
     return false;
 }
 
-// TODO: starts_with() - C++20
+// starts_with() - C++20
 
 #define string_MK_STARTS_WITH(T) /*TODO*/
 
@@ -855,7 +887,7 @@ inline string_nodiscard bool starts_with( std20::string_view text, char seek )
     return starts_with( text, std20::string_view( &seek, &seek + 1) );
 }
 
-string_nodiscard inline bool starts_with( std20::string_view text, std::regex const & seek )
+string_nodiscard inline bool starts_with( std20::string_view text, std::regex const & re )
 {
     return false;
 }
@@ -870,7 +902,7 @@ string_nodiscard bool starts_with_re( std20::string_view text, SeekT const & see
     return false;
 }
 
-// TODO: ends_with() - C++20
+// ends_with() - C++20
 
 #define string_MK_ENDS_WITH(T) /*TODO*/
 
@@ -895,7 +927,7 @@ inline string_nodiscard bool ends_with( std20::string_view text, char seek )
     return ends_with( text, std20::string_view( &seek, &seek + 1) );
 }
 
-string_nodiscard inline bool ends_with( std20::string_view text, std::regex const & seek )
+string_nodiscard inline bool ends_with( std20::string_view text, std::regex const & re )
 {
     return false;
 }
@@ -931,7 +963,7 @@ string_nodiscard bool ends_with_re( std20::string_view text, SeekT const & seek 
 //     return " \t\n";
 // }
 
-// TODO: strip_left()
+// strip_left()
 
 #define string_MK_STRIP_LEFT(T) /*TODO*/
 
@@ -942,7 +974,7 @@ strip_left( std::string text, SetT const & set  )
     return text.erase( 0, text.find_first_not_of( set ) );
 }
 
-// TODO: strip_right()
+// strip_right()
 
 #define string_MK_STRIP_RIGHT(T) /*TODO*/
 
@@ -953,7 +985,7 @@ strip_right( std::string text, SetT const & set )
     return text.erase( text.find_last_not_of( set ) + 1 );
 }
 
-// TODO: strip()
+// strip()
 
 #define string_MK_STRIP(T) /*TODO*/
 
@@ -964,7 +996,7 @@ strip( std::string text, SetT const & set )
     return strip_right( strip_left( text, set ), set);
 }
 
-// TODO: replace_all
+// TODO: replace_all()
 
 #define string_MK_REPLACE_ALL(T) /*TODO*/
 
@@ -976,7 +1008,7 @@ replace_all( std::string text, WhatT const & what, WithT const & with )
     return "[Implement replace_all()]";
 }
 
-// TODO: replace_first
+// TODO: replace_first()
 
 #define string_MK_REPLACE_FIRST(T) /*TODO*/
 
@@ -988,7 +1020,7 @@ replace_first( std::string text, WhatT const & what, WithT const & with )
     return "[Implement replace_first()]";
 }
 
-// TODO: replace_last
+// TODO: replace_last()
 
 #define string_MK_REPLACE_LAST(T) /*TODO*/
 
@@ -1004,7 +1036,7 @@ replace_last( std::string text, WhatT const & what, WithT const & with )
 // Joining, splitting:
 //
 
-// TODO: append
+// append()
 
 #define string_MK_APPEND(T) /*TODO*/
 
@@ -1019,9 +1051,34 @@ append( std::string text, TailT const & tail )
 #endif
 }
 
-// TODO: join
+// substring()
 
-// Join...:
+#define string_MK_SUBSTRING(T) /*TODO*/
+
+string_nodiscard inline std::string 
+substring( std20::string_view text, size_t pos = 0, size_t count = detail::npos )
+{
+    #pragma message("TODO: Implement substring().")
+    return "[Implement substring()]";
+}
+
+string_nodiscard inline std::string 
+substring( std20::string_view text, std::regex const & re )
+{
+    #pragma message("TODO: Implement substring(regex).")
+    return "[Implement substring(regex)]";
+}
+
+// substring_re()
+
+string_nodiscard inline std::string 
+substring_re( std20::string_view text, char const * re )
+{
+    #pragma message("TODO: Implement substring_re().")
+    return "[Implement substring_re()]";
+}
+
+// join()
 
 namespace string {
 namespace detail {

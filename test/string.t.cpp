@@ -720,6 +720,14 @@ CASE( "append: Return string with second string append to first string - string-
     EXPECT( append(std::string("abc"), std20::string_view("xyz")) == std::string("abcxyz") );
 }
 
+// substring()
+
+CASE( "substring: Return string with second string append to first string - char*-pos" "[.TODO]" ) {}
+CASE( "substring: Return string with second string append to first string - string-pos" "[.TODO]" ) {}
+CASE( "substring: Return string with second string append to first string - string_view-pos" "[.TODO]" ) {}
+CASE( "substring: Return string with second string append to first string - string-regex" "[.TODO]" ) {}
+CASE( "substring_re: Return string with second string append to first string - string-char*" "[.TODO]" ) {}
+
 // strip_left()
 
 CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - C-string" )

@@ -47,7 +47,7 @@ inline nonstd::std20::string_view text_view()
     return ::nonstd::string::std20::string_view( text().c_str(), text().length() );
 }
 
-const auto sv_npos = ::nonstd::string::std20::string_view::npos;
+const auto sv_npos = ::nonstd::string::detail::npos;
 
 inline std::ostream & operator<<(std::ostream &os, ::nonstd::std20::string_view vw)
 {
