@@ -138,10 +138,10 @@ CASE( "contains: true if string contains regular expression - string-std::regex"
     EXPECT(     contains(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT_NOT( contains(std::string("abc123mno123xyz"), std::regex("[4-9]+")) );
 #else
-    EXPECT( !!"contains(regex) is not available (pre C++11)." );
+    EXPECT( !!"contains(regex) is not available (string_HAVE_REGEX)." );
 #endif
 #else
-    EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
 #endif
 }
 
@@ -152,10 +152,10 @@ CASE( "contains_re: true if string contains regular expression - string-char*" "
     EXPECT(     contains_re(std::string("abc123mno123xyz"), "[0-9]+") );
     EXPECT_NOT( contains_re(std::string("abc123mno123xyz"), "[4-9]+") );
 #else
-    EXPECT( !!"contains_re is not available (pre C++11)." );
+    EXPECT( !!"contains(regex) is not available (string_HAVE_REGEX)." );
 #endif
 #else
-    EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
 #endif
 }
 
@@ -198,10 +198,10 @@ CASE( "starts_with: true if string starts with regular expression - string-std::
     EXPECT(     starts_with(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT_NOT( starts_with(std::string("abc123mno123xyz"), std::regex("[4-9]+")) );
 #else
-    EXPECT( !!"starts_with(regex) is not available (pre C++11)." );
+    EXPECT( !!"starts_with(regex) is not available (string_HAVE_REGEX)." );
 #endif
 #else
-    EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
 #endif
 }
 
@@ -212,10 +212,10 @@ CASE( "starts_with_re: true if string starts with regular expression - string-ch
     EXPECT(     starts_with_re(std::string("abc123mno123xyz"), "[0-9]+") );
     EXPECT_NOT( starts_with_re(std::string("abc123mno123xyz"), "[4-9]+") );
 #else
-    EXPECT( !!"starts_with_re is not available (pre C++11)." );
+    EXPECT( !!"starts_with_re is not available (string_HAVE_REGEX)." );
 #endif
 #else
-    EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
 #endif
 }
 
@@ -258,10 +258,10 @@ CASE( "ends_with: true if string ends with regular expression - string-std::rege
     EXPECT(     ends_with(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT_NOT( ends_with(std::string("abc123mno123xyz"), std::regex("[4-9]+")) );
 #else
-    EXPECT( !!"ends_with(regex) is not available (pre C++11)." );
+    EXPECT( !!"ends_with(regex) is not available (string_HAVE_REGEX)." );
 #endif
 #else
-    EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
 #endif
 }
 
@@ -272,10 +272,10 @@ CASE( "ends_with_re: true if string ends with regular expression - string-char*"
     EXPECT(     ends_with_re(std::string("abc123mno123xyz"), "[0-9]+") );
     EXPECT_NOT( ends_with_re(std::string("abc123mno123xyz"), "[4-9]+") );
 #else
-    EXPECT( !!"ends_with_re is not available (pre C++11)." );
+    EXPECT( !!"ends_with_re is not available (string_HAVE_REGEX)." );
 #endif
 #else
-    EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
 #endif
 }
 
@@ -315,16 +315,32 @@ CASE( "find_first: position of sub string in string_view - string_view-string_vi
 
 CASE( "find_first: position of regex in string: string-std::regex" "[.TODO]" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT(       3 == find_first("abc123mno123xyz", std::regex("[0-9]+")) );
     EXPECT( sv_npos == find_first("abc123mno123xyz", std::regex("[7-9]+")) );
+#else
+    EXPECT( !!"find_first(regex) is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // TODO: find_first_re()
 
 CASE( "find_first_re: position of regex in string: string-char*" "[.TODO]" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT(       3 == find_first_re("abc123mno123xyz", "[0-9]") );
     EXPECT( sv_npos == find_first_re("abc123mno123xyz", "[7-9]") );
+#else
+    EXPECT( !!"find_first_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // find_last():
@@ -363,16 +379,32 @@ CASE( "find_last: position of sub string in string_view - string_view-string_vie
 
 CASE( "find_last: position of regex in string: string-std::regex" "[.TODO]" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT(       9 == find_last("abc123mno123xyz", std::regex("[0-9]+")) );
     EXPECT( sv_npos == find_last("abc123mno123xyz", std::regex("[7-9]+")) );
+#else
+    EXPECT( !!"find_last(regex) is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // TODO: find_last_re()
 
-CASE( "find_first_re: position of regex in string: string-char*" "[.TODO]" ) 
+CASE( "find_last_re: position of regex in string: string-char*" "[.TODO]" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT(       9 == find_last_re("abc123mno123xyz", "[0-9]") );
     EXPECT( sv_npos == find_last_re("abc123mno123xyz", "[7-9]") );
+#else
+    EXPECT( !!"find_last_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // find_first_of()
@@ -397,16 +429,32 @@ CASE( "find_first_of: position of sub string in string - string-string" )
 
 CASE( "find_first_of: position of regex in string: string-std::regex" "[.TODO]" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT(       3 == find_first_of(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT( sv_npos == find_first_of(std::string("abc123mno123xyz"), std::regex("[7-9]+")) );
+#else
+    EXPECT( !!"find_first_of(regex) is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // find_first_of_re()
 
 CASE( "find_first_of_re: position of regex in string: string-char*" "[.TODO]" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT(       3 == find_first_of_re(std::string("abc123mno123xyz"), "[0-9]+") );
     EXPECT( sv_npos == find_first_of_re(std::string("abc123mno123xyz"), "[7-9]+") );
+#else
+    EXPECT( !!"find_first_of_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // TODO: find_last_of()
@@ -431,16 +479,32 @@ CASE( "find_last_of: position of sub string in string - string-string" )
 
 CASE( "find_last_of: position of regex in string: string-std::regex" "[.TODO]" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT(       3 == find_last_of(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), std::regex("[7-9]+")) );
+#else
+    EXPECT( !!"find_last_of(regex) is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // find_last_of_re()
 
 CASE( "find_last_of_re: position of regex in string: string-char*" "[.TODO]" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT(       3 == find_last_of_re(std::string("abc123mno123xyz"), "[0-9]+") );
     EXPECT( sv_npos == find_last_of_re(std::string("abc123mno123xyz"), "[7-9]+") );
+#else
+    EXPECT( !!"find_last_of_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // TODO: find_first_not_of()
@@ -465,16 +529,32 @@ CASE( "find_first_not_of: position of sub string in string - string-string" )
 
 CASE( "find_first_not_of: position of regex in string: string-std::regex" "[.TODO]" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT(       3 == find_first_not_of(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT( sv_npos == find_first_not_of(std::string("abc123mno123xyz"), std::regex("[7-9]+")) );
+#else
+    EXPECT( !!"find_first_not_of(regex) is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // TODO: find_first_not_of_re()
 
 CASE( "find_first_not_of_re: position of regex in string: string-char*" "[.TODO]" ) 
 {
-    EXPECT(       3 == find_first_not_of(std::string("abc123mno123xyz"), "[0-9]+") );
-    EXPECT( sv_npos == find_first_not_of(std::string("abc123mno123xyz"), "[7-9]+") );
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
+    EXPECT(       3 == find_first_not_of_re(std::string("abc123mno123xyz"), "[0-9]+") );
+    EXPECT( sv_npos == find_first_not_of_re(std::string("abc123mno123xyz"), "[7-9]+") );
+#else
+    EXPECT( !!"find_first_not_of_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // TODO: find_last_not_of()
@@ -499,16 +579,32 @@ CASE( "find_last_not_of: position of sub string in string - string-string" )
 
 CASE( "find_last_not_of: position of regex in string: string-std::regex" "[.TODO]" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT(      11 == find_last_not_of(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT( sv_npos == find_last_not_of(std::string("abc123mno123xyz"), std::regex("[7-9]+")) );
+#else
+    EXPECT( !!"find_last_not_of(regex) is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // TODO: find_last_not_of_re()
 
 CASE( "find_last_not_of_re: position of regex in string: string-char*" "[.TODO]" ) 
 {
-    EXPECT(      11 == find_last_not_of(std::string("abc123mno123xyz"), "[0-9]+") );
-    EXPECT( sv_npos == find_last_not_of(std::string("abc123mno123xyz"), "[7-9]+") );
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
+    EXPECT(      11 == find_last_not_of_re(std::string("abc123mno123xyz"), "[0-9]+") );
+    EXPECT( sv_npos == find_last_not_of_re(std::string("abc123mno123xyz"), "[7-9]+") );
+#else
+    EXPECT( !!"find_last_not_of_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // Modifiers:
@@ -811,7 +907,7 @@ CASE( "split: Split string into vector of string_view given delimiter - regex_de
 
     EXPECT( split("abc+-def-+ghi", regex_delimiter("[+-]+")) == golden );
 #else
-    EXPECT( !!"regex_delimiter is not available (pre C++11)." );
+    EXPECT( !!"split is not available (no regex, string_HAVE_REGEX)." );
 #endif
 #else
     EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
