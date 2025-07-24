@@ -270,7 +270,7 @@ namespace detail {
 // npos
 
 #if string_CPP17_OR_GREATER
-    static string_constexpr size_type npos = size_t(-1);
+    static string_constexpr size_t npos = size_t(-1);
 #elif string_CPP11_OR_GREATER
     enum : size_t { npos = size_t(-1) };
 #else
@@ -350,7 +350,13 @@ public:
 
     // Constants:
 
-    static const auto npos = detail::npos;
+#if string_CPP17_OR_GREATER
+    static string_constexpr size_t npos = detail::npos;
+#elif string_CPP11_OR_GREATER
+    enum : size_t { npos = detail::npos };
+#else
+    enum { npos = detail::npos };
+#endif
 
     // 24.4.2.1 Construction and assignment:
 
@@ -686,6 +692,8 @@ string_nodiscard inline std::size_t find_first( std20::string_view text, char se
     return find_first( text, std20::string_view( &seek, &seek + 1 ) );
 }
 
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
 // TODO: find_first(regex)
 
 string_nodiscard inline std::size_t find_first( std20::string_view text, std::regex const & re )
@@ -700,6 +708,8 @@ string_nodiscard std::size_t find_first_re( std20::string_view text, SeekT const
 {
     return detail::npos;
 }
+
+#endif // regex
 
 // find_last()
 
@@ -716,6 +726,8 @@ string_nodiscard inline std::size_t find_last( std20::string_view text, char see
     return find_last( text, std20::string_view( &seek, &seek + 1 ) );
 }
 
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
 // TODO: find_last(regex)
 
 string_nodiscard inline std::size_t find_last( std20::string_view text, std::regex const & re )
@@ -731,6 +743,8 @@ string_nodiscard std::size_t find_last_re( std20::string_view text, SeekT const 
     return detail::npos;
 }
 
+#endif // regex
+
 // find_first_of()
 
 #define string_MK_FIND_FIRST_OF(T) /*TODO*/
@@ -740,6 +754,8 @@ string_nodiscard std::size_t find_first_of( std20::string_view text, SeekT const
 {
     return text.find_first_of( seek );
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 // TODO: find_first_of(regex)
 
@@ -756,6 +772,8 @@ string_nodiscard inline std::size_t find_first_of_re( std20::string_view text, S
     return detail::npos;
 }
 
+#endif // regex
+
 // find_last_of()
 
 #define string_MK_FIND_LAST_OF(T) /*TODO*/
@@ -765,6 +783,8 @@ string_nodiscard std::size_t find_last_of( std20::string_view text, SeekT const 
 {
     return text.find_last_of( seek );
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 // TODO: find_last_of(regex)
 
@@ -781,6 +801,8 @@ string_nodiscard inline std::size_t find_last_of_re( std20::string_view text, Se
     return detail::npos;
 }
 
+#endif // regex
+
 // TODO: find_first_not_of()
 
 #define string_MK_FIND_FIRST_NOT_OF(T) /*TODO*/
@@ -790,6 +812,8 @@ string_nodiscard std::size_t find_first_not_of( std20::string_view text, SeekT c
 {
     return text.find_first_not_of( seek );
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 // TODO: find_first_not_of_(regex)
 
@@ -806,6 +830,8 @@ string_nodiscard inline std::size_t find_first_not_of_re( std20::string_view tex
     return detail::npos;
 }
 
+#endif // regex
+
 // TODO: find_last_not_of()
 
 #define string_MK_FIND_LAST_NOT_OF(T) /*TODO*/
@@ -815,6 +841,8 @@ string_nodiscard std::size_t find_last_not_of( std20::string_view text, SeekT co
 {
     return text.find_last_not_of( seek );
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 // TODO: find_last_not_of_re(regex)
 
@@ -831,6 +859,8 @@ string_nodiscard inline std::size_t find_last_not_of_re( std20::string_view text
     return detail::npos;
 }
 
+#endif // regex
+
 // contains() - C++23
 
 #define string_MK_CONTAINS(T) /*TODO*/
@@ -844,6 +874,8 @@ string_nodiscard bool contains( std20::string_view text, SeekT const & seek )
     return detail::npos != find_first(text, seek);
 #endif
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 // TODO: contains(regex)
 
@@ -861,6 +893,8 @@ string_nodiscard bool contains_re( std20::string_view text, SeekT const & seek )
 {
     return false;
 }
+
+#endif // regex
 
 // starts_with() - C++20
 
@@ -887,6 +921,8 @@ inline string_nodiscard bool starts_with( std20::string_view text, char seek )
     return starts_with( text, std20::string_view( &seek, &seek + 1) );
 }
 
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
 string_nodiscard inline bool starts_with( std20::string_view text, std::regex const & re )
 {
     return false;
@@ -901,6 +937,8 @@ string_nodiscard bool starts_with_re( std20::string_view text, SeekT const & see
 {
     return false;
 }
+
+#endif // regex
 
 // ends_with() - C++20
 
@@ -927,6 +965,8 @@ inline string_nodiscard bool ends_with( std20::string_view text, char seek )
     return ends_with( text, std20::string_view( &seek, &seek + 1) );
 }
 
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
 string_nodiscard inline bool ends_with( std20::string_view text, std::regex const & re )
 {
     return false;
@@ -941,6 +981,8 @@ string_nodiscard bool ends_with_re( std20::string_view text, SeekT const & seek 
 {
     return false;
 }
+
+#endif // regex
 
 //
 // Modifiers:
@@ -1059,7 +1101,7 @@ string_nodiscard inline std::string
 to_string( std20::string_view text )
 {
 #if string_HAVE_STRING_VIEW_20
-    return text;
+    return std::string( text );
 #else
     return std::string( text.begin(), text.end() );
 #endif
@@ -1070,6 +1112,8 @@ substring( std20::string_view text, size_t pos = 0, size_t count = detail::npos 
 {
     return to_string( text.substr( pos, count ) );
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 string_nodiscard inline std::string 
 substring( std20::string_view text, std::regex const & re )
@@ -1086,6 +1130,8 @@ substring_re( std20::string_view text, char const * re )
     #pragma message("TODO: Implement substring_re().")
     return "[Implement substring_re()]";
 }
+
+#endif // regex
 
 // join()
 
