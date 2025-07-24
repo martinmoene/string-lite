@@ -42,14 +42,14 @@ inline std::string & text()
     return text_;
 }
 
-inline nonstd::std17::string_view text_view()
+inline nonstd::std20::string_view text_view()
 {
-    return ::nonstd::string::std17::string_view( text().c_str(), text().length() );
+    return ::nonstd::string::std20::string_view( text().c_str(), text().length() );
 }
 
-const auto sv_npos = ::nonstd::string::std17::string_view::npos;
+const auto sv_npos = ::nonstd::string::std20::string_view::npos;
 
-inline std::ostream & operator<<(std::ostream &os, ::nonstd::std17::string_view vw)
+inline std::ostream & operator<<(std::ostream &os, ::nonstd::std20::string_view vw)
 {
     return os << std::string( vw.begin(), vw.end() );
 }
@@ -66,33 +66,33 @@ inline std::ostream & operator<<( std::ostream & os, std::vector<T>const & vec )
     return os << "]";
 }
 
-// inline std::ostream & operator<<( std::ostream & os, std::vector<::nonstd::std17::string_view> const & vec )
+// inline std::ostream & operator<<( std::ostream & os, std::vector<::nonstd::std20::string_view> const & vec )
 // {
 //     os << "[vector:";
 
-//     for ( typename std::vector<::nonstd::std17::string_view>::const_iterator pos = vec.begin(); pos != vec.end(); ++pos )
+//     for ( typename std::vector<::nonstd::std20::string_view>::const_iterator pos = vec.begin(); pos != vec.end(); ++pos )
 //     {
 //         os << " '" << std::string( pos->begin(), pos->end() ) << "',";
 //     }
 //     return os << "]";
 // }
 
-// inline bool operator==( ::nonstd::std17::string_view const & a, std::string const & b )
+// inline bool operator==( ::nonstd::std20::string_view const & a, std::string const & b )
 // {
 //     return std::string(a.begin(), a.end()) == b;
 // }
 
-// inline bool operator==( std::string const & a, ::nonstd::std17::string_view const & b )
+// inline bool operator==( std::string const & a, ::nonstd::std20::string_view const & b )
 // {
 //     return b == a;
 // }
 
-// inline bool operator==( std::vector<::nonstd::std17::string_view> const & a, std::vector<std::string> const & b )
+// inline bool operator==( std::vector<::nonstd::std20::string_view> const & a, std::vector<std::string> const & b )
 // {
 //     return std::equal( a.begin(), a.end(), b.begin() );
 // }
 
-// inline bool operator==( std::vector<std::string> const & a, std::vector<::nonstd::std17::string_view> const & b )
+// inline bool operator==( std::vector<std::string> const & a, std::vector<::nonstd::std20::string_view> const & b )
 // {
 //     return b == a;
 // }
@@ -101,11 +101,11 @@ inline std::ostream & operator<<( std::ostream & os, std::vector<T>const & vec )
 
 namespace std {
 
-inline std::ostream & operator<<( std::ostream & os, std::vector<::nonstd::std17::string_view> const & vec )
+inline std::ostream & operator<<( std::ostream & os, std::vector<::nonstd::std20::string_view> const & vec )
 {
     os << "[vector:";
 
-    for ( typename std::vector<::nonstd::std17::string_view>::const_iterator pos = vec.begin(); pos != vec.end(); ++pos )
+    for ( typename std::vector<::nonstd::std20::string_view>::const_iterator pos = vec.begin(); pos != vec.end(); ++pos )
     {
         os << " '" << std::string( pos->begin(), pos->end() ) << "',";
     }
@@ -115,7 +115,7 @@ inline std::ostream & operator<<( std::ostream & os, std::vector<::nonstd::std17
 }
 namespace nonstd {
 namespace string {
-namespace std17 {
+namespace std20 {
 
 inline bool operator==( string_view const & a, std::string const & b )
 {
@@ -137,17 +137,17 @@ inline bool operator==( std::vector<std::string> const & a, std::vector<string_v
     return b == a;
 }
 
-} // namespace std17
+} // namespace std20
 } // namespace string
 } // namespace nonstd
 
 namespace lest {
 
-// inline std::ostream & operator<<( std::ostream & os, std::vector<::nonstd::std17::string_view> const & vec )
+// inline std::ostream & operator<<( std::ostream & os, std::vector<::nonstd::std20::string_view> const & vec )
 // {
 //     os << "[vector:";
 
-//     for ( typename std::vector<::nonstd::std17::string_view>::const_iterator pos = vec.begin(); pos != vec.end(); ++pos )
+//     for ( typename std::vector<::nonstd::std20::string_view>::const_iterator pos = vec.begin(); pos != vec.end(); ++pos )
 //     {
 //         os << " '" << std::string( pos->begin(), pos->end() ) << "',";
 //     }

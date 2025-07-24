@@ -174,6 +174,7 @@
 // Presence of C++20 language features:
 
 #define string_HAVE_CHAR8_T                 string_CPP20_000
+#define string_HAVE_STRING_VIEW_20          string_CPP20_000
 
 // Presence of C++ library features:
 
@@ -236,16 +237,18 @@
 #include <tuple>
 #include <vector>
 
-#if string_HAVE_STRING_VIEW
+#if string_HAVE_STRING_VIEW_20
 # include <string_view>
 #else
-// # pragma message("string.hpp: Using internal nonstd::std17::string_view.")
+// # pragma message("string.hpp: Using internal nonstd::std20::string_view.")
 #endif
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 # include <regex>
 #endif
 
+// use C++20 std::string_view, not C++17 for presence of ctor(char* begin, char* end) 
+// TODO: supprt string_view as source?
 // TODO: constexpr / string_constexpr / string_constexpr14
 // TODO: nodiscard / string_nodiscard
 // TODO: noexcept / string_noexcept
@@ -264,8 +267,19 @@ namespace std14 {
 } // namespace std14
 
 namespace std17 {
+} // namespace std17
 
-#if string_HAVE_STRING_VIEW
+namespace std20 {
+
+// type identity, to establish non-deduced contexts in template argument deduction:
+
+template< typename T >
+struct type_identity
+{
+    typedef T type;
+};
+
+#if string_HAVE_STRING_VIEW_20
 
 using std::basic_string_view;
 
@@ -288,7 +302,7 @@ using std::basic_string_view;
     using std::u32string_view;
 # endif
 
-#else // string_HAVE_STRING_VIEW
+#else // string_HAVE_STRING_VIEW_20
 
 // TODO: Local basic_string_view.
 
@@ -335,7 +349,7 @@ public:
         , size_( count )
     {}
 
-    string_constexpr basic_string_view( CharT const * b, CharT const * e ) string_noexcept // non-standard noexcept
+    string_constexpr basic_string_view( CharT const * b, CharT const * e ) string_noexcept // C++20, non-standard noexcept
         : data_( b )
         , size_( e - b )
     {}
@@ -548,19 +562,7 @@ string_nodiscard inline size_t size( basic_string_view<T> const & sv )
     return sv.size();
 }
 
-#endif // string_HAVE_STRING_VIEW
-
-} // namespace std17
-
-namespace std20 {
-
-// type identity, to establish non-deduced contexts in template argument deduction:
-
-template< typename T >
-struct type_identity
-{
-    typedef T type;
-};
+#endif // string_HAVE_STRING_VIEW_20
 
 } // namespace std20
 
@@ -581,14 +583,14 @@ string_nodiscard string_constexpr CharT nullchr() noexcept
 
 template< class CharT >
 std::basic_string<CharT>
-to_string( std17::basic_string_view<CharT> v )
+to_string( std20::basic_string_view<CharT> v )
 {
     return std::basic_string<CharT>( v.begin(), v.end() );
 }
 
 // template< class CharT, class Traits, class Allocator >
 // std::basic_string<CharT, Traits, Allocator>
-// to_string( std17::basic_string_view<CharT, Traits> v, Allocator const & a )
+// to_string( std20::basic_string_view<CharT, Traits> v, Allocator const & a )
 // {
 //     return std::basic_string<CharT, Traits, Allocator>( v.begin(), v.end(), a );
 // }
@@ -634,7 +636,7 @@ using namespace string;
 // TODO: length()
 
 #define string_MK_LENGTH(T) \
-    string_nodiscard inline std::size_t length( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline std::size_t length( std20::basic_string_view<T> text ) noexcept \
     { \
         return text.length(); \
     }\
@@ -642,7 +644,7 @@ using namespace string;
 // TODO: size()
 
 #define string_MK_SIZE(T) \
-    string_nodiscard inline std::size_t size( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline std::size_t size( std20::basic_string_view<T> text ) noexcept \
     { \
         return text.size(); \
     }\
@@ -650,7 +652,7 @@ using namespace string;
 // TODO: is_empty()
 
 #define string_MK_IS_EMPTY(T) \
-    string_nodiscard inline bool is_empty( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline bool is_empty( std20::basic_string_view<T> text ) noexcept \
     { \
         return text.empty(); \
     }\
@@ -664,33 +666,76 @@ using namespace string;
 #define string_MK_FIND_FIRST(T) /*TODO*/
 
 template< typename SeekT >
-string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_first( std20::string_view text, SeekT const & seek )
 {
     return text.find( seek );
 }
 
+string_nodiscard inline std::size_t find_first( std20::string_view text, char seek )
+{
+    return find_first( text, std20::string_view( &seek, &seek + 1 ) );
+}
+
+string_nodiscard inline std::size_t find_first( std20::string_view text, std::regex const & seek )
+{
+    return std20::string_view::npos;
+}
+
 // TODO: find_first_re()
+
+template< typename SeekT >
+string_nodiscard std::size_t find_first_re( std20::string_view text, SeekT const & seek )
+{
+    return std20::string_view::npos;
+}
 
 // TODO: find_last()
 
 #define string_MK_FIND_LAST(T) /*TODO*/
 
 template< typename SeekT >
-string_nodiscard std::size_t find_last( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_last( std20::string_view text, SeekT const & seek )
 {
     return text.rfind( seek );
 }
 
+string_nodiscard inline std::size_t find_last( std20::string_view text, char seek )
+{
+    return find_last( text, std20::string_view( &seek, &seek + 1 ) );
+}
+
+string_nodiscard inline std::size_t find_last( std20::string_view text, std::regex const & seek )
+{
+    return std20::string_view::npos;
+}
+
 // TODO: find_last_re()
+
+template< typename SeekT >
+string_nodiscard std::size_t find_last_re( std20::string_view text, SeekT const & seek )
+{
+    return std20::string_view::npos;
+}
 
 // TODO: find_first_of()
 
 #define string_MK_FIND_FIRST_OF(T) /*TODO*/
 
 template< typename SeekT >
-string_nodiscard std::size_t find_first_of( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_first_of( std20::string_view text, SeekT const & seek )
 {
     return text.find_first_of( seek );
+}
+
+string_nodiscard inline std::size_t find_first_of( std20::string_view text, std::regex const & seek )
+{
+    return std20::string_view::npos;
+}
+
+template< typename SeekT >
+string_nodiscard inline std::size_t find_first_of_re( std20::string_view text, SeekT const & seek )
+{
+    return std20::string_view::npos;
 }
 
 // TODO: find_last_of()
@@ -698,9 +743,20 @@ string_nodiscard std::size_t find_first_of( std17::string_view text, SeekT const
 #define string_MK_FIND_LAST_OF(T) /*TODO*/
 
 template< typename SeekT >
-string_nodiscard std::size_t find_last_of( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_last_of( std20::string_view text, SeekT const & seek )
 {
     return text.find_last_of( seek );
+}
+
+string_nodiscard inline std::size_t find_last_of( std20::string_view text, std::regex const & seek )
+{
+    return std20::string_view::npos;
+}
+
+template< typename SeekT >
+string_nodiscard inline std::size_t find_last_of_re( std20::string_view text, SeekT const & seek )
+{
+    return std20::string_view::npos;
 }
 
 // TODO: find_first_not_of()
@@ -708,9 +764,20 @@ string_nodiscard std::size_t find_last_of( std17::string_view text, SeekT const 
 #define string_MK_FIND_FIRST_NOT_OF(T) /*TODO*/
 
 template< typename SeekT >
-string_nodiscard std::size_t find_first_not_of( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_first_not_of( std20::string_view text, SeekT const & seek )
 {
     return text.find_first_not_of( seek );
+}
+
+string_nodiscard inline std::size_t find_first_not_of( std20::string_view text, std::regex const & seek )
+{
+    return std20::string_view::npos;
+}
+
+template< typename SeekT >
+string_nodiscard inline std::size_t find_first_not_of_re( std20::string_view text, SeekT const & seek )
+{
+    return std20::string_view::npos;
 }
 
 // TODO: find_last_not_of()
@@ -718,9 +785,20 @@ string_nodiscard std::size_t find_first_not_of( std17::string_view text, SeekT c
 #define string_MK_FIND_LAST_NOT_OF(T) /*TODO*/
 
 template< typename SeekT >
-string_nodiscard std::size_t find_last_not_of( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_last_not_of( std20::string_view text, SeekT const & seek )
 {
     return text.find_last_not_of( seek );
+}
+
+string_nodiscard inline std::size_t find_last_not_of( std20::string_view text, std::regex const & seek )
+{
+    return std20::string_view::npos;
+}
+
+template< typename SeekT >
+string_nodiscard inline std::size_t find_last_not_of_re( std20::string_view text, SeekT const & seek )
+{
+    return std20::string_view::npos;
 }
 
 // TODO: contains() - C++23
@@ -728,28 +806,41 @@ string_nodiscard std::size_t find_last_not_of( std17::string_view text, SeekT co
 #define string_MK_CONTAINS(T) /*TODO*/
 
 template< typename SeekT >
-string_nodiscard bool contains( std17::string_view text, SeekT const & seek )
+string_nodiscard bool contains( std20::string_view text, SeekT const & seek )
 {
 #if string_CPP23_OR_GREATER
     return text.contains( seek );
 #else
-    return std17::string_view::npos != find_first(text, seek);
+    return std20::string_view::npos != find_first(text, seek);
 #endif
 }
 
+string_nodiscard inline bool contains( std20::string_view text, std::regex const & seek )
+{
+    return false;
+}
+
 // TODO: contains_re()
+
+#define string_MK_CONTAINS_RE(T) /*TODO*/
+
+template< typename SeekT >
+string_nodiscard bool contains_re( std20::string_view text, SeekT const & seek )
+{
+    return false;
+}
 
 // TODO: starts_with() - C++20
 
 #define string_MK_STARTS_WITH(T) /*TODO*/
 
 template< typename SeekT >
-string_nodiscard bool starts_with( std17::string_view text, SeekT const & seek )
+string_nodiscard bool starts_with( std20::string_view text, SeekT const & seek )
 {
 #if string_CPP20_OR_GREATER
     return text.starts_with( seek );
 #else
-    std17::string_view look( seek );
+    std20::string_view look( seek );
 
     if ( size( look ) > size( text ) )
     {
@@ -759,19 +850,37 @@ string_nodiscard bool starts_with( std17::string_view text, SeekT const & seek )
 #endif
 }
 
+inline string_nodiscard bool starts_with( std20::string_view text, char seek )
+{
+    return starts_with( text, std20::string_view( &seek, &seek + 1) );
+}
+
+string_nodiscard inline bool starts_with( std20::string_view text, std::regex const & seek )
+{
+    return false;
+}
+
 // TODO: starts_with_re()
+
+#define string_MK_STARTS_WITH_RE(T) /*TODO*/
+
+template< typename SeekT >
+string_nodiscard bool starts_with_re( std20::string_view text, SeekT const & seek )
+{
+    return false;
+}
 
 // TODO: ends_with() - C++20
 
 #define string_MK_ENDS_WITH(T) /*TODO*/
 
 template< typename SeekT >
-string_nodiscard bool ends_with( std17::string_view text, SeekT const & seek )
+string_nodiscard bool ends_with( std20::string_view text, SeekT const & seek )
 {
 #if string_CPP20_OR_GREATER
     return text.ends_with( seek );
 #else
-    std17::string_view look( seek );
+    std20::string_view look( seek );
 
     if ( size( look ) > size( text ) )
     {
@@ -781,7 +890,25 @@ string_nodiscard bool ends_with( std17::string_view text, SeekT const & seek )
 #endif
 }
 
+inline string_nodiscard bool ends_with( std20::string_view text, char seek )
+{
+    return ends_with( text, std20::string_view( &seek, &seek + 1) );
+}
+
+string_nodiscard inline bool ends_with( std20::string_view text, std::regex const & seek )
+{
+    return false;
+}
+
 // TODO: ends_with_re()
+
+#define string_MK_ENDS_WITH_RE(T) /*TODO*/
+
+template< typename SeekT >
+string_nodiscard bool ends_with_re( std20::string_view text, SeekT const & seek )
+{
+    return false;
+}
 
 //
 // Modifiers:
@@ -790,10 +917,10 @@ string_nodiscard bool ends_with( std17::string_view text, SeekT const & seek )
 // to_lowercase()
 // to_uppercase()
 
-// template string_nodiscard std::basic_string<char> to_lowercase( std17::basic_string_view<char> text ) noexcept;
+// template string_nodiscard std::basic_string<char> to_lowercase( std20::basic_string_view<char> text ) noexcept;
 
 #define string_MK_TO_CASE(T, Function) \
-    string_nodiscard inline std::basic_string<T> to_ ## Function( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline std::basic_string<T> to_ ## Function( std20::basic_string_view<T> text ) noexcept \
     { \
         return detail::to_case( std::basic_string<T>(text), detail::to_ ## Function<T> ); \
     }\
@@ -885,8 +1012,8 @@ template< typename TailT >
 string_nodiscard std::string
 append( std::string text, TailT const & tail )
 {
-#if string_CPP17_000
-    return text.append( tail );
+#if string_CPP20_000
+    return text.append( tail );     // requires std::string_view, but using nonstd::string_view with C++17
 #else
     return text + std::string(tail);
 #endif
@@ -946,12 +1073,12 @@ join( Coll const & coll, SepT const & sep )
 // - char_delimiter - single-char delimiter
 
 template< typename CharT >
-std17::basic_string_view<CharT> basic_delimiter_end(std17::basic_string_view<CharT> sv)
+std20::basic_string_view<CharT> basic_delimiter_end(std20::basic_string_view<CharT> sv)
 {
 #if string_CONFIG_SELECT_STRING_VIEW != string_CONFIG_SELECT_STRING_VIEW_STD // TODO: these macros are not used
-    return std17::basic_string_view<CharT>(sv.cend(), size_t(0));
+    return std20::basic_string_view<CharT>(sv.cend(), size_t(0));
 #else
-    return std17::basic_string_view<CharT>(sv.data() + sv.size(), size_t(0));
+    return std20::basic_string_view<CharT>(sv.data() + sv.size(), size_t(0));
 #endif
 }
 
@@ -964,7 +1091,7 @@ class basic_literal_delimiter
     mutable size_t found_;
 
 public:
-    explicit basic_literal_delimiter(std17::basic_string_view<CharT> sv)
+    explicit basic_literal_delimiter(std20::basic_string_view<CharT> sv)
         : delimiter_(detail::to_string(sv))
         , found_(0)
     {}
@@ -974,12 +1101,12 @@ public:
         return delimiter_.length();
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, size_t pos) const
+    std20::basic_string_view<CharT> operator()(std20::basic_string_view<CharT> text, size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, size_t pos) const
+    std20::basic_string_view<CharT> find(std20::basic_string_view<CharT> text, size_t pos) const
     {
         // out of range, return 'empty' if last match was at end of text, else return 'done':
         if ( pos >= text.length())
@@ -1007,7 +1134,7 @@ public:
         }
 
         // no delimiter found:
-        if (found_ == std17::basic_string_view<CharT>::npos)
+        if (found_ == std20::basic_string_view<CharT>::npos)
         {
             // return remaining text:
             if (pos < text.length())
@@ -1032,7 +1159,7 @@ class basic_any_of_delimiter
     const std::basic_string<CharT> delimiters_;
 
 public:
-    explicit basic_any_of_delimiter(std17::basic_string_view<CharT> sv)
+    explicit basic_any_of_delimiter(std20::basic_string_view<CharT> sv)
         : delimiters_(detail::to_string(sv)) {}
 
     size_t length() const
@@ -1040,12 +1167,12 @@ public:
         return (std::min)( size_t(1), delimiters_.length());
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, size_t pos) const
+    std20::basic_string_view<CharT> operator()(std20::basic_string_view<CharT> text, size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, size_t pos) const
+    std20::basic_string_view<CharT> find(std20::basic_string_view<CharT> text, size_t pos) const
     {
         // out of range, return 'done':
         if ( pos > text.length())
@@ -1062,11 +1189,11 @@ public:
         // at a delimiter, or searching past the last delimiter:
         if (found == pos || (pos == text.length()))
         {
-            return std17::basic_string_view<CharT>();
+            return std20::basic_string_view<CharT>();
         }
 
         // no delimiter found:
-        if (found == std17::basic_string_view<CharT>::npos)
+        if (found == std20::basic_string_view<CharT>::npos)
         {
             // return remaining text:
             if (pos < text.length())
@@ -1099,12 +1226,12 @@ public:
         return 0;
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, size_t pos) const
+    std20::basic_string_view<CharT> operator()(std20::basic_string_view<CharT> text, size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, size_t pos) const
+    std20::basic_string_view<CharT> find(std20::basic_string_view<CharT> text, size_t pos) const
     {
         // out of range, return 'done':
         if ( pos > text.length())
@@ -1135,7 +1262,7 @@ class basic_regex_delimiter
     mutable bool   trailing_delimiter_seen;     // whether to provide last empty result
 
 public:
-    explicit basic_regex_delimiter(std17::basic_string_view<CharT> sv)
+    explicit basic_regex_delimiter(std20::basic_string_view<CharT> sv)
         : delimiter_re_(detail::to_string(sv))
         , delimiter_len_(sv.length())
         , matched_delimiter_length_(0u)
@@ -1147,19 +1274,19 @@ public:
         return matched_delimiter_length_;
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, size_t pos) const
+    std20::basic_string_view<CharT> operator()(std20::basic_string_view<CharT> text, size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, size_t pos) const
+    std20::basic_string_view<CharT> find(std20::basic_string_view<CharT> text, size_t pos) const
     {
         // trailing empty entry:
         // TODO this feels like a hack, don't know any better at this moment
         if (trailing_delimiter_seen)
         {
             trailing_delimiter_seen = false;
-            return std17::basic_string_view<CharT>();
+            return std20::basic_string_view<CharT>();
         }
 
         // out of range, return 'done':
@@ -1221,17 +1348,17 @@ public:
         return 1;
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, size_t pos) const
+    std20::basic_string_view<CharT> operator()(std20::basic_string_view<CharT> text, size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, size_t pos) const
+    std20::basic_string_view<CharT> find(std20::basic_string_view<CharT> text, size_t pos) const
     {
         size_t found = text.find(c_, pos);
 
         // nothing left, return 'done':
-        if (found == std17::basic_string_view<CharT>::npos)
+        if (found == std20::basic_string_view<CharT>::npos)
             return basic_delimiter_end(text);
 
         // the c_ in the input string:
@@ -1310,15 +1437,15 @@ string_nodiscard inline size_t length( Coll const & coll )
 }
 
 template< typename CharT, typename Delimiter >
-std::vector< std17::basic_string_view<CharT> >
-split( std17::basic_string_view<CharT> text, Delimiter delimiter, size_t Nsplit )
+std::vector< std20::basic_string_view<CharT> >
+split( std20::basic_string_view<CharT> text, Delimiter delimiter, size_t Nsplit )
 {
-    std::vector< std17::basic_string_view<CharT> > result;
+    std::vector< std20::basic_string_view<CharT> > result;
 
     size_t pos = 0;
     size_t cnt = 1; // for Nsplit
 
-    for( std17::basic_string_view<CharT> sv = delimiter(text, pos); sv.cbegin() != text.cend(); sv = delimiter(text, pos), ++cnt )
+    for( std20::basic_string_view<CharT> sv = delimiter(text, pos); sv.cbegin() != text.cend(); sv = delimiter(text, pos), ++cnt )
     {
         if ( cnt >= Nsplit )
         {
@@ -1340,16 +1467,16 @@ split( std17::basic_string_view<CharT> text, Delimiter delimiter, size_t Nsplit 
 #define string_MK_SPLIT(T) /*TODO*/
 
 template< typename CharT, typename Delimiter >
-string_nodiscard std::vector< std17::string_view >
-split( std17::string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+string_nodiscard std::vector< std20::string_view >
+split( std20::string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
 {
     return detail::split( text, delimiter, count );
 }
 
 #if string_CONFIG_PROVIDE_CHAR_T
-template<typename Delimiter> string_nodiscard std::vector< std17::string_view> split( std17::string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+template<typename Delimiter> string_nodiscard std::vector< std20::string_view> split( std20::string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
 
-string_nodiscard inline std::vector<std17::string_view> split( std17::string_view text, char const * d, int count = std::numeric_limits<int>::max() ) { return detail::split(text, literal_delimiter(d), count ); }
+string_nodiscard inline std::vector<std20::string_view> split( std20::string_view text, char const * d, int count = std::numeric_limits<int>::max() ) { return detail::split(text, literal_delimiter(d), count ); }
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
@@ -1381,7 +1508,7 @@ inline string_nodiscard std::vector<std17::u32string_view> split( std17::u32stri
 // split_2 -> tuple
 
 template<typename Delimiter> string_nodiscard auto
-split_2( std17::string_view const & text, Delimiter delimiter ) -> std::tuple<std17::string_view, std17::string_view>
+split_2( std20::string_view const & text, Delimiter delimiter ) -> std::tuple<std20::string_view, std20::string_view>
 {
     auto const result = split( text, delimiter, 2 );
 
@@ -1389,7 +1516,7 @@ split_2( std17::string_view const & text, Delimiter delimiter ) -> std::tuple<st
 }
 
 string_nodiscard inline auto
-split_2(  std17::string_view text, char const * d ) -> std::tuple<std17::string_view, std17::string_view>
+split_2(  std20::string_view text, char const * d ) -> std::tuple<std20::string_view, std20::string_view>
 {
     return split_2( text, literal_delimiter(d) );
 }
@@ -1399,7 +1526,7 @@ split_2(  std17::string_view text, char const * d ) -> std::tuple<std17::string_
 // Split string at given separator character, starting at right.
 
 template<typename Delimiter> string_nodiscard auto
-rsplit_2( std17::string_view const & text, Delimiter d ) -> std::tuple<std17::string_view, std17::string_view>
+rsplit_2( std20::string_view const & text, Delimiter d ) -> std::tuple<std20::string_view, std20::string_view>
 {
     auto const result = rsplit( text, delimiter, 2 );
 
@@ -1407,7 +1534,7 @@ rsplit_2( std17::string_view const & text, Delimiter d ) -> std::tuple<std17::st
 }
 
 string_nodiscard inline auto
-rsplit_2(  std17::string_view text, char const * d ) -> std::tuple<std17::string_view, std17::string_view>
+rsplit_2(  std20::string_view text, char const * d ) -> std::tuple<std20::string_view, std20::string_view>
 {
     return rsplit_2( text, literal_delimiter(d) );
 }

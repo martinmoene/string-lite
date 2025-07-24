@@ -43,7 +43,7 @@ struct stringy : std::string
 
 namespace std17 {
 
-    using ::nonstd::string::std17::string_view;
+    using ::nonstd::string::std20::string_view;
     inline typename string_view::size_type sv_npos() { return string_view::npos; }
 }
 
@@ -63,24 +63,24 @@ CASE( "string: Setting Windows console to print utf8 characters" "[unicode][wind
 
 // length():
 
-CASE( "length: true if string length is correct- char *" )
+CASE( "length: length of given string - char *" )
 {
     EXPECT( length("abc") == 3 );
 }
 
-CASE( "length: true if string length is correct - std::string" )
+CASE( "length: length of given string  - std::string" )
 {
     EXPECT( length(std::string("abc")) == 3 );
 }
 
 // size():
 
-CASE( "size: true if string length is correct - char *" )
+CASE( "size: length of given string  - char *" )
 {
     EXPECT( size("abc") == 3 );
 }
 
-CASE( "size: true if string length is correct - std::string" )
+CASE( "size: length of given string  - std::string" )
 {
     EXPECT( size(std::string("abc")) == 3 );
 }
@@ -121,31 +121,31 @@ CASE( "contains: true if string contains sub string - string-string" )
 
 CASE( "contains: true if string contains sub string - string-string_view" )
 {
-    EXPECT(     contains(std::string("abc123mno123xyz"), std17::string_view("123")) );
-    EXPECT_NOT( contains(std::string("abc123mno123xyz"), std17::string_view("789")) );
+    EXPECT(     contains(std::string("abc123mno123xyz"), std20::string_view("123")) );
+    EXPECT_NOT( contains(std::string("abc123mno123xyz"), std20::string_view("789")) );
 }
 
 CASE( "contains: true if string contains sub string - string_view-string_view" )
 {
-    EXPECT(     contains(std17::string_view("abc123mno123xyz"), std17::string_view("123")) );
-    EXPECT_NOT( contains(std17::string_view("abc123mno123xyz"), std17::string_view("789")) );
+    EXPECT(     contains(std20::string_view("abc123mno123xyz"), std20::string_view("123")) );
+    EXPECT_NOT( contains(std20::string_view("abc123mno123xyz"), std20::string_view("789")) );
 }
 
-CASE( "contains: true if string contains regular expression - string-std::regexp" )
+CASE( "contains: true if string contains regular expression - string-std::regex" "[.TODO]" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
     EXPECT(     contains(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT_NOT( contains(std::string("abc123mno123xyz"), std::regex("[4-9]+")) );
 #else
-    EXPECT( !!"contains(regexp) is not available (pre C++11)." );
+    EXPECT( !!"contains(regex) is not available (pre C++11)." );
 #endif
 #else
     EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
 #endif
 }
 
-CASE( "contains_re: true if string contains regular expression - string-char*" )
+CASE( "contains_re: true if string contains regular expression - string-char*" "[.TODO]" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -159,26 +159,12 @@ CASE( "contains_re: true if string contains regular expression - string-char*" )
 #endif
 }
 
-CASE( "contains_re: true if string contains regular expression - string-string" )
-{
-#if string_CONFIG_PROVIDE_REGEX
-#if string_HAVE_REGEX
-    EXPECT(     contains_re(std::string("abc123mno123xyz"), std::string("[0-9]+")) );
-    EXPECT_NOT( contains_re(std::string("abc123mno123xyz"), std::string("[4-9]+")) );
-#else
-    EXPECT( !!"contains_re is not available (pre C++11)." );
-#endif
-#else
-    EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
-#endif
-}
-
 // starts_with():
 
-CASE( "starts_with: true if string starts with sub string - string-char"  " [.TODO]" )
+CASE( "starts_with: true if string starts with sub string - string-char" )
 {
-    // EXPECT(     starts_with(std::string("abc123mno123xyz"), 'a') );
-    // EXPECT_NOT( starts_with(std::string("abc123mno123xyz"), 'b') );
+    EXPECT(     starts_with(std::string("abc123mno123xyz"), 'a') );
+    EXPECT_NOT( starts_with(std::string("abc123mno123xyz"), 'b') );
 }
 
 CASE( "starts_with: true if string starts with sub string - string-char*" )
@@ -195,31 +181,31 @@ CASE( "starts_with: true if string starts with sub string - string-string" )
 
 CASE( "starts_with: true if string starts with sub string - string-string_view" )
 {
-    EXPECT(     starts_with(std::string("abc123mno123xyz"), std17::string_view("a")) );
-    EXPECT_NOT( starts_with(std::string("abc123mno123xyz"), std17::string_view("b")) );
+    EXPECT(     starts_with(std::string("abc123mno123xyz"), std20::string_view("a")) );
+    EXPECT_NOT( starts_with(std::string("abc123mno123xyz"), std20::string_view("b")) );
 }
 
 CASE( "starts_with: true if string starts with sub string - string_view-string_view" )
 {
-    EXPECT(     starts_with(std17::string_view("abc123mno123xyz"), std17::string_view("a")) );
-    EXPECT_NOT( starts_with(std17::string_view("abc123mno123xyz"), std17::string_view("b")) );
+    EXPECT(     starts_with(std20::string_view("abc123mno123xyz"), std20::string_view("a")) );
+    EXPECT_NOT( starts_with(std20::string_view("abc123mno123xyz"), std20::string_view("b")) );
 }
 
-CASE( "starts_with: true if string starts with regular expression - string-std::regexp" )
+CASE( "starts_with: true if string starts with regular expression - string-std::regex" "[.TODO]" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
     EXPECT(     starts_with(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT_NOT( starts_with(std::string("abc123mno123xyz"), std::regex("[4-9]+")) );
 #else
-    EXPECT( !!"starts_with(regexp) is not available (pre C++11)." );
+    EXPECT( !!"starts_with(regex) is not available (pre C++11)." );
 #endif
 #else
     EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
 #endif
 }
 
-CASE( "starts_with_re: true if string starts with regular expression - string-char*" )
+CASE( "starts_with_re: true if string starts with regular expression - string-char*" "[.TODO]" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -233,26 +219,12 @@ CASE( "starts_with_re: true if string starts with regular expression - string-ch
 #endif
 }
 
-CASE( "starts_with_re: true if string starts with regular expression - string-string" )
-{
-#if string_CONFIG_PROVIDE_REGEX
-#if string_HAVE_REGEX
-    EXPECT(     starts_with_re(std::string("abc123mno123xyz"), std::string("[0-9]+")) );
-    EXPECT_NOT( starts_with_re(std::string("abc123mno123xyz"), std::string("[4-9]+")) );
-#else
-    EXPECT( !!"starts_with_re is not available (pre C++11)." );
-#endif
-#else
-    EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
-#endif
-}
-
 // ends_with():
 
-CASE( "ends_with: true if string ends with sub string - string-char" " [.TODO]" )
+CASE( "ends_with: true if string ends with sub string - string-char" )
 {
-    // EXPECT(     ends_with(std::string("abc123mno123xyz"), 'z') );
-    // EXPECT_NOT( ends_with(std::string("abc123mno123xyz"), 'y') );
+    EXPECT(     ends_with(std::string("abc123mno123xyz"), 'z') );
+    EXPECT_NOT( ends_with(std::string("abc123mno123xyz"), 'y') );
 }
 
 CASE( "ends_with: true if string ends with sub string - string-char*" )
@@ -269,31 +241,31 @@ CASE( "ends_with: true if string ends with sub string - string-string" )
 
 CASE( "ends_with: true if string ends with sub string - string-string_view" )
 {
-    EXPECT(     ends_with(std::string("abc123mno123xyz"), std17::string_view("z")) );
-    EXPECT_NOT( ends_with(std::string("abc123mno123xyz"), std17::string_view("y")) );
+    EXPECT(     ends_with(std::string("abc123mno123xyz"), std20::string_view("z")) );
+    EXPECT_NOT( ends_with(std::string("abc123mno123xyz"), std20::string_view("y")) );
 }
 
 CASE( "ends_with: true if string ends with sub string - string_view-string_view" )
 {
-    EXPECT(     ends_with(std17::string_view("abc123mno123xyz"), std17::string_view("z")) );
-    EXPECT_NOT( ends_with(std17::string_view("abc123mno123xyz"), std17::string_view("y")) );
+    EXPECT(     ends_with(std20::string_view("abc123mno123xyz"), std20::string_view("z")) );
+    EXPECT_NOT( ends_with(std20::string_view("abc123mno123xyz"), std20::string_view("y")) );
 }
 
-CASE( "ends_with: true if string ends with regular expression - string-std::regexp" )
+CASE( "ends_with: true if string ends with regular expression - string-std::regex" "[.TODO]" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
     EXPECT(     ends_with(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT_NOT( ends_with(std::string("abc123mno123xyz"), std::regex("[4-9]+")) );
 #else
-    EXPECT( !!"ends_with(regexp) is not available (pre C++11)." );
+    EXPECT( !!"ends_with(regex) is not available (pre C++11)." );
 #endif
 #else
     EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
 #endif
 }
 
-CASE( "ends_with_re: true if string ends with regular expression - string-char*" )
+CASE( "ends_with_re: true if string ends with regular expression - string-char*" "[.TODO]" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -307,111 +279,243 @@ CASE( "ends_with_re: true if string ends with regular expression - string-char*"
 #endif
 }
 
-CASE( "ends_with_re: true if string ends with regular expression - string-string" )
-{
-#if string_CONFIG_PROVIDE_REGEX
-#if string_HAVE_REGEX
-    EXPECT(     ends_with_re(std::string("abc123mno123xyz"), std::string("[0-9]+")) );
-    EXPECT_NOT( ends_with_re(std::string("abc123mno123xyz"), std::string("[4-9]+")) );
-#else
-    EXPECT( !!"contains_re is not available (pre C++11)." );
-#endif
-#else
-    EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
-#endif
-}
-
 // find_first():
 
-CASE( "find_first: iterator to sub string in string - string-char" "[.TODO]" )
+CASE( "find_first: position of sub string in string - string-char" )
 {
-    // EXPECT(       3 == find_first("abc123mno123xyz", '1') );
-    // EXPECT( sv_npos == find_first("abc123mno123xyz", '7') );
+    EXPECT(       3 == find_first("abc123mno123xyz", '1') );
+    EXPECT( sv_npos == find_first("abc123mno123xyz", '7') );
 }
 
-CASE( "find_first: iterator to sub string in string - string-char*" )
+CASE( "find_first: position of sub string in string - string-char*" )
 {
     EXPECT(       3 == find_first("abc123mno123xyz", "123") );
     EXPECT( sv_npos == find_first("abc123mno123xyz", "789") );
 }
 
-CASE( "find_first: iterator to sub string in string - string-string" )
+CASE( "find_first: position of sub string in string - string-string" )
 {
     EXPECT(       3 == find_first("abc123mno123xyz", std::string("123")) );
     EXPECT( sv_npos == find_first("abc123mno123xyz", std::string("789")) );
 }
 
-CASE( "find_first: iterator to sub string in string - string-string_view" )
+CASE( "find_first: position of sub string in string - string-string_view" )
 {
-    EXPECT(       3 == find_first("abc123mno123xyz", std17::string_view("123")) );
-    EXPECT( sv_npos == find_first("abc123mno123xyz", std17::string_view("789")) );
+    EXPECT(       3 == find_first("abc123mno123xyz", std20::string_view("123")) );
+    EXPECT( sv_npos == find_first("abc123mno123xyz", std20::string_view("789")) );
 }
 
-CASE( "find_first: iterator to sub string in string_view - string_view-string_view" )
+CASE( "find_first: position of sub string in string_view - string_view-string_view" )
 {
     // text((): "abc123mno123xyz"
 
-    EXPECT(       3 == find_first(text_view(), std17::string_view("123")) );
-    EXPECT( sv_npos == find_first(text_view(), std17::string_view("789")) );
+    EXPECT(       3 == find_first(text_view(), std20::string_view("123")) );
+    EXPECT( sv_npos == find_first(text_view(), std20::string_view("789")) );
+}
+
+CASE( "find_first: position of regex in string: string-std::regex" "[.TODO]" ) 
+{
+    EXPECT(       3 == find_first("abc123mno123xyz", std::regex("[0-9]+")) );
+    EXPECT( sv_npos == find_first("abc123mno123xyz", std::regex("[7-9]+")) );
 }
 
 // TODO: find_first_re()
-CASE( "find_first_re: " "[.TODO]" ) {}
+
+CASE( "find_first_re: position of regex in string: string-char*" "[.TODO]" ) 
+{
+    EXPECT(       3 == find_first_re("abc123mno123xyz", "[0-9]") );
+    EXPECT( sv_npos == find_first_re("abc123mno123xyz", "[7-9]") );
+}
 
 // find_last():
 
-CASE( "find_last: iterator to sub string in string - string-char" "[.TODO]" )
+CASE( "find_last: position of sub string in string - string-char" )
 {
-    // EXPECT(       9 == find_last("abc123mno123xyz", '1') );
-    // EXPECT( sv_npos == find_last("abc123mno123xyz", '7') );
+    EXPECT(       9 == find_last("abc123mno123xyz", '1') );
+    EXPECT( sv_npos == find_last("abc123mno123xyz", '7') );
 }
 
-CASE( "find_last: iterator to sub string in string - string-char*" )
+CASE( "find_last: position of sub string in string - string-char*" )
 {
     EXPECT(       9 == find_last("abc123mno123xyz", "123") );
     EXPECT( sv_npos == find_last("abc123mno123xyz", "789") );
 }
 
-CASE( "find_last: iterator to sub string in string - string-string" )
+CASE( "find_last: position of sub string in string - string-string" )
 {
     EXPECT(       9 == find_last("abc123mno123xyz", std::string("123")) );
     EXPECT( sv_npos == find_last("abc123mno123xyz", std::string("789")) );
 }
 
-CASE( "find_last: iterator to sub string in string - string-string_view" )
+CASE( "find_last: position of sub string in string - string-string_view" )
 {
-    EXPECT(       9 == find_last("abc123mno123xyz", std17::string_view("123")) );
-    EXPECT( sv_npos == find_last("abc123mno123xyz", std17::string_view("789")) );
+    EXPECT(       9 == find_last("abc123mno123xyz", std20::string_view("123")) );
+    EXPECT( sv_npos == find_last("abc123mno123xyz", std20::string_view("789")) );
 }
 
-CASE( "find_last: iterator to sub string in string_view - string_view-string_view" )
+CASE( "find_last: position of sub string in string_view - string_view-string_view" )
 {
     // text((): "abc123mno123xyz"
 
-    EXPECT(       9 == find_last(text_view(), std17::string_view("123")) );
-    EXPECT( sv_npos == find_last(text_view(), std17::string_view("789")) );
+    EXPECT(       9 == find_last(text_view(), std20::string_view("123")) );
+    EXPECT( sv_npos == find_last(text_view(), std20::string_view("789")) );
+}
+
+CASE( "find_last: position of regex in string: string-std::regex" "[.TODO]" ) 
+{
+    EXPECT(       9 == find_last("abc123mno123xyz", std::regex("[0-9]+")) );
+    EXPECT( sv_npos == find_last("abc123mno123xyz", std::regex("[7-9]+")) );
 }
 
 // TODO: find_last_re()
-CASE( "find_last_re: " "[.TODO]" ) {}
 
-// TODO: find_first_of()
-CASE( "find_first_of: " "[.TODO]" ) {}
+CASE( "find_first_re: position of regex in string: string-char*" "[.TODO]" ) 
+{
+    EXPECT(       9 == find_last_re("abc123mno123xyz", "[0-9]") );
+    EXPECT( sv_npos == find_last_re("abc123mno123xyz", "[7-9]") );
+}
+
+// find_first_of()
+
+CASE( "find_first_of: position of sub string in string - char*-char*" )
+{
+    EXPECT(       3 == find_first_of("abc123mno123xyz", "321") );
+    EXPECT( sv_npos == find_first_of("abc123mno123xyz", "789") );
+}
+
+CASE( "find_first_of: position of sub string in string - string-char*" )
+{
+    EXPECT(       3 == find_first_of(std::string("abc123mno123xyz"), "321") );
+    EXPECT( sv_npos == find_first_of(std::string("abc123mno123xyz"), "789") );
+}
+
+CASE( "find_first_of: position of sub string in string - string-string" )
+{
+    EXPECT(       3 == find_first_of(std::string("abc123mno123xyz"), std::string("321") ) );
+    EXPECT( sv_npos == find_first_of(std::string("abc123mno123xyz"), std::string("789") ) );
+}
+
+CASE( "find_first_of: position of regex in string: string-std::regex" "[.TODO]" ) 
+{
+    EXPECT(       3 == find_first_of(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
+    EXPECT( sv_npos == find_first_of(std::string("abc123mno123xyz"), std::regex("[7-9]+")) );
+}
+
+// find_first_of_re()
+
+CASE( "find_first_of_re: position of regex in string: string-char*" "[.TODO]" ) 
+{
+    EXPECT(       3 == find_first_of_re(std::string("abc123mno123xyz"), "[0-9]+") );
+    EXPECT( sv_npos == find_first_of_re(std::string("abc123mno123xyz"), "[7-9]+") );
+}
 
 // TODO: find_last_of()
-CASE( "find_last_of: " "[.TODO]" ) {}
+
+CASE( "find_last_of: position of sub string in string - char*-char*" )
+{
+    EXPECT(       11 == find_last_of("abc123mno123xyz", "123") );
+    EXPECT( sv_npos == find_last_of("abc123mno123xyz", "789") );
+}
+
+CASE( "find_last_of: position of sub string in string - string-char*" )
+{
+    EXPECT(       11 == find_last_of(std::string("abc123mno123xyz"), "123") );
+    EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), "789") );
+}
+
+CASE( "find_last_of: position of sub string in string - string-string" )
+{
+    EXPECT(       11 == find_last_of(std::string("abc123mno123xyz"), std::string("123") ) );
+    EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), std::string("789") ) );
+}
+
+CASE( "find_last_of: position of regex in string: string-std::regex" "[.TODO]" ) 
+{
+    EXPECT(       3 == find_last_of(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
+    EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), std::regex("[7-9]+")) );
+}
+
+// find_last_of_re()
+
+CASE( "find_last_of_re: position of regex in string: string-char*" "[.TODO]" ) 
+{
+    EXPECT(       3 == find_last_of_re(std::string("abc123mno123xyz"), "[0-9]+") );
+    EXPECT( sv_npos == find_last_of_re(std::string("abc123mno123xyz"), "[7-9]+") );
+}
 
 // TODO: find_first_not_of()
-CASE( "find_first_not_of: " "[.TODO]" ) {}
+
+CASE( "find_first_not_of: position of sub string in string - char*-char*" )
+{
+    EXPECT(       3 == find_first_not_of("abc123mno123xyz", "cba") );
+    EXPECT( sv_npos == find_first_not_of("abc123mno123xyz", "abc123mno123xyz") );
+}
+
+CASE( "find_first_not_of: position of sub string in string - string-char*" )
+{
+    EXPECT(       3 == find_first_not_of(std::string("abc123mno123xyz"), "cba") );
+    EXPECT( sv_npos == find_first_not_of(std::string("abc123mno123xyz"), "abc123mno123xyz") );
+}
+
+CASE( "find_first_not_of: position of sub string in string - string-string" )
+{
+    EXPECT(       3 == find_first_not_of(std::string("abc123mno123xyz"), std::string("cba") ) );
+    EXPECT( sv_npos == find_first_not_of(std::string("abc123mno123xyz"), std::string("abc123mno123xyz") ) );
+}
+
+CASE( "find_first_not_of: position of regex in string: string-std::regex" "[.TODO]" ) 
+{
+    EXPECT(       3 == find_first_not_of(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
+    EXPECT( sv_npos == find_first_not_of(std::string("abc123mno123xyz"), std::regex("[7-9]+")) );
+}
+
+// TODO: find_first_not_of_re()
+
+CASE( "find_first_not_of_re: position of regex in string: string-char*" "[.TODO]" ) 
+{
+    EXPECT(       3 == find_first_not_of(std::string("abc123mno123xyz"), "[0-9]+") );
+    EXPECT( sv_npos == find_first_not_of(std::string("abc123mno123xyz"), "[7-9]+") );
+}
 
 // TODO: find_last_not_of()
-CASE( "find_last_not_of: " "[.TODO]" ) {}
+
+CASE( "find_last_not_of: position of sub string in string - char*-char*" )
+{
+    EXPECT(      11 == find_last_not_of("abc123mno123xyz", "zyx") );
+    EXPECT( sv_npos == find_last_not_of("abc123mno123xyz", "abc123mno123xyz") );
+}
+
+CASE( "find_last_not_of: position of sub string in string - string-char*" )
+{
+    EXPECT(      11 == find_last_not_of(std::string("abc123mno123xyz"), "zyx") );
+    EXPECT( sv_npos == find_last_not_of(std::string("abc123mno123xyz"), "abc123mno123xyz") );
+}
+
+CASE( "find_last_not_of: position of sub string in string - string-string" )
+{
+    EXPECT(      11 == find_last_not_of(std::string("abc123mno123xyz"), std::string("zyx") ) );
+    EXPECT( sv_npos == find_last_not_of(std::string("abc123mno123xyz"), std::string("abc123mno123xyz") ) );
+}
+
+CASE( "find_last_not_of: position of regex in string: string-std::regex" "[.TODO]" ) 
+{
+    EXPECT(      11 == find_last_not_of(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
+    EXPECT( sv_npos == find_last_not_of(std::string("abc123mno123xyz"), std::regex("[7-9]+")) );
+}
+
+// TODO: find_last_not_of_re()
+
+CASE( "find_last_not_of_re: position of regex in string: string-char*" "[.TODO]" ) 
+{
+    EXPECT(      11 == find_last_not_of(std::string("abc123mno123xyz"), "[0-9]+") );
+    EXPECT( sv_npos == find_last_not_of(std::string("abc123mno123xyz"), "[7-9]+") );
+}
 
 // Modifiers:
 
 // to_lowercase(), to_uppercase:
 
-CASE( "to_lowercase: Return new string in lowercase - string" )
+CASE( "to_lowercase: Return string in lowercase - string" )
 {
     std::string ls( lstr() );
     std::string us( ustr() );
@@ -419,7 +523,7 @@ CASE( "to_lowercase: Return new string in lowercase - string" )
     EXPECT( to_lowercase(us) == ls );
 }
 
-CASE( "to_uppercase: Return new string in uppercase - string" )
+CASE( "to_uppercase: Return string in uppercase - string" )
 {
     std::string ls( lstr() );
     std::string us( ustr() );
@@ -431,87 +535,96 @@ CASE( "to_uppercase: Return new string in uppercase - string" )
 
 // replace_all():
 
-CASE( "replace_all: Return new string with all occurrences of sub string changed - char*-char*" "[.TODO]" )
+CASE( "replace_all: Return string with all occurrences of sub string changed - char*-char*" "[.TODO]" )
 {
     EXPECT( replace_all( "abc123mno123xyz", "123", "789") == std::string("abc789mno789xyz") );
 }
 
-CASE( "replace_all: Return new string with all occurrences of sub string changed - string-string" "[.TODO]" )
+CASE( "replace_all: Return string with all occurrences of sub string changed - string-string" "[.TODO]" )
 {
     EXPECT( replace_all( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == std::string("abc789mno789xyz") );
 }
 
-CASE( "replace_all: Return new string with all occurrences of sub string changed - string-string_view" "[.TODO]" )
+CASE( "replace_all: Return string with all occurrences of sub string changed - string-string_view" "[.TODO]" )
 {
     EXPECT( replace_all( std::string("abc123mno123xyz"), "123", "789") == std::string("abc789mno789xyz") );
 }
 
+CASE( "replace_all: Return string with all occurrences of regex changed - string-regex" "[.TODO]" ) {}
+CASE( "replace_all_re: Return string with all occurrences of regex changed - string-char*" "[.TODO]" ) {}
+
 // replace_first():
 
-CASE( "replace_first: Return new string with first occurrence of sub string changed - char*-char*" "[.TODO]" )
+CASE( "replace_first: Return string with first occurrence of sub string changed - char*-char*" "[.TODO]" )
 {
     EXPECT( replace_first( "abc123mno123xyz", "123", "789") == std::string("abc789mno123xyz") );
 }
 
-CASE( "replace_first: Return new string with first occurrence of sub string changed - string-string" "[.TODO]" )
+CASE( "replace_first: Return string with first occurrence of sub string changed - string-string" "[.TODO]" )
 {
     EXPECT( replace_first( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == std::string("abc789mno123xyz") );
 }
 
-CASE( "replace_first: Return new string with first occurrence of sub string changed - string-string_view" "[.TODO]" )
+CASE( "replace_first: Return string with first occurrence of sub string changed - string-string_view" "[.TODO]" )
 {
     EXPECT( replace_first( std::string("abc123mno123xyz"), "123", "789") == std::string("abc789mno123xyz") );
 }
 
-CASE( "replace_first: Return new string with first occurrence of sub string changed - string_view-string_view" "[.TODO]" )
+CASE( "replace_first: Return string with first occurrence of sub string changed - string_view-string_view" "[.TODO]" )
 {
 // TODO : implement detail::replace_first(it...)
     // EXPECT( replace_first( string_view("abc123mno123xyz"), "123", "789") == std::string("abc789mno789xyz") );
 }
 
+CASE( "replace_first: Return string with first occurrence of regex changed - string-regex" "[.TODO]" ) {}
+CASE( "replace_first_re: Return string with first occurrence of regex changed - string-char*" "[.TODO]" ) {}
+
 // replace_last():
 
-CASE( "replace_last: Return new string with last occurrence of sub string changed - char*-char*" "[.TODO]" )
+CASE( "replace_last: Return string with last occurrence of sub string changed - char*-char*" "[.TODO]" )
 {
     EXPECT( replace_last( "abc123mno123xyz", "123", "789") == std::string("abc123mno789xyz") );
 }
 
-CASE( "replace_last: Return new string with last occurrence of sub string changed - string-string" "[.TODO]" )
+CASE( "replace_last: Return string with last occurrence of sub string changed - string-string" "[.TODO]" )
 {
     EXPECT( replace_last( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == std::string("abc123mno789xyz") );
 }
 
-CASE( "replace_last: Return new string with last occurrence of sub string changed - string-string_view" "[.TODO]" )
+CASE( "replace_last: Return string with last occurrence of sub string changed - string-string_view" "[.TODO]" )
 {
     EXPECT( replace_last( std::string("abc123mno123xyz"), "123", "789") == std::string("abc123mno789xyz") );
 }
 
-CASE( "replace_last: Return new string with last occurrence of sub string changed - string_view-string_view" "[.TODO]" )
+CASE( "replace_last: Return string with last occurrence of sub string changed - string_view-string_view" "[.TODO]" )
 {
 // TODO : implement detail::replace_last(it...)
     // EXPECT( replace_last( string_view("abc123mno123xyz"), "123", "789") == std::string("abc789mno789xyz") );
 }
 
+CASE( "replace_last: Return string with last occurrence of regex changed - string-regex" "[.TODO]" ) {}
+CASE( "replace_last_re: Return string with last occurrence of regex changed - string-char*" "[.TODO]" ) {}
+
 #endif
 
 // append():
 
-CASE( "append: Return new string with second string append to first string - string-char*" )
+CASE( "append: Return string with second string append to first string - string-char*" )
 {
     EXPECT( append(std::string("abc"), "xyz") == std::string("abcxyz") );
 }
 
-CASE( "append: Return new string with second string append to first string - string-string" )
+CASE( "append: Return string with second string append to first string - string-string" )
 {
     EXPECT( append(std::string("abc"), std::string("xyz")) == std::string("abcxyz") );
 }
 
-CASE( "append: Return new string with second string append to first string - string-string_view" )
+CASE( "append: Return string with second string append to first string - string-string_view" )
 {
-    EXPECT( append(std::string("abc"), std17::string_view("xyz")) == std::string("abcxyz") );
+    EXPECT( append(std::string("abc"), std20::string_view("xyz")) == std::string("abcxyz") );
 }
 
-// strip()
+// strip_left()
 
 CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - C-string" )
 {
@@ -525,17 +638,24 @@ CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - 
     EXPECT( strip_left(std::string(" #$%&abc"), " #$%&") == std::string("abc") );
 }
 
-#if 0 // string_view not supported
-
-CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - other" "[.TODO]")
+CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - other" )
 {
-    char s1[] = " \t\nabc";
-    char s2[] = " #$%&abc";
+    EXPECT( strip_left(stringy(" \t\nabc"), " \t\n") == std::string("abc") );
+    EXPECT( strip_left(stringy(" #$%&abc"), " #$%&") == std::string("abc") );
 
-    EXPECT( strip_left(std17::string_view(std::begin(s1), std::end(s1)), " \t\n") == std::string("abc") );
-    EXPECT( strip_left(std17::string_view(std::begin(s2), std::end(s2)), " #$%&") == std::string("abc") );
+    // string_view not supported:
+
+    // char s1[] = " \t\nabc";
+    // char s2[] = " #$%&abc";
+
+    // EXPECT( strip_left(std20::string_view(std::begin(s1), std::end(s1)), " \t\n") == std::string("abc") );
+    // EXPECT( strip_left(std20::string_view(std::begin(s2), std::end(s2)), " #$%&") == std::string("abc") );
 }
-#endif
+
+CASE( "strip_left: Remove characters in regex from left of string - string-regex" "[.TODO]" ) {}
+CASE( "strip_left_re: Remove characters in regex from left of string - string-char*" "[.TODO]" ) {}
+
+// strip_right()
 
 CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] - string" )
 {
@@ -543,7 +663,7 @@ CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] 
     EXPECT( strip_right(std::string("abc #$%&"), " #$%&") == std::string("abc") );
 }
 
-CASE( "strip_right: Remove characters in set from left of string [\" \\t\\n\"] - other" "[.TODO]")
+CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] - other" )
 {
     EXPECT( strip_right(stringy("abc \t\n"), " \t\n") == std::string("abc") );
     EXPECT( strip_right(stringy("abc #$%&"), " #$%&") == std::string("abc") );
@@ -553,9 +673,14 @@ CASE( "strip_right: Remove characters in set from left of string [\" \\t\\n\"] -
     // char s1[] = "abc \t\n";
     // char s2[] = "abc #$%&";
 
-    // EXPECT( strip_right(std17::string_view(begin(s1), end(s1)), " \t\n") == std::string("abc") );
-    // EXPECT( strip_right(std17::string_view(begin(s2), end(s2)), " #$%&") == std::string("abc") );
+    // EXPECT( strip_right(std20::string_view(begin(s1), end(s1)), " \t\n") == std::string("abc") );
+    // EXPECT( strip_right(std20::string_view(begin(s2), end(s2)), " #$%&") == std::string("abc") );
 }
+
+CASE( "strip_right: Remove characters in regex from right of string - string-regex" "[.TODO]" ) {}
+CASE( "strip_right_re: Remove characters in regex from right of string - string-char*" "[.TODO]" ) {}
+
+// strip()
 
 CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - string" )
 {
@@ -563,19 +688,24 @@ CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\
     EXPECT( strip(std::string(" #$%&abc #$%&"), " #$%&") == std::string("abc") );
 }
 
-CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - other" "[.TODO]")
+CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - other" )
 {
     EXPECT( strip(stringy(" \t\nabc \t\n"), " \t\n") == std::string("abc") );
     EXPECT( strip(stringy(" #$%&abc #$%&"), " #$%&") == std::string("abc") );
 
+    // string_view not supported:
+
     // char s1[] = " \t\nabc";
     // char s2[] = " #$%&abc";
 
-    // EXPECT( strip(std17::string_view(begin(s1), end(s1))) == std::string("abc") );
-    // EXPECT( strip(std17::string_view(begin(s2), end(s2)), " #$%&") == std::string("abc") );
+    // EXPECT( strip(std20::string_view(begin(s1), end(s1))) == std::string("abc") );
+    // EXPECT( strip(std20::string_view(begin(s2), end(s2)), " #$%&") == std::string("abc") );
 }
 
-// TODO Add tests for string_view:
+CASE( "strip: Remove characters in regex from left and right of string - string-regex" "[.TODO]" ) {}
+CASE( "strip_re: Remove characters in regex from left and right of string - string-char*" "[.TODO]" ) {}
+
+// TODO Add tests for (internal) string_view:
 
 CASE( "string_view: ..." "[.TODO]" )
 {
@@ -718,7 +848,7 @@ CASE( "split: Split string into single characters given empty delimiter" )
 
 CASE( "split_2: Split string into two-element tuple given delimiter - xxx_delimiter" )
 {
-    std17::string_view a, b;
+    std20::string_view a, b;
     std::tie(a, b) = split_2("abc;def;ghi", ";");
 
     std::cout << "[a:" << a << "][b:" << b << "]\n";

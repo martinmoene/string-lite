@@ -16,7 +16,7 @@ echo VC%version%: %args%
 
 set unit_config=^
     -Dstring_STRING_HEADER=\"nonstd/string.hpp\" ^
-    -Dstring_TEST_NODISCARD=1
+    -Dstring_CONFIG_PROVIDE_REGEX=1
 
 ::-Dstring_CONFIG_SELECT_STRING_VIEW=string_CONFIG_SELECT_STRING_VIEW_INTERNAL
 ::string_CONFIG_SELECT_STRING_VIEW_INTERNAL
