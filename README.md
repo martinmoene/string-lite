@@ -77,8 +77,12 @@ find_last_not_of: position of sub string in string - string-char*
 find_last_not_of: position of sub string in string - string-string
 find_last_not_of: position of regex in string: string-std::regex[.TODO]
 find_last_not_of_re: position of regex in string: string-char*[.TODO]
+to_lowercase: Return string in lowercase - char*
 to_lowercase: Return string in lowercase - string
+to_lowercase: Return string in lowercase - string_view
+to_uppercase: Return string in uppercase - char*
 to_uppercase: Return string in uppercase - string
+to_uppercase: Return string in uppercase - string_view
 append: Return string with second string append to first string - string-char*
 append: Return string with second string append to first string - string-string
 append: Return string with second string append to first string - string-string_view

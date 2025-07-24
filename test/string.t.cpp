@@ -611,20 +611,34 @@ CASE( "find_last_not_of_re: position of regex in string: string-char*" "[.TODO]"
 
 // to_lowercase(), to_uppercase:
 
+CASE( "to_lowercase: Return string in lowercase - char*" )
+{
+    EXPECT( to_lowercase(ustr()) == lstr() );
+}
+
 CASE( "to_lowercase: Return string in lowercase - string" )
 {
-    std::string ls( lstr() );
-    std::string us( ustr() );
+    EXPECT( to_lowercase(std::string(ustr())) == lstr() );
+}
 
-    EXPECT( to_lowercase(us) == ls );
+CASE( "to_lowercase: Return string in lowercase - string_view" )
+{
+    EXPECT( to_lowercase(std20::string_view(ustr())) == lstr() );
+}
+
+CASE( "to_uppercase: Return string in uppercase - char*" )
+{
+    EXPECT( to_uppercase(lstr()) == ustr() );
 }
 
 CASE( "to_uppercase: Return string in uppercase - string" )
 {
-    std::string ls( lstr() );
-    std::string us( ustr() );
+    EXPECT( to_uppercase(std::string(lstr())) == ustr() );
+}
 
-    EXPECT( to_uppercase(ls) == us );
+CASE( "to_uppercase: Return string in uppercase - string_view" )
+{
+    EXPECT( to_uppercase(std20::string_view(lstr())) == ustr() );
 }
 
 // append():
