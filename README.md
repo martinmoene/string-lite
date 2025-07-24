@@ -79,23 +79,6 @@ find_last_not_of: position of regex in string: string-std::regex[.TODO]
 find_last_not_of_re: position of regex in string: string-char*[.TODO]
 to_lowercase: Return string in lowercase - string
 to_uppercase: Return string in uppercase - string
-replace_all: Return string with all occurrences of sub string changed - char*-char*[.TODO]
-replace_all: Return string with all occurrences of sub string changed - string-string[.TODO]
-replace_all: Return string with all occurrences of sub string changed - string-string_view[.TODO]
-replace_all: Return string with all occurrences of regex changed - string-regex[.TODO]
-replace_all_re: Return string with all occurrences of regex changed - string-char*[.TODO]
-replace_first: Return string with first occurrence of sub string changed - char*-char*[.TODO]
-replace_first: Return string with first occurrence of sub string changed - string-string[.TODO]
-replace_first: Return string with first occurrence of sub string changed - string-string_view[.TODO]
-replace_first: Return string with first occurrence of sub string changed - string_view-string_view[.TODO]
-replace_first: Return string with first occurrence of regex changed - string-regex[.TODO]
-replace_first_re: Return string with first occurrence of regex changed - string-char*[.TODO]
-replace_last: Return string with last occurrence of sub string changed - char*-char*[.TODO]
-replace_last: Return string with last occurrence of sub string changed - string-string[.TODO]
-replace_last: Return string with last occurrence of sub string changed - string-string_view[.TODO]
-replace_last: Return string with last occurrence of sub string changed - string_view-string_view[.TODO]
-replace_last: Return string with last occurrence of regex changed - string-regex[.TODO]
-replace_last_re: Return string with last occurrence of regex changed - string-char*[.TODO]
 append: Return string with second string append to first string - string-char*
 append: Return string with second string append to first string - string-string
 append: Return string with second string append to first string - string-string_view
@@ -118,6 +101,23 @@ strip: Remove characters in set from left and right of string [" \t\n"] - other
 strip: Remove characters in regex from left and right of string - string-regex[.TODO]
 strip_re: Remove characters in regex from left and right of string - string-char*[.TODO]
 string_view: ...[.TODO]
+replace_all: Return string with all occurrences of sub string changed - char*-char*[.TODO]
+replace_all: Return string with all occurrences of sub string changed - string-string[.TODO]
+replace_all: Return string with all occurrences of sub string changed - string-string_view[.TODO]
+replace_all: Return string with all occurrences of regex changed - string-regex[.TODO]
+replace_all_re: Return string with all occurrences of regex changed - string-char*[.TODO]
+replace_first: Return string with first occurrence of sub string changed - char*-char*[.TODO]
+replace_first: Return string with first occurrence of sub string changed - string-string[.TODO]
+replace_first: Return string with first occurrence of sub string changed - string-string_view[.TODO]
+replace_first: Return string with first occurrence of sub string changed - string_view-string_view[.TODO]
+replace_first: Return string with first occurrence of regex changed - string-regex[.TODO]
+replace_first_re: Return string with first occurrence of regex changed - string-char*[.TODO]
+replace_last: Return string with last occurrence of sub string changed - char*-char*[.TODO]
+replace_last: Return string with last occurrence of sub string changed - string-string[.TODO]
+replace_last: Return string with last occurrence of sub string changed - string-string_view[.TODO]
+replace_last: Return string with last occurrence of sub string changed - string_view-string_view[.TODO]
+replace_last: Return string with last occurrence of regex changed - string-regex[.TODO]
+replace_last_re: Return string with last occurrence of regex changed - string-char*[.TODO]
 join: Join strings from collection into a string separated by given separator
 split: Split string into vector of string_view given delimiter - literal_delimiter
 split_2: Split string into two-element tuple given delimiter - xxx_delimiter
