@@ -795,11 +795,11 @@ string_nodiscard std::size_t find_first_of( std20::string_view text, SeekT const
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-// TODO: find_first_of(regex)
+// find_first_of(regex)
 
 string_nodiscard inline std::size_t find_first_of( std20::string_view text, std::regex const & re )
 {
-    return detail::npos;
+    return find_first( text, re );
 }
 
 // find_first_of_re()

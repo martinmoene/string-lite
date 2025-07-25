@@ -428,7 +428,7 @@ CASE( "find_first_of: position of sub string in string - string-string" )
     EXPECT( sv_npos == find_first_of(std::string("abc123mno123xyz"), std::string("789") ) );
 }
 
-CASE( "find_first_of: position of regex in string: string-std::regex" "[.TODO]" )
+CASE( "find_first_of: position of regex in string: string-std::regex" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -444,7 +444,7 @@ CASE( "find_first_of: position of regex in string: string-std::regex" "[.TODO]" 
 
 // find_first_of_re()
 
-CASE( "find_first_of_re: position of regex in string: string-char*" "[.TODO]" )
+CASE( "find_first_of_re: position of regex in string: string-char*" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
