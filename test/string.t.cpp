@@ -983,12 +983,25 @@ CASE( "split: Split string into single characters given empty delimiter" )
 
 #endif // Test Activation
 
-// split_2
+// TODO: split_2
 
 CASE( "split_2: Split string into two-element tuple given delimiter - xxx_delimiter" )
 {
     std20::string_view a, b;
     std::tie(a, b) = split_2("abc;def;ghi", ";");
+
+    std::cout << "[a:" << a << "][b:" << b << "]\n";
+
+    // EXPECT( split_2("abc;def;ghi", ";") == (std::tuple<std::string, std::string>("abc", "def;ghi")) );
+    // EXPECT( std::get<1>(split_2("abc;def;ghi", ";")) == std::string("def;ghi" ));
+}
+
+// TODO: rsplit_2
+
+CASE( "rsplit_2: Split string into two-element tuple given delimiter - xxx_delimiter" )
+{
+    std20::string_view a, b;
+    std::tie(a, b) = rsplit_2("abc;def;ghi", ";");
 
     std::cout << "[a:" << a << "][b:" << b << "]\n";
 

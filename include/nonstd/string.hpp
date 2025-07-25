@@ -1583,6 +1583,7 @@ split( std20::basic_string_view<CharT> text, Delimiter delimiter, size_t Nsplit 
 
     return result;
 }
+
 } // namespace detail
 } // namespace string
 
@@ -1603,6 +1604,11 @@ split( std20::string_view text, Delimiter delimiter, int count = std::numeric_li
 
 string_nodiscard inline std::vector<std20::string_view>
 split( std20::string_view text, char const * d, int count = std::numeric_limits<int>::max() ) { return detail::split(text, literal_delimiter(d), count ); }
+
+#if 0
+string_nodiscard inline std::vector<std20::string_view>
+rsplit( std20::string_view text, char const * d, int count = std::numeric_limits<int>::max() ) { return detail::split(text, reverse_literal_delimiter(d), count ); }
+#endif
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
@@ -1655,27 +1661,18 @@ split_2(  std20::string_view text, char const * d ) -> std::tuple<std20::string_
     return split_2( text, literal_delimiter(d) );
 }
 
-#if 0 // TODO: rsplit_2 -> tuple - use
+// TODO: rsplit_2 -> tuple
 
 // Split string at given separator character, starting at right.
-
-template<typename Delimiter> string_nodiscard auto
-rsplit_2( std20::string_view const & text, Delimiter d ) -> std::tuple<std20::string_view, std20::string_view>
-{
-    auto const result = rsplit( text, delimiter, 2 );
-
-    return { result[0], result[1] };
-}
 
 string_nodiscard inline auto
 rsplit_2(  std20::string_view text, char const * d ) -> std::tuple<std20::string_view, std20::string_view>
 {
-    return rsplit_2( text, literal_delimiter(d) );
+    return { "TODO", "TODO" };
+    // return rsplit_2( text, reverse_literal_delimiter(d) );
 }
 
-#endif
 #endif // string_CONFIG_PROVIDE_CHAR_T
-
 
 //
 // Define requested functions:
