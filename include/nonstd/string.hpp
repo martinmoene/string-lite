@@ -28,6 +28,8 @@
 #define string_STRINGIFY(  x )  string_STRINGIFY_( x )
 #define string_STRINGIFY_( x )  #x
 
+#include <iostream>
+
 // tweak header support:
 
 #ifdef __has_include
@@ -757,11 +759,21 @@ string_nodiscard inline std::size_t find_last( std20::string_view text, char see
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-// TODO: find_last(regex)
+// find_last(regex): use std::regex_iterator?
 
 string_nodiscard inline std::size_t find_last( std20::string_view text, std::regex const & re )
 {
-    return detail::npos;
+    auto elem_begin = std::regex_iterator<std20::string_view::const_iterator>( text.begin(), text.end(), re );
+    auto elem_end   = std::regex_iterator<std20::string_view::const_iterator>();
+
+    size_t last_pos = detail::npos;
+    for (std::regex_iterator<std20::string_view::const_iterator> i = elem_begin; i != elem_end; ++i)
+    {
+        std::match_results<std20::string_view::const_iterator> match = *i;
+        last_pos = match.position();
+    }
+
+    return last_pos;
 }
 
 // find_last_re()

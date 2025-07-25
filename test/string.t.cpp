@@ -378,7 +378,7 @@ CASE( "find_last: position of sub string in string_view - string_view-string_vie
     EXPECT( sv_npos == find_last(text_view(), std20::string_view("789")) );
 }
 
-CASE( "find_last: position of regex in string: string-std::regex" "[.TODO]" )
+CASE( "find_last: position of regex in string: string-std::regex" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -392,14 +392,14 @@ CASE( "find_last: position of regex in string: string-std::regex" "[.TODO]" )
 #endif
 }
 
-// TODO: find_last_re()
+// find_last_re()
 
-CASE( "find_last_re: position of regex in string: string-char*" "[.TODO]" )
+CASE( "find_last_re: position of regex in string: string-char*" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
-    EXPECT(       9 == find_last_re("abc123mno123xyz", "[0-9]") );
-    EXPECT( sv_npos == find_last_re("abc123mno123xyz", "[7-9]") );
+    EXPECT(       9 == find_last_re("abc123mno123xyz", "[0-9]+") );
+    EXPECT( sv_npos == find_last_re("abc123mno123xyz", "[7-9]+") );
 #else
     EXPECT( !!"find_last_re is not available (string_HAVE_REGEX)." );
 #endif
