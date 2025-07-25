@@ -908,7 +908,7 @@ string_nodiscard bool contains( std20::string_view text, SeekT const & seek )
 
 string_nodiscard inline bool contains( std20::string_view text, std::regex const & re )
 {
-    return false;
+    return std::regex_search( text.begin(), text.end(), re );
 }
 
 // TODO: contains_re()
@@ -918,7 +918,7 @@ string_nodiscard inline bool contains( std20::string_view text, std::regex const
 template< typename SeekT >
 string_nodiscard bool contains_re( std20::string_view text, SeekT const & seek )
 {
-    return false;
+    return contains( text, std::regex(seek) );
 }
 
 #endif // regex
