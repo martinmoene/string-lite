@@ -68,19 +68,19 @@ CASE( "length: length of given string - char *" )
     EXPECT( length("abc") == 3 );
 }
 
-CASE( "length: length of given string  - std::string" )
+CASE( "length: length of given string - std::string" )
 {
     EXPECT( length(std::string("abc")) == 3 );
 }
 
 // size():
 
-CASE( "size: length of given string  - char *" )
+CASE( "size: length of given string - char *" )
 {
     EXPECT( size("abc") == 3 );
 }
 
-CASE( "size: length of given string  - std::string" )
+CASE( "size: length of given string - std::string" )
 {
     EXPECT( size(std::string("abc")) == 3 );
 }

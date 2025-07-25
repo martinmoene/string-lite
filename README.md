@@ -17,9 +17,9 @@ Initially writing code for `char` type strings, followed by generalising and ena
 
 ```
 length: length of given string - char *
-length: length of given string  - std::string
-size: length of given string  - char *
-size: length of given string  - std::string
+length: length of given string - std::string
+size: length of given string - char *
+size: length of given string - std::string
 is_empty: true if string is empty - char *
 is_empty: true if string is empty - string
 contains: true if string contains sub string - string-char
