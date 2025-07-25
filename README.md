@@ -27,8 +27,8 @@ contains: true if string contains sub string - string-char*
 contains: true if string contains sub string - string-string
 contains: true if string contains sub string - string-string_view
 contains: true if string contains sub string - string_view-string_view
-contains: true if string contains regular expression - string-std::regex[.TODO]
-contains_re: true if string contains regular expression - string-char*[.TODO]
+contains: true if string contains regular expression - string-std::regex
+contains_re: true if string contains regular expression - string-char*
 starts_with: true if string starts with sub string - string-char
 starts_with: true if string starts with sub string - string-char*
 starts_with: true if string starts with sub string - string-string
@@ -124,7 +124,8 @@ replace_last: Return string with last occurrence of regex changed - string-regex
 replace_last_re: Return string with last occurrence of regex changed - string-char*[.TODO]
 join: Join strings from collection into a string separated by given separator
 split: Split string into vector of string_view given delimiter - literal_delimiter
-split_2: Split string into two-element tuple given delimiter - xxx_delimiter
+split_2: Split string into two-element tuple given delimiter - forward - xxx_delimiter
+rsplit_2: Split string into two-element tuple given delimiter - reverse - xxx_delimiter
 tweak header: Reads tweak header if supported [tweak]
 ```
 

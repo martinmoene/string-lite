@@ -985,7 +985,7 @@ CASE( "split: Split string into single characters given empty delimiter" )
 
 // TODO: split_2
 
-CASE( "split_2: Split string into two-element tuple given delimiter - xxx_delimiter" )
+CASE( "split_2: Split string into two-element tuple given delimiter - forward - xxx_delimiter" )
 {
     std20::string_view a, b;
     std::tie(a, b) = split_2("abc;def;ghi", ";");
@@ -998,7 +998,7 @@ CASE( "split_2: Split string into two-element tuple given delimiter - xxx_delimi
 
 // TODO: rsplit_2
 
-CASE( "rsplit_2: Split string into two-element tuple given delimiter - xxx_delimiter" )
+CASE( "rsplit_2: Split string into two-element tuple given delimiter - reverse - xxx_delimiter" )
 {
     std20::string_view a, b;
     std::tie(a, b) = rsplit_2("abc;def;ghi", ";");
