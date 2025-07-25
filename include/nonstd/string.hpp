@@ -767,8 +767,7 @@ string_nodiscard inline std::size_t find_last( std20::string_view text, std::reg
     size_t last_pos = detail::npos;
     for (std::regex_iterator<std20::string_view::const_iterator> i = elem_begin; i != elem_end; ++i)
     {
-        std::match_results<std20::string_view::const_iterator> match = *i;
-        last_pos = match.position();
+        last_pos = i->position();
     }
 
     return last_pos;
@@ -1015,9 +1014,8 @@ string_nodiscard inline bool ends_with( std20::string_view text, std::regex cons
     size_t last_len = 0;
     for (std::regex_iterator<std20::string_view::const_iterator> i = elem_begin; i != elem_end; ++i)
     {
-        std::match_results<std20::string_view::const_iterator> match = *i;
-        last_pos = match.position();
-        last_len = match.length();
+        last_pos = i->position();
+        last_len = i->length();
     }
 
     return text.length() == last_pos + last_len;
