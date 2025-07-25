@@ -192,7 +192,7 @@ CASE( "starts_with: true if string starts with sub string - string_view-string_v
     EXPECT_NOT( starts_with(std20::string_view("abc123mno123xyz"), std20::string_view("b")) );
 }
 
-CASE( "starts_with: true if string starts with regular expression - string-std::regex" "[.TODO]" )
+CASE( "starts_with: true if string starts with regular expression - string-std::regex" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -206,7 +206,7 @@ CASE( "starts_with: true if string starts with regular expression - string-std::
 #endif
 }
 
-CASE( "starts_with_re: true if string starts with regular expression - string-char*" "[.TODO]" )
+CASE( "starts_with_re: true if string starts with regular expression - string-char*" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -314,7 +314,7 @@ CASE( "find_first: position of sub string in string_view - string_view-string_vi
     EXPECT( sv_npos == find_first(text_view(), std20::string_view("789")) );
 }
 
-CASE( "find_first: position of regex in string: string-std::regex" "[.TODO]" )
+CASE( "find_first: position of regex in string: string-std::regex" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -330,7 +330,7 @@ CASE( "find_first: position of regex in string: string-std::regex" "[.TODO]" )
 
 // TODO: find_first_re()
 
-CASE( "find_first_re: position of regex in string: string-char*" "[.TODO]" )
+CASE( "find_first_re: position of regex in string: string-char*" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX

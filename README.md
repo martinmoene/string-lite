@@ -34,8 +34,8 @@ starts_with: true if string starts with sub string - string-char*
 starts_with: true if string starts with sub string - string-string
 starts_with: true if string starts with sub string - string-string_view
 starts_with: true if string starts with sub string - string_view-string_view
-starts_with: true if string starts with regular expression - string-std::regex[.TODO]
-starts_with_re: true if string starts with regular expression - string-char*[.TODO]
+starts_with: true if string starts with regular expression - string-std::regex
+starts_with_re: true if string starts with regular expression - string-char*
 ends_with: true if string ends with sub string - string-char
 ends_with: true if string ends with sub string - string-char*
 ends_with: true if string ends with sub string - string-string
@@ -48,8 +48,8 @@ find_first: position of sub string in string - string-char*
 find_first: position of sub string in string - string-string
 find_first: position of sub string in string - string-string_view
 find_first: position of sub string in string_view - string_view-string_view
-find_first: position of regex in string: string-std::regex[.TODO]
-find_first_re: position of regex in string: string-char*[.TODO]
+find_first: position of regex in string: string-std::regex
+find_first_re: position of regex in string: string-char*
 find_last: position of sub string in string - string-char
 find_last: position of sub string in string - string-char*
 find_last: position of sub string in string - string-string

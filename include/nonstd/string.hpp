@@ -721,19 +721,21 @@ string_nodiscard inline std::size_t find_first( std20::string_view text, char se
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-// TODO: find_first(regex)
+// find_first(regex)
 
 string_nodiscard inline std::size_t find_first( std20::string_view text, std::regex const & re )
 {
-    return detail::npos;
+    std::match_results< std20::string_view::const_iterator > result;
+
+    return std::regex_search( text.begin(), text.end(), result, re ) ? result.position() : detail::npos;
 }
 
-// TODO: find_first_re()
+// find_first_re()
 
 template< typename SeekT >
 string_nodiscard std::size_t find_first_re( std20::string_view text, SeekT const & seek )
 {
-    return detail::npos;
+    return find_first( text, std::regex(seek) );
 }
 
 #endif // regex
@@ -762,12 +764,12 @@ string_nodiscard inline std::size_t find_last( std20::string_view text, std::reg
     return detail::npos;
 }
 
-// TODO: find_last_re()
+// find_last_re()
 
 template< typename SeekT >
 string_nodiscard std::size_t find_last_re( std20::string_view text, SeekT const & seek )
 {
-    return detail::npos;
+    return find_last( text, std::regex(seek) );
 }
 
 #endif // regex
@@ -791,12 +793,12 @@ string_nodiscard inline std::size_t find_first_of( std20::string_view text, std:
     return detail::npos;
 }
 
-// TODO: find_first_of_re()
+// find_first_of_re()
 
 template< typename SeekT >
 string_nodiscard inline std::size_t find_first_of_re( std20::string_view text, SeekT const & seek )
 {
-    return detail::npos;
+    return find_first_of( text, std::regex(seek) );
 }
 
 #endif // regex
@@ -820,12 +822,12 @@ string_nodiscard inline std::size_t find_last_of( std20::string_view text, std::
     return detail::npos;
 }
 
-// TODO: find_last_of_re()
+// find_last_of_re()
 
 template< typename SeekT >
 string_nodiscard inline std::size_t find_last_of_re( std20::string_view text, SeekT const & seek )
 {
-    return detail::npos;
+    return find_last_of( text, std::regex(seek) );
 }
 
 #endif // regex
@@ -849,12 +851,12 @@ string_nodiscard inline std::size_t find_first_not_of( std20::string_view text, 
     return detail::npos;
 }
 
-// TODO: find_last_not_of_re()
+// find_first_not_of_re()
 
 template< typename SeekT >
 string_nodiscard inline std::size_t find_first_not_of_re( std20::string_view text, SeekT const & seek )
 {
-    return detail::npos;
+    return find_first_not_of( text, std::regex(seek) );
 }
 
 #endif // regex
@@ -878,12 +880,12 @@ string_nodiscard inline std::size_t find_last_not_of( std20::string_view text, s
     return detail::npos;
 }
 
-// TODO: find_last_not_of_re()
+// find_last_not_of_re()
 
 template< typename SeekT >
 string_nodiscard inline std::size_t find_last_not_of_re( std20::string_view text, SeekT const & seek )
 {
-    return detail::npos;
+    return find_last_not_of( text, std::regex(seek) );
 }
 
 #endif // regex
@@ -952,17 +954,17 @@ inline string_nodiscard bool starts_with( std20::string_view text, char seek )
 
 string_nodiscard inline bool starts_with( std20::string_view text, std::regex const & re )
 {
-    return false;
+    return 0 == find_first( text, re );
 }
 
-// TODO: starts_with_re()
+// starts_with_re()
 
 #define string_MK_STARTS_WITH_RE(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard bool starts_with_re( std20::string_view text, SeekT const & seek )
 {
-    return false;
+    return 0 == find_first_re( text, seek );
 }
 
 #endif // regex
