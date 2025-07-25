@@ -252,12 +252,12 @@ CASE( "ends_with: true if string ends with sub string - string_view-string_view"
     EXPECT_NOT( ends_with(std20::string_view("abc123mno123xyz"), std20::string_view("y")) );
 }
 
-CASE( "ends_with: true if string ends with regular expression - string-std::regex" "[.TODO]" )
+CASE( "ends_with: true if string ends with regular expression - string-std::regex" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
-    EXPECT(     ends_with(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
-    EXPECT_NOT( ends_with(std::string("abc123mno123xyz"), std::regex("[4-9]+")) );
+    EXPECT(     ends_with(std::string("abc123mno123xyz"), std::regex("[a-z]+")) );
+    EXPECT_NOT( ends_with(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
 #else
     EXPECT( !!"ends_with(regex) is not available (string_HAVE_REGEX)." );
 #endif
@@ -266,12 +266,12 @@ CASE( "ends_with: true if string ends with regular expression - string-std::rege
 #endif
 }
 
-CASE( "ends_with_re: true if string ends with regular expression - string-char*" "[.TODO]" )
+CASE( "ends_with_re: true if string ends with regular expression - string-char*" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
-    EXPECT(     ends_with_re(std::string("abc123mno123xyz"), "[0-9]+") );
-    EXPECT_NOT( ends_with_re(std::string("abc123mno123xyz"), "[4-9]+") );
+    EXPECT(     ends_with_re(std::string("abc123mno123xyz"), "[a-z]+") );
+    EXPECT_NOT( ends_with_re(std::string("abc123mno123xyz"), "[0-9]+") );
 #else
     EXPECT( !!"ends_with_re is not available (string_HAVE_REGEX)." );
 #endif

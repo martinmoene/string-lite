@@ -28,8 +28,6 @@
 #define string_STRINGIFY(  x )  string_STRINGIFY_( x )
 #define string_STRINGIFY_( x )  #x
 
-#include <iostream>
-
 // tweak header support:
 
 #ifdef __has_include
@@ -1010,17 +1008,29 @@ inline string_nodiscard bool ends_with( std20::string_view text, char seek )
 
 string_nodiscard inline bool ends_with( std20::string_view text, std::regex const & re )
 {
-    return false;
+    auto elem_begin = std::regex_iterator<std20::string_view::const_iterator>( text.begin(), text.end(), re );
+    auto elem_end   = std::regex_iterator<std20::string_view::const_iterator>();
+
+    size_t last_pos = detail::npos;
+    size_t last_len = 0;
+    for (std::regex_iterator<std20::string_view::const_iterator> i = elem_begin; i != elem_end; ++i)
+    {
+        std::match_results<std20::string_view::const_iterator> match = *i;
+        last_pos = match.position();
+        last_len = match.length();
+    }
+
+    return text.length() == last_pos + last_len;
 }
 
-// TODO: ends_with_re()
+// ends_with_re()
 
 #define string_MK_ENDS_WITH_RE(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard bool ends_with_re( std20::string_view text, SeekT const & seek )
 {
-    return false;
+    return ends_with( text, std::regex(seek) );
 }
 
 #endif // regex
