@@ -676,7 +676,7 @@ using namespace string;
 // Observers
 //
 
-// TODO: length()
+// length()
 
 #define string_MK_LENGTH(T) \
     string_nodiscard inline std::size_t length( std20::basic_string_view<T> text ) noexcept \
@@ -684,7 +684,7 @@ using namespace string;
         return text.length(); \
     }\
 
-// TODO: size()
+// size()
 
 #define string_MK_SIZE(T) \
     string_nodiscard inline std::size_t size( std20::basic_string_view<T> text ) noexcept \
@@ -692,7 +692,7 @@ using namespace string;
         return text.size(); \
     }\
 
-// TODO: is_empty()
+// is_empty()
 
 #define string_MK_IS_EMPTY(T) \
     string_nodiscard inline bool is_empty( std20::basic_string_view<T> text ) noexcept \
@@ -904,14 +904,14 @@ string_nodiscard bool contains( std20::string_view text, SeekT const & seek )
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-// TODO: contains(regex)
+// contains(regex)
 
 string_nodiscard inline bool contains( std20::string_view text, std::regex const & re )
 {
     return std::regex_search( text.begin(), text.end(), re );
 }
 
-// TODO: contains_re()
+// contains_re()
 
 #define string_MK_CONTAINS_RE(T) /*TODO: MK()*/
 
@@ -1203,11 +1203,7 @@ join( Coll const & coll, SepT const & sep )
 template< typename CharT >
 std20::basic_string_view<CharT> basic_delimiter_end(std20::basic_string_view<CharT> sv)
 {
-#if 0 // string_CONFIG_SELECT_STRING_VIEW != string_CONFIG_SELECT_STRING_VIEW_STD // TODO: these macros are not used
-    return std20::basic_string_view<CharT>(sv.cend(), size_t(0));
-#else
     return std20::basic_string_view<CharT>(sv.data() + sv.size(), size_t(0));
-#endif
 }
 
 // a single string delimiter:
