@@ -1600,47 +1600,80 @@ split( std20::string_view text, Delimiter delimiter, int count = std::numeric_li
 
 #if string_CONFIG_PROVIDE_CHAR_T
 template<typename Delimiter> string_nodiscard std::vector< std20::string_view>
-split( std20::string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+split( std20::string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+{
+    return detail::split(text, delimiter, count );
+}
 
 string_nodiscard inline std::vector<std20::string_view>
-split( std20::string_view text, char const * d, int count = std::numeric_limits<int>::max() ) { return detail::split(text, literal_delimiter(d), count ); }
+split( std20::string_view text, char const * d, int count = std::numeric_limits<int>::max() )
+{
+    return detail::split(text, literal_delimiter(d), count );
+}
 
 #if 0
 string_nodiscard inline std::vector<std20::string_view>
-rsplit( std20::string_view text, char const * d, int count = std::numeric_limits<int>::max() ) { return detail::split(text, reverse_literal_delimiter(d), count ); }
+rsplit( std20::string_view text, char const * d, int count = std::numeric_limits<int>::max() )
+{
+    return detail::split(text, reverse_literal_delimiter(d), count );
+}
 #endif
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
 template<typename Delimiter> string_nodiscard std::vector<std17::wstring_view>
-split( std17::wstring_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+split( std17::wstring_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+{
+    return detail::split(text, delimiter, count );
+}
 
 string_nodiscard inline std::vector<std17::wstring_view>
-split( std17::wstring_view text, wchar_t const * d, int count = 0 ) { return detail::split(text, wliteral_delimiter(d), count ); }
+split( std17::wstring_view text, wchar_t const * d, int count = 0 )
+{
+    return detail::split(text, wliteral_delimiter(d), count );
+}
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR8_T
 template<typename Delimiter> string_nodiscard std::vector<std17::u8string_view>
-split( std17::u8string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+split( std17::u8string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+{
+    return detail::split(text, delimiter, count );
+}
 
 string_nodiscard inline std::vector<std17::u8string_view>
-split( std17::u8string_view text, char8_t const * d, int count = 0 ) { return detail::split(text, u8literal_delimiter(d), count ); }
+split( std17::u8string_view text, char8_t const * d, int count = 0 )
+{
+    return detail::split(text, u8literal_delimiter(d), count );
+}
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR16_T
 template<typename Delimiter> string_nodiscard std::vector<std17::u16string_view>
-split( std17::u16string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+split( std17::u16string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+{
+    return detail::split(text, delimiter, count );
+}
 
 string_nodiscard inline std::vector<std17::u16string_view>
-split( std17::u16string_view text, char16_t const * d, int count = 0 ) { return detail::split(text, u16literal_delimiter(d), count ); }
+split( std17::u16string_view text, char16_t const * d, int count = 0 )
+{
+    return detail::split(text, u16literal_delimiter(d), count );
+}
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR32_T
 template<typename Delimiter> string_nodiscard std::vector<std17::u32string_view>
-split( std17::u32string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+split( std17::u32string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+{
+    return detail::split(text, delimiter, count );
+}
 
 inline string_nodiscard std::vector<std17::u32string_view>
-split( std17::u32string_view text, char32_t const * d, int count = 0 ) { return detail::split(text, u32literal_delimiter(d), count ); }
+split( std17::u32string_view text, char32_t const * d, int count = 0 )
+{
+    return detail::split(text, u32literal_delimiter(d), count );
+}
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR_T
