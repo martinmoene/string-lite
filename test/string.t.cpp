@@ -478,11 +478,11 @@ CASE( "find_last_of: position of sub string in string - string-string" )
     EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), std::string("789") ) );
 }
 
-CASE( "find_last_of: position of regex in string: string-std::regex" "[.TODO]" )
+CASE( "find_last_of: position of regex in string: string-std::regex" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
-    EXPECT(       3 == find_last_of(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
+    EXPECT(       9 == find_last_of(std::string("abc123mno123xyz"), std::regex("[0-9]+")) );
     EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), std::regex("[7-9]+")) );
 #else
     EXPECT( !!"find_last_of(regex) is not available (string_HAVE_REGEX)." );
@@ -494,11 +494,11 @@ CASE( "find_last_of: position of regex in string: string-std::regex" "[.TODO]" )
 
 // find_last_of_re()
 
-CASE( "find_last_of_re: position of regex in string: string-char*" "[.TODO]" )
+CASE( "find_last_of_re: position of regex in string: string-char*" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
-    EXPECT(       3 == find_last_of_re(std::string("abc123mno123xyz"), "[0-9]+") );
+    EXPECT(       9 == find_last_of_re(std::string("abc123mno123xyz"), "[0-9]+") );
     EXPECT( sv_npos == find_last_of_re(std::string("abc123mno123xyz"), "[7-9]+") );
 #else
     EXPECT( !!"find_last_of_re is not available (string_HAVE_REGEX)." );

@@ -65,8 +65,8 @@ find_first_of_re: position of regex in string: string-char*
 find_last_of: position of sub string in string - char*-char*
 find_last_of: position of sub string in string - string-char*
 find_last_of: position of sub string in string - string-string
-find_last_of: position of regex in string: string-std::regex[.TODO]
-find_last_of_re: position of regex in string: string-char*[.TODO]
+find_last_of: position of regex in string: string-std::regex
+find_last_of_re: position of regex in string: string-char*
 find_first_not_of: position of sub string in string - char*-char*
 find_first_not_of: position of sub string in string - string-char*
 find_first_not_of: position of sub string in string - string-string

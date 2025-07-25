@@ -828,7 +828,7 @@ string_nodiscard std::size_t find_last_of( std20::string_view text, SeekT const 
 
 string_nodiscard inline std::size_t find_last_of( std20::string_view text, std::regex const & re )
 {
-    return detail::npos;
+    return find_last( text, re );
 }
 
 // find_last_of_re()
