@@ -7,14 +7,14 @@
 // (See accompanying file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // TODO: Plan
-// - [x] use C++20 std::string_view, not C++17 for presence of ctor(char* begin, char* end) 
+// - [x] use C++20 std::string_view, not C++17 for presence of ctor(char* begin, char* end)
 // - [ ] implement functions
-// - [] support string_view as source?
-// - [] constexpr / string_constexpr / string_constexpr14
-// - [] nodiscard / string_nodiscard
-// - [] noexcept / string_noexcept
-// - [] MK macros
-// - [] create functions via MK macros
+// - [ ] support string_view as source?
+// - [ ] constexpr / string_constexpr / string_constexpr14
+// - [ ] nodiscard / string_nodiscard
+// - [ ] noexcept / string_noexcept
+// - [ ] MK macros
+// - [ ] create functions via MK macros
 
 #ifndef NONSTD_STRING_BARE_HPP
 #define NONSTD_STRING_BARE_HPP
@@ -603,14 +603,14 @@ string_nodiscard string_constexpr CharT nullchr() noexcept
     to_string( std20::basic_string_view<T> sv )     \
     {                                               \
         return std::basic_string<T>( sv );          \
-    }                                               
+    }
 #else
     #define MK_DETAIL_TO_STRING_SV(T)               \
     string_nodiscard inline std::basic_string<T>    \
     to_string( std20::basic_string_view<T> sv )     \
     {                                               \
         return std::basic_string<T>( sv.begin(), sv.end() );    \
-    }                                               
+    }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR_T
@@ -706,7 +706,7 @@ using namespace string;
 
 // find_first()
 
-#define string_MK_FIND_FIRST(T) /*TODO*/
+#define string_MK_FIND_FIRST(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard std::size_t find_first( std20::string_view text, SeekT const & seek )
@@ -740,7 +740,7 @@ string_nodiscard std::size_t find_first_re( std20::string_view text, SeekT const
 
 // find_last()
 
-#define string_MK_FIND_LAST(T) /*TODO*/
+#define string_MK_FIND_LAST(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard std::size_t find_last( std20::string_view text, SeekT const & seek )
@@ -774,7 +774,7 @@ string_nodiscard std::size_t find_last_re( std20::string_view text, SeekT const 
 
 // find_first_of()
 
-#define string_MK_FIND_FIRST_OF(T) /*TODO*/
+#define string_MK_FIND_FIRST_OF(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard std::size_t find_first_of( std20::string_view text, SeekT const & seek )
@@ -803,7 +803,7 @@ string_nodiscard inline std::size_t find_first_of_re( std20::string_view text, S
 
 // find_last_of()
 
-#define string_MK_FIND_LAST_OF(T) /*TODO*/
+#define string_MK_FIND_LAST_OF(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard std::size_t find_last_of( std20::string_view text, SeekT const & seek )
@@ -832,7 +832,7 @@ string_nodiscard inline std::size_t find_last_of_re( std20::string_view text, Se
 
 // TODO: find_first_not_of()
 
-#define string_MK_FIND_FIRST_NOT_OF(T) /*TODO*/
+#define string_MK_FIND_FIRST_NOT_OF(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard std::size_t find_first_not_of( std20::string_view text, SeekT const & seek )
@@ -861,7 +861,7 @@ string_nodiscard inline std::size_t find_first_not_of_re( std20::string_view tex
 
 // TODO: find_last_not_of()
 
-#define string_MK_FIND_LAST_NOT_OF(T) /*TODO*/
+#define string_MK_FIND_LAST_NOT_OF(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard std::size_t find_last_not_of( std20::string_view text, SeekT const & seek )
@@ -890,7 +890,7 @@ string_nodiscard inline std::size_t find_last_not_of_re( std20::string_view text
 
 // contains() - C++23
 
-#define string_MK_CONTAINS(T) /*TODO*/
+#define string_MK_CONTAINS(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard bool contains( std20::string_view text, SeekT const & seek )
@@ -913,7 +913,7 @@ string_nodiscard inline bool contains( std20::string_view text, std::regex const
 
 // TODO: contains_re()
 
-#define string_MK_CONTAINS_RE(T) /*TODO*/
+#define string_MK_CONTAINS_RE(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard bool contains_re( std20::string_view text, SeekT const & seek )
@@ -925,7 +925,7 @@ string_nodiscard bool contains_re( std20::string_view text, SeekT const & seek )
 
 // starts_with() - C++20
 
-#define string_MK_STARTS_WITH(T) /*TODO*/
+#define string_MK_STARTS_WITH(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard bool starts_with( std20::string_view text, SeekT const & seek )
@@ -957,7 +957,7 @@ string_nodiscard inline bool starts_with( std20::string_view text, std::regex co
 
 // TODO: starts_with_re()
 
-#define string_MK_STARTS_WITH_RE(T) /*TODO*/
+#define string_MK_STARTS_WITH_RE(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard bool starts_with_re( std20::string_view text, SeekT const & seek )
@@ -969,7 +969,7 @@ string_nodiscard bool starts_with_re( std20::string_view text, SeekT const & see
 
 // ends_with() - C++20
 
-#define string_MK_ENDS_WITH(T) /*TODO*/
+#define string_MK_ENDS_WITH(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard bool ends_with( std20::string_view text, SeekT const & seek )
@@ -1001,7 +1001,7 @@ string_nodiscard inline bool ends_with( std20::string_view text, std::regex cons
 
 // TODO: ends_with_re()
 
-#define string_MK_ENDS_WITH_RE(T) /*TODO*/
+#define string_MK_ENDS_WITH_RE(T) /*TODO: MK()*/
 
 template< typename SeekT >
 string_nodiscard bool ends_with_re( std20::string_view text, SeekT const & seek )
@@ -1034,7 +1034,7 @@ string_nodiscard bool ends_with_re( std20::string_view text, SeekT const & seek 
 
 // strip_left()
 
-#define string_MK_STRIP_LEFT(T) /*TODO*/
+#define string_MK_STRIP_LEFT(T) /*TODO: MK()*/
 
 template< typename SetT >
 string_nodiscard std::string
@@ -1045,7 +1045,7 @@ strip_left( std::string text, SetT const & set  )
 
 // strip_right()
 
-#define string_MK_STRIP_RIGHT(T) /*TODO*/
+#define string_MK_STRIP_RIGHT(T) /*TODO: MK()*/
 
 template< typename SetT >
 string_nodiscard std::string
@@ -1056,7 +1056,7 @@ strip_right( std::string text, SetT const & set )
 
 // strip()
 
-#define string_MK_STRIP(T) /*TODO*/
+#define string_MK_STRIP(T) /*TODO: MK()*/
 
 template< typename SetT >
 string_nodiscard std::string
@@ -1067,7 +1067,7 @@ strip( std::string text, SetT const & set )
 
 // TODO: replace_all()
 
-#define string_MK_REPLACE_ALL(T) /*TODO*/
+#define string_MK_REPLACE_ALL(T) /*TODO: MK()*/
 
 template< typename WhatT, typename WithT >
 string_nodiscard std::string
@@ -1079,7 +1079,7 @@ replace_all( std::string text, WhatT const & what, WithT const & with )
 
 // TODO: replace_first()
 
-#define string_MK_REPLACE_FIRST(T) /*TODO*/
+#define string_MK_REPLACE_FIRST(T) /*TODO: MK()*/
 
 template< typename WhatT, typename WithT >
 string_nodiscard std::string
@@ -1091,7 +1091,7 @@ replace_first( std::string text, WhatT const & what, WithT const & with )
 
 // TODO: replace_last()
 
-#define string_MK_REPLACE_LAST(T) /*TODO*/
+#define string_MK_REPLACE_LAST(T) /*TODO: MK()*/
 
 template< typename WhatT, typename WithT >
 string_nodiscard std::string
@@ -1107,7 +1107,7 @@ replace_last( std::string text, WhatT const & what, WithT const & with )
 
 // append()
 
-#define string_MK_APPEND(T) /*TODO*/
+#define string_MK_APPEND(T) /*TODO: MK()*/
 
 template< typename TailT >
 string_nodiscard std::string
@@ -1122,9 +1122,9 @@ append( std::string text, TailT const & tail )
 
 // substring()
 
-#define string_MK_SUBSTRING(T) /*TODO*/
+#define string_MK_SUBSTRING(T) /*TODO: MK()*/
 
-string_nodiscard inline std::string 
+string_nodiscard inline std::string
 substring( std20::string_view text, size_t pos = 0, size_t count = detail::npos )
 {
     return detail::to_string( text.substr( pos, count ) );
@@ -1132,7 +1132,7 @@ substring( std20::string_view text, size_t pos = 0, size_t count = detail::npos 
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-string_nodiscard inline std::string 
+string_nodiscard inline std::string
 substring( std20::string_view text, std::regex const & re )
 {
     #pragma message("TODO: Implement substring(regex).")
@@ -1141,7 +1141,7 @@ substring( std20::string_view text, std::regex const & re )
 
 // substring_re()
 
-string_nodiscard inline std::string 
+string_nodiscard inline std::string
 substring_re( std20::string_view text, char const * re )
 {
     #pragma message("TODO: Implement substring_re().")
@@ -1179,7 +1179,7 @@ join( Coll const & coll, SepT const & sep, Result result )
 } // namespace detail
 } // namespace string
 
-#define string_MK_JOIN(T) /*TODO*/
+#define string_MK_JOIN(T) /*TODO: MK()*/
 
 template< typename Coll, typename SepT >
 string_nodiscard std::string
@@ -1189,7 +1189,6 @@ join( Coll const & coll, SepT const & sep )
 }
 
 // TODO: split
-
 
 // split():
 
@@ -1204,7 +1203,7 @@ join( Coll const & coll, SepT const & sep )
 template< typename CharT >
 std20::basic_string_view<CharT> basic_delimiter_end(std20::basic_string_view<CharT> sv)
 {
-#if string_CONFIG_SELECT_STRING_VIEW != string_CONFIG_SELECT_STRING_VIEW_STD // TODO: these macros are not used
+#if 0 // string_CONFIG_SELECT_STRING_VIEW != string_CONFIG_SELECT_STRING_VIEW_STD // TODO: these macros are not used
     return std20::basic_string_view<CharT>(sv.cend(), size_t(0));
 #else
     return std20::basic_string_view<CharT>(sv.data() + sv.size(), size_t(0));
@@ -1593,7 +1592,7 @@ split( std20::basic_string_view<CharT> text, Delimiter delimiter, size_t Nsplit 
 
 // split -> vector
 
-#define string_MK_SPLIT(T) /*TODO*/
+#define string_MK_SPLIT(T) /*TODO: MK()*/
 
 template< typename CharT, typename Delimiter >
 string_nodiscard std::vector< std20::string_view >
@@ -1603,33 +1602,43 @@ split( std20::string_view text, Delimiter delimiter, int count = std::numeric_li
 }
 
 #if string_CONFIG_PROVIDE_CHAR_T
-template<typename Delimiter> string_nodiscard std::vector< std20::string_view> split( std20::string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+template<typename Delimiter> string_nodiscard std::vector< std20::string_view>
+split( std20::string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
 
-string_nodiscard inline std::vector<std20::string_view> split( std20::string_view text, char const * d, int count = std::numeric_limits<int>::max() ) { return detail::split(text, literal_delimiter(d), count ); }
+string_nodiscard inline std::vector<std20::string_view>
+split( std20::string_view text, char const * d, int count = std::numeric_limits<int>::max() ) { return detail::split(text, literal_delimiter(d), count ); }
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
-template<typename Delimiter> string_nodiscard std::vector<std17::wstring_view> split( std17::wstring_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+template<typename Delimiter> string_nodiscard std::vector<std17::wstring_view>
+split( std17::wstring_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
 
-string_nodiscard inline std::vector<std17::wstring_view> split( std17::wstring_view text, wchar_t const * d, int count = 0 ) { return detail::split(text, wliteral_delimiter(d), count ); }
+string_nodiscard inline std::vector<std17::wstring_view>
+split( std17::wstring_view text, wchar_t const * d, int count = 0 ) { return detail::split(text, wliteral_delimiter(d), count ); }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR8_T
-template<typename Delimiter> string_nodiscard std::vector<std17::u8string_view> split( std17::u8string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+template<typename Delimiter> string_nodiscard std::vector<std17::u8string_view>
+split( std17::u8string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
 
-string_nodiscard inline std::vector<std17::u8string_view> split( std17::u8string_view text, char8_t const * d, int count = 0 ) { return detail::split(text, u8literal_delimiter(d), count ); }
+string_nodiscard inline std::vector<std17::u8string_view>
+split( std17::u8string_view text, char8_t const * d, int count = 0 ) { return detail::split(text, u8literal_delimiter(d), count ); }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR16_T
-template<typename Delimiter> string_nodiscard std::vector<std17::u16string_view> split( std17::u16string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+template<typename Delimiter> string_nodiscard std::vector<std17::u16string_view>
+split( std17::u16string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
 
-string_nodiscard inline std::vector<std17::u16string_view> split( std17::u16string_view text, char16_t const * d, int count = 0 ) { return detail::split(text, u16literal_delimiter(d), count ); }
+string_nodiscard inline std::vector<std17::u16string_view>
+split( std17::u16string_view text, char16_t const * d, int count = 0 ) { return detail::split(text, u16literal_delimiter(d), count ); }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR32_T
-template<typename Delimiter> string_nodiscard std::vector<std17::u32string_view> split( std17::u32string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
+template<typename Delimiter> string_nodiscard std::vector<std17::u32string_view>
+split( std17::u32string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() ) { return detail::split(text, delimiter, count ); }
 
-inline string_nodiscard std::vector<std17::u32string_view> split( std17::u32string_view text, char32_t const * d, int count = 0 ) { return detail::split(text, u32literal_delimiter(d), count ); }
+inline string_nodiscard std::vector<std17::u32string_view>
+split( std17::u32string_view text, char32_t const * d, int count = 0 ) { return detail::split(text, u32literal_delimiter(d), count ); }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR_T
