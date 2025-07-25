@@ -597,12 +597,39 @@ string_nodiscard string_constexpr CharT nullchr() noexcept
     return 0;
 }
 
-template< class CharT >
-std::basic_string<CharT>
-to_string( std20::basic_string_view<CharT> v )
-{
-    return std::basic_string<CharT>( v.begin(), v.end() );
-}
+#if string_HAVE_STRING_VIEW_20
+    #define MK_DETAIL_TO_STRING_SV(T)               \
+    string_nodiscard inline std::basic_string<T>    \
+    to_string( std20::basic_string_view<T> sv )     \
+    {                                               \
+        return std::basic_string<T>( sv );          \
+    }                                               
+#else
+    #define MK_DETAIL_TO_STRING_SV(T)               \
+    string_nodiscard inline std::basic_string<T>    \
+    to_string( std20::basic_string_view<T> sv )     \
+    {                                               \
+        return std::basic_string<T>( sv.begin(), sv.end() );    \
+    }                                               
+#endif
+
+#if string_CONFIG_PROVIDE_CHAR_T
+    MK_DETAIL_TO_STRING_SV( char )
+#endif
+#if string_CONFIG_PROVIDE_WCHAR_T
+    MK_DETAIL_TO_STRING_SV( wchar_t )
+#endif
+#if string_CONFIG_PROVIDE_CHAR8_T
+    MK_DETAIL_TO_STRING_SV( char8_t )
+#endif
+#if string_CONFIG_PROVIDE_CHAR16_T
+    MK_DETAIL_TO_STRING_SV( char16_t )
+#endif
+#if string_CONFIG_PROVIDE_CHAR32_T
+    MK_DETAIL_TO_STRING_SV( char32_t )
+#endif
+
+#undef MK_DETAIL_TO_STRING_SV
 
 // template< class CharT, class Traits, class Allocator >
 // std::basic_string<CharT, Traits, Allocator>
@@ -1097,20 +1124,10 @@ append( std::string text, TailT const & tail )
 
 #define string_MK_SUBSTRING(T) /*TODO*/
 
-string_nodiscard inline std::string
-to_string( std20::string_view text )
-{
-#if string_HAVE_STRING_VIEW_20
-    return std::string( text );
-#else
-    return std::string( text.begin(), text.end() );
-#endif
-}
-
 string_nodiscard inline std::string 
 substring( std20::string_view text, size_t pos = 0, size_t count = detail::npos )
 {
-    return to_string( text.substr( pos, count ) );
+    return detail::to_string( text.substr( pos, count ) );
 }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
