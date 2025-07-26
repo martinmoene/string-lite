@@ -70,13 +70,13 @@ find_last_of_re: position of regex in string: string-char*
 find_first_not_of: position of sub string in string - char*-char*
 find_first_not_of: position of sub string in string - string-char*
 find_first_not_of: position of sub string in string - string-string
-find_first_not_of: position of regex in string: string-std::regex[.TODO]
-find_first_not_of_re: position of regex in string: string-char*[.TODO]
+find_first_not_of: position of regex in string: use find_first_of([^...]): string-std::regex
+find_first_not_of_re: position of regex in string: use find_first_of_re([^...]): string-char*
 find_last_not_of: position of sub string in string - char*-char*
 find_last_not_of: position of sub string in string - string-char*
 find_last_not_of: position of sub string in string - string-string
-find_last_not_of: position of regex in string: string-std::regex[.TODO]
-find_last_not_of_re: position of regex in string: string-char*[.TODO]
+find_last_not_of: position of regex in string: use find_last_of([^...]): string-std::regex
+find_last_not_of_re: position of regex in string: find_last_of_re([^...]): string-char*
 to_lowercase: Return string in lowercase - char*
 to_lowercase: Return string in lowercase - string
 to_lowercase: Return string in lowercase - string_view

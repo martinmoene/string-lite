@@ -841,7 +841,7 @@ string_nodiscard inline std::size_t find_last_of_re( std20::string_view text, Se
 
 #endif // regex
 
-// TODO: find_first_not_of()
+// find_first_not_of()
 
 #define string_MK_FIND_FIRST_NOT_OF(T) /*TODO: MK()*/
 
@@ -851,26 +851,9 @@ string_nodiscard std::size_t find_first_not_of( std20::string_view text, SeekT c
     return text.find_first_not_of( seek );
 }
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+// find_first_not_of_(regex): use find_first_of_([^regex])
 
-// TODO: find_first_not_of_(regex)
-
-string_nodiscard inline std::size_t find_first_not_of( std20::string_view text, std::regex const & re )
-{
-    return detail::npos;
-}
-
-// find_first_not_of_re()
-
-template< typename SeekT >
-string_nodiscard inline std::size_t find_first_not_of_re( std20::string_view text, SeekT const & seek )
-{
-    return find_first_not_of( text, std::regex(seek) );
-}
-
-#endif // regex
-
-// TODO: find_last_not_of()
+// find_last_not_of()
 
 #define string_MK_FIND_LAST_NOT_OF(T) /*TODO: MK()*/
 
@@ -880,24 +863,11 @@ string_nodiscard std::size_t find_last_not_of( std20::string_view text, SeekT co
     return text.find_last_not_of( seek );
 }
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+// find_last_not_of_(regex): use find_last_of_([^regex])
 
-// TODO: find_last_not_of_re(regex)
+// TODO: ??? find_if()
 
-string_nodiscard inline std::size_t find_last_not_of( std20::string_view text, std::regex const & re )
-{
-    return detail::npos;
-}
-
-// find_last_not_of_re()
-
-template< typename SeekT >
-string_nodiscard inline std::size_t find_last_not_of_re( std20::string_view text, SeekT const & seek )
-{
-    return find_last_not_of( text, std::regex(seek) );
-}
-
-#endif // regex
+// TODO: ??? find_if_not()
 
 // contains() - C++23
 
