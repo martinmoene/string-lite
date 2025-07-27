@@ -851,7 +851,36 @@ string_nodiscard std::size_t find_first_not_of( std20::string_view text, SeekT c
     return text.find_first_not_of( seek );
 }
 
-// find_first_not_of_(regex): use find_first_of_([^regex])
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
+// Avoid signed/unsigned mismatch.
+
+template< typename T >
+size_t to_size( T value )
+{
+    return static_cast<size_t>( value );
+}
+
+// find_first_not_of(regex), optionally use find_first_of_([^regex])
+
+string_nodiscard inline std::size_t find_first_not_of( std20::string_view text, std::regex const & re )
+{
+    std::match_results< std20::string_view::const_iterator > result;
+
+    return std::regex_search( text.begin(), text.end(), result, re ) && result.position() == 0 && to_size(result.length()) < text.length()
+        ? result.length() 
+        : detail::npos;
+}
+
+// find_first_not_of_re()
+
+template< typename SeekT >
+string_nodiscard inline std::size_t find_first_not_of_re( std20::string_view text, SeekT const & seek )
+{
+    return find_first_not_of( text, std::regex(seek) );
+}
+
+#endif // regex
 
 // find_last_not_of()
 
@@ -863,7 +892,46 @@ string_nodiscard std::size_t find_last_not_of( std20::string_view text, SeekT co
     return text.find_last_not_of( seek );
 }
 
-// find_last_not_of_(regex): use find_last_of_([^regex])
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
+// TODO: find_last_not_of(regex), optionally use find_last_of_([^regex])
+
+string_nodiscard inline std::size_t find_last_not_of( std20::string_view text, std::regex const & re )
+{
+#if 1
+    return detail::npos;
+#else
+    auto elem_begin = std::regex_iterator<std20::string_view::const_iterator>( text.begin(), text.end(), re );
+    auto elem_end   = std::regex_iterator<std20::string_view::const_iterator>();
+
+    size_t last_pos = detail::npos;
+    size_t prev_pos = 0;
+    size_t last_len = 0;
+    size_t prev_len = 0;
+    for (std::regex_iterator<std20::string_view::const_iterator> i = elem_begin; i != elem_end; ++i)
+    {
+        prev_pos = last_pos;
+        prev_len = last_len;
+        last_pos = i->position();
+        last_len = i->length();
+    }
+
+    std::cout << "\nfind_last_not_of pos:" << last_pos << " last_len:" << last_len << "\n";
+
+    // TODO: add checks:
+    return last_pos == detail::npos ? 0 : last_pos - 1;
+#endif
+}
+
+// find_first_not_of_re()
+
+template< typename SeekT >
+string_nodiscard inline std::size_t find_last_not_of_re( std20::string_view text, SeekT const & seek )
+{
+    return find_last_not_of( text, std::regex(seek) );
+}
+
+#endif // regex
 
 // TODO: ??? find_if()
 
@@ -1030,9 +1098,22 @@ string_nodiscard bool ends_with_re( std20::string_view text, SeekT const & seek 
 
 template< typename SetT >
 string_nodiscard std::string
-strip_left( std::string text, SetT const & set  )
+strip_left( std::string text, SetT const & set )
 {
     return text.erase( 0, text.find_first_not_of( set ) );
+}
+
+string_nodiscard std::string inline
+strip_left( std::string text, std::regex const & re )
+{
+    return text.erase( 0, find_first_not_of( text, re ) );
+}
+
+template< typename SetT >
+string_nodiscard std::string
+strip_left_re( std::string text, SetT const & set )
+{
+    return strip_left( text, std::regex( set ) );
 }
 
 // strip_right()
@@ -1046,6 +1127,19 @@ strip_right( std::string text, SetT const & set )
     return text.erase( text.find_last_not_of( set ) + 1 );
 }
 
+string_nodiscard std::string inline
+strip_right( std::string text, std::regex const & re )
+{
+    return text.erase( 0, find_last_not_of( text, re ) );
+}
+
+template< typename SetT >
+string_nodiscard std::string
+strip_right_re( std::string text, SetT const & set )
+{
+    return strip_right( text, std::regex( set ) );
+}
+
 // strip()
 
 #define string_MK_STRIP(T) /*TODO: MK()*/
@@ -1054,7 +1148,20 @@ template< typename SetT >
 string_nodiscard std::string
 strip( std::string text, SetT const & set )
 {
-    return strip_right( strip_left( text, set ), set);
+    return strip_left( strip_right( text, set ), set );
+}
+
+string_nodiscard std::string inline
+strip( std::string text, std::regex const & re )
+{
+    return strip_left( strip_right( text, re ), re );
+}
+
+template< typename SetT >
+string_nodiscard std::string
+strip_re( std::string text, SetT const & set )
+{
+    return strip( text, std::regex( set ) );
 }
 
 // TODO: replace_all()
@@ -1124,11 +1231,54 @@ substring( std20::string_view text, size_t pos = 0, size_t count = detail::npos 
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
+namespace string {
+namespace detail {
+
+class search_result
+{
+public:
+    search_result() : fnd( false ), pos( 0 ), len( 0 ) {}
+    search_result( bool fnd_, size_t pos_, size_t len_ ) : fnd( fnd_ ), pos( pos_ ), len( len_ ) {}
+
+    string_nodiscard explicit operator bool() const { return fnd;}
+
+    string_nodiscard size_t position() { return pos; }
+    string_nodiscard size_t length()   { return len; }
+
+private:
+    bool   fnd;
+    size_t pos;
+    size_t len;
+};
+
+string_nodiscard inline search_result search( std20::string_view text, std::regex const & re )
+{
+    std::match_results< std20::string_view::const_iterator > result;
+
+    return std::regex_search( text.begin(), text.end(), result, re ) 
+        ? search_result( true, result.position(), result.length() )
+        : search_result();
+}
+
 string_nodiscard inline std::string
 substring( std20::string_view text, std::regex const & re )
 {
-    #pragma message("TODO: Implement substring(regex).")
-    return "[Implement substring(regex)]";
+    if ( auto result = detail::search( text, re ) )
+    {
+        return detail::to_string( text.substr( result.position(), result.length() ) );
+    }
+    else
+    {
+        return {};
+    }
+}
+} // namespace detail
+} // namespace string
+
+string_nodiscard inline std::string
+substring( std20::string_view text, std::regex const & re )
+{
+    return detail::substring( text, re );
 }
 
 // substring_re()
@@ -1136,8 +1286,7 @@ substring( std20::string_view text, std::regex const & re )
 string_nodiscard inline std::string
 substring_re( std20::string_view text, char const * re )
 {
-    #pragma message("TODO: Implement substring_re().")
-    return "[Implement substring_re()]";
+    return substring( text, std::regex(re) );
 }
 
 #endif // regex

@@ -70,13 +70,13 @@ find_last_of_re: position of regex in string: string-char*
 find_first_not_of: position of sub string in string - char*-char*
 find_first_not_of: position of sub string in string - string-char*
 find_first_not_of: position of sub string in string - string-string
-find_first_not_of: position of regex in string: use find_first_of([^...]): string-std::regex
-find_first_not_of_re: position of regex in string: use find_first_of_re([^...]): string-char*
+find_first_not_of: position of regex in string: optionally use find_first_of([^...]): string-std::regex
+find_first_not_of_re: position of regex in string: optionally use find_first_of_re([^...]): string-char*
 find_last_not_of: position of sub string in string - char*-char*
 find_last_not_of: position of sub string in string - string-char*
 find_last_not_of: position of sub string in string - string-string
-find_last_not_of: position of regex in string: use find_last_of([^...]): string-std::regex
-find_last_not_of_re: position of regex in string: find_last_of_re([^...]): string-char*
+find_last_not_of: position of regex in string: optionally use find_last_of([^...]): string-std::regex[.TODO]
+find_last_not_of_re: position of regex in string: optionally find_last_of_re([^...]): string-char*[.TODO]
 to_lowercase: Return string in lowercase - char*
 to_lowercase: Return string in lowercase - string
 to_lowercase: Return string in lowercase - string_view
@@ -89,13 +89,13 @@ append: Return string with second string append to first string - string-string_
 substring: Return substring given position and length - char*-pos
 substring: Return substring given position and length - string-pos
 substring: Return substring given position and length - string_view-pos
-substring: Return substring given regex - string-regex[.TODO]
-substring_re: Return substring given regex - string-char*[.TODO]
+substring: Return substring given regex - string-regex
+substring_re: Return substring given regex - string-char*
 strip_left: Remove characters in set from left of string [" \t\n"] - C-string
 strip_left: Remove characters in set from left of string [" \t\n"] - string
 strip_left: Remove characters in set from left of string [" \t\n"] - other
-strip_left: Remove characters in regex from left of string - string-regex[.TODO]
-strip_left_re: Remove characters in regex from left of string - string-char*[.TODO]
+strip_left: Remove characters in regex from left of string - string-regex
+strip_left_re: Remove characters in regex from left of string - string-char*
 strip_right: Remove characters in set from right of string [" \t\n"] - string
 strip_right: Remove characters in set from right of string [" \t\n"] - other
 strip_right: Remove characters in regex from right of string - string-regex[.TODO]
