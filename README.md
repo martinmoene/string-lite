@@ -2,14 +2,142 @@
 
 Another attempt at a hopefully generally useful C++ string algorithm library.
 
-For now, have a look at section [*string-bare* test specification](#ad) for the functions envisioned / implemented (at the moment). The in-place modification class of functions is decidedly absent.
+For now, have a look at section [*string-bare* test specification](#a2) for the functions envisioned / implemented (at the moment). The in-place modification class of functions is decidedly absent.
 
 Initially writing code for `char` type strings, followed by generalising and enabling selecting `char`, `wchar_t`, `char8_t`, `char16_t`, `char32_t` insofar feasible and sensible.
 
+**Contents**  
+
+- [Example usage](#example-usage)
+- [In a nutshell](#in-a-nutshell)
+- [License](#license)
+- [Dependencies](#dependencies)
+- [Installation and use](#installation-and-use)
+- [Synopsis](#synopsis)
+- [Notes and references](#notes-and-references)
+- [Appendix](#appendix)
+
+
+## Example usage
+
+TBD
+
+## In a nutshell
+
+TBD
+
+## License
+
+*string bare* is distributed under the [Boost Software License](https://github.com/martinmoene/bit-lite/blob/master/LICENSE.txt).
+
+## Dependencies
+
+*string lite* has no other dependencies than the [C++ standard library](http://en.cppreference.com/w/cpp/header).
+
+## Installation and use
+
+*string bare* is a single-file header-only library. Put `string.hpp` in the [include](include) folder directly into the project source tree or somewhere reachable from your project.
+
+## Synopsis
+
+TBD
+
+### Configuration
+
+```
+string_CONFIG_PROVIDE_CHAR_T
+string_CONFIG_PROVIDE_WCHAR_T
+string_CONFIG_PROVIDE_CHAR8_T
+string_CONFIG_PROVIDE_CHAR16_T
+string_CONFIG_PROVIDE_CHAR32_T
+
+string_CONFIG_PROVIDE_REGEX
+
+string_CONFIG_NO_EXCEPTIONS
+```
+
+### Functions
+
+<!-- string-main.t.exe -l @ | cut --delimiter=: -f 1 |sort |uniq |clip -->
+Current functions in the library:
+
+```
+is_empty
+length
+size
+
+contains
+contains_re
+
+starts_with
+starts_with_re
+
+ends_with
+ends_with_re
+
+find_first
+find_first_re
+find_first_of
+find_first_of_re
+find_first_not_of
+find_first_not_of_re
+
+find_last
+find_last_re
+find_last_of
+find_last_of_re
+find_last_not_of        non-regex
+find_last_not_of_re     to be implemented
+
+to_lowercase
+to_uppercase
+
+append
+
+substring
+substring_re
+
+replace_all             to be implemented
+replace_all_re          ...
+replace_first           ...
+replace_first_re        ...
+replace_last            ...
+replace_last_re         ...
+
+join
+split
+
+split_2
+rsplit_2                to be implemented
+
+strip
+strip_left
+strip_left_re
+strip_right             non-regex
+strip_right_re          to be implemented
+tweak header
+```
+
+### Configuration
+
+TBD
+
+## Notes and references
+
+TBD
+
+- [n3593 - std::split(): An algorithm for splitting strings](http://wg21.link/n3593). / https://isocpp.org/files/papers/n3593.html
+- [Martin Broadhurst. How to split a string in C++. 2016](http://www.martinbroadhurst.com/how-to-split-a-string-in-c.html).
+
 ## Appendix
 
-<a id="ad"></a>
-### A.d *string-bare* test specification
+<a id="a1"></a>
+### A.1 Compile-time information
+
+In the test runner, the version of *string-bare* is available via tag `[.version]`. The following tags are available for information on the compiler and on the C++ standard library used: `[.compiler]`, `[.stdc++]`, `[.stdlanguage]` and `[.stdlibrary]`.
+
+<a id="a2"></a>
+### A.2 *string-bare* test specification
 
 <details>
 <summary>click to expand</summary>
