@@ -1791,10 +1791,10 @@ split( std17::u32string_view text, char32_t const * d, int count = 0 )
 
 #if string_CONFIG_PROVIDE_CHAR_T
 
-// split_2 -> tuple
+// split_left -> tuple
 
 template<typename Delimiter> string_nodiscard auto
-split_2( std20::string_view const & text, Delimiter delimiter ) -> std::tuple<std20::string_view, std20::string_view>
+split_left( std20::string_view const & text, Delimiter delimiter ) -> std::tuple<std20::string_view, std20::string_view>
 {
     auto const result = split( text, delimiter, 2 );
 
@@ -1802,20 +1802,20 @@ split_2( std20::string_view const & text, Delimiter delimiter ) -> std::tuple<st
 }
 
 string_nodiscard inline auto
-split_2(  std20::string_view text, char const * d ) -> std::tuple<std20::string_view, std20::string_view>
+split_left(  std20::string_view text, char const * d ) -> std::tuple<std20::string_view, std20::string_view>
 {
-    return split_2( text, literal_delimiter(d) );
+    return split_left( text, literal_delimiter(d) );
 }
 
-// TODO: rsplit_2 -> tuple
+// TODO: split_right -> tuple
 
 // Split string at given separator character, starting at right.
 
 string_nodiscard inline auto
-rsplit_2(  std20::string_view text, char const * d ) -> std::tuple<std20::string_view, std20::string_view>
+split_right(  std20::string_view text, char const * d ) -> std::tuple<std20::string_view, std20::string_view>
 {
     return { "TODO", "TODO" };
-    // return rsplit_2( text, reverse_literal_delimiter(d) );
+    // return split_right( text, reverse_literal_delimiter(d) );
 }
 
 #endif // string_CONFIG_PROVIDE_CHAR_T

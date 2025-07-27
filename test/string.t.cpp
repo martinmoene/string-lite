@@ -1069,30 +1069,30 @@ CASE( "split: Split string into single characters given empty delimiter" )
 
 #endif // Test Activation
 
-// TODO: split_2
+// TODO: split_left
 
-CASE( "split_2: Split string into two-element tuple given delimiter - forward - xxx_delimiter" )
+CASE( "split_left: Split string into two-element tuple given delimiter - forward - xxx_delimiter" )
 {
     std20::string_view a, b;
-    std::tie(a, b) = split_2("abc;def;ghi", ";");
+    std::tie(a, b) = split_left("abc;def;ghi", ";");
 
     std::cout << "[a:" << a << "][b:" << b << "]\n";
 
-    // EXPECT( split_2("abc;def;ghi", ";") == (std::tuple<std::string, std::string>("abc", "def;ghi")) );
-    // EXPECT( std::get<1>(split_2("abc;def;ghi", ";")) == std::string("def;ghi" ));
+    // EXPECT( split_left("abc;def;ghi", ";") == (std::tuple<std::string, std::string>("abc", "def;ghi")) );
+    // EXPECT( std::get<1>(split_left("abc;def;ghi", ";")) == std::string("def;ghi" ));
 }
 
-// TODO: rsplit_2
+// TODO: split_right
 
-CASE( "rsplit_2: Split string into two-element tuple given delimiter - reverse - xxx_delimiter" )
+CASE( "split_right: Split string into two-element tuple given delimiter - reverse - xxx_delimiter" )
 {
     std20::string_view a, b;
-    std::tie(a, b) = rsplit_2("abc;def;ghi", ";");
+    std::tie(a, b) = split_right("abc;def;ghi", ";");
 
     std::cout << "[a:" << a << "][b:" << b << "]\n";
 
-    // EXPECT( split_2("abc;def;ghi", ";") == (std::tuple<std::string, std::string>("abc", "def;ghi")) );
-    // EXPECT( std::get<1>(split_2("abc;def;ghi", ";")) == std::string("def;ghi" ));
+    // EXPECT( split_left("abc;def;ghi", ";") == (std::tuple<std::string, std::string>("abc", "def;ghi")) );
+    // EXPECT( std::get<1>(split_left("abc;def;ghi", ";")) == std::string("def;ghi" ));
 }
 
 CASE( "tweak header: Reads tweak header if supported " "[tweak]" )

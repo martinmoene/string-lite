@@ -93,8 +93,8 @@ replace_last_re         ...
 join
 split
 
-split_2
-rsplit_2                to be implemented
+split_left
+split_right             to be implemented
 
 strip
 strip_left
@@ -265,8 +265,8 @@ replace_last: Return string with last occurrence of regex changed - string-regex
 replace_last_re: Return string with last occurrence of regex changed - string-char*[.TODO]
 join: Join strings from collection into a string separated by given separator
 split: Split string into vector of string_view given delimiter - literal_delimiter
-split_2: Split string into two-element tuple given delimiter - forward - xxx_delimiter
-rsplit_2: Split string into two-element tuple given delimiter - reverse - xxx_delimiter
+split_left: Split string into two-element tuple given delimiter - forward - xxx_delimiter
+split_right: Split string into two-element tuple given delimiter - reverse - xxx_delimiter
 tweak header: Reads tweak header if supported [tweak]
 ```
 
