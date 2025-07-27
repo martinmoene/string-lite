@@ -115,7 +115,6 @@ strip_left
 strip_left_re
 strip_right             non-regex
 strip_right_re          to be implemented
-tweak header
 ```
 
 ### Configuration
