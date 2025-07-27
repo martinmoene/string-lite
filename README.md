@@ -83,6 +83,12 @@ append
 substring
 substring_re
 
+strip
+strip_left
+strip_left_re
+strip_right             non-regex
+strip_right_re          to be implemented
+
 replace_all             to be implemented
 replace_all_re          ...
 replace_first           ...
@@ -95,12 +101,6 @@ split
 
 split_left
 split_right             to be implemented
-
-strip
-strip_left
-strip_left_re
-strip_right             non-regex
-strip_right_re          to be implemented
 ```
 
 ### Configuration
