@@ -1234,44 +1234,16 @@ substring( std20::string_view text, size_t pos = 0, size_t count = detail::npos 
 namespace string {
 namespace detail {
 
-class search_result
-{
-public:
-    search_result() : fnd( false ), pos( 0 ), len( 0 ) {}
-    search_result( bool fnd_, size_t pos_, size_t len_ ) : fnd( fnd_ ), pos( pos_ ), len( len_ ) {}
-
-    string_nodiscard explicit operator bool() const { return fnd;}
-
-    string_nodiscard size_t position() { return pos; }
-    string_nodiscard size_t length()   { return len; }
-
-private:
-    bool   fnd;
-    size_t pos;
-    size_t len;
-};
-
-string_nodiscard inline search_result search( std20::string_view text, std::regex const & re )
-{
-    std::match_results< std20::string_view::const_iterator > result;
-
-    return std::regex_search( text.begin(), text.end(), result, re ) 
-        ? search_result( true, result.position(), result.length() )
-        : search_result();
-}
-
 string_nodiscard inline std::string
 substring( std20::string_view text, std::regex const & re )
 {
-    if ( auto result = detail::search( text, re ) )
-    {
-        return detail::to_string( text.substr( result.position(), result.length() ) );
-    }
-    else
-    {
-        return {};
-    }
+    std::match_results< std20::string_view::const_iterator > result;
+
+    return std::regex_search( text.begin(), text.end(), result, re )
+        ? to_string( text.substr( result.position(), result.length() ) )
+        : std::string{};
 }
+
 } // namespace detail
 } // namespace string
 
