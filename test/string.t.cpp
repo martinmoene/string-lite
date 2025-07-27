@@ -410,25 +410,25 @@ CASE( "find_last_re: position of regex in string: string-char*" )
 
 // find_first_of()
 
-CASE( "find_first_of: position of sub string in string - char*-char*" )
+CASE( "find_first_of: position of character in set in string - char*-char*" )
 {
     EXPECT(       3 == find_first_of("abc123mno123xyz", "321") );
     EXPECT( sv_npos == find_first_of("abc123mno123xyz", "789") );
 }
 
-CASE( "find_first_of: position of sub string in string - string-char*" )
+CASE( "find_first_of: position of character in set in string - string-char*" )
 {
     EXPECT(       3 == find_first_of(std::string("abc123mno123xyz"), "321") );
     EXPECT( sv_npos == find_first_of(std::string("abc123mno123xyz"), "789") );
 }
 
-CASE( "find_first_of: position of sub string in string - string-string" )
+CASE( "find_first_of: position of character in set in string - string-string" )
 {
     EXPECT(       3 == find_first_of(std::string("abc123mno123xyz"), std::string("321") ) );
     EXPECT( sv_npos == find_first_of(std::string("abc123mno123xyz"), std::string("789") ) );
 }
 
-CASE( "find_first_of: position of regex in string: string-std::regex" )
+CASE( "find_first_of: position of character in set in string: string-std::regex" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -444,7 +444,7 @@ CASE( "find_first_of: position of regex in string: string-std::regex" )
 
 // find_first_of_re()
 
-CASE( "find_first_of_re: position of regex in string: string-char*" )
+CASE( "find_first_of_re: position of character in set in string: string-char*" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -460,25 +460,25 @@ CASE( "find_first_of_re: position of regex in string: string-char*" )
 
 // TODO: find_last_of()
 
-CASE( "find_last_of: position of sub string in string - char*-char*" )
+CASE( "find_last_of: position of character in set in string - char*-char*" )
 {
     EXPECT(       11 == find_last_of("abc123mno123xyz", "123") );
     EXPECT( sv_npos == find_last_of("abc123mno123xyz", "789") );
 }
 
-CASE( "find_last_of: position of sub string in string - string-char*" )
+CASE( "find_last_of: position of character in set in string - string-char*" )
 {
     EXPECT(       11 == find_last_of(std::string("abc123mno123xyz"), "123") );
     EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), "789") );
 }
 
-CASE( "find_last_of: position of sub string in string - string-string" )
+CASE( "find_last_of: position of character in set in string - string-string" )
 {
     EXPECT(       11 == find_last_of(std::string("abc123mno123xyz"), std::string("123") ) );
     EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), std::string("789") ) );
 }
 
-CASE( "find_last_of: position of regex in string: string-std::regex" )
+CASE( "find_last_of: position of character in set in string: string-std::regex" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -494,7 +494,7 @@ CASE( "find_last_of: position of regex in string: string-std::regex" )
 
 // find_last_of_re()
 
-CASE( "find_last_of_re: position of regex in string: string-char*" )
+CASE( "find_last_of_re: position of character in set in string: string-char*" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -510,25 +510,25 @@ CASE( "find_last_of_re: position of regex in string: string-char*" )
 
 // TODO: find_first_not_of()
 
-CASE( "find_first_not_of: position of sub string in string - char*-char*" )
+CASE( "find_first_not_of: position of character in set in string - char*-char*" )
 {
     EXPECT(       3 == find_first_not_of("abc123mno123xyz", "cba") );
     EXPECT( sv_npos == find_first_not_of("abc123mno123xyz", "abc123mno123xyz") );
 }
 
-CASE( "find_first_not_of: position of sub string in string - string-char*" )
+CASE( "find_first_not_of: position of character in set in string - string-char*" )
 {
     EXPECT(       3 == find_first_not_of(std::string("abc123mno123xyz"), "cba") );
     EXPECT( sv_npos == find_first_not_of(std::string("abc123mno123xyz"), "abc123mno123xyz") );
 }
 
-CASE( "find_first_not_of: position of sub string in string - string-string" )
+CASE( "find_first_not_of: position of character in set in string - string-string" )
 {
     EXPECT(       3 == find_first_not_of(std::string("abc123mno123xyz"), std::string("cba") ) );
     EXPECT( sv_npos == find_first_not_of(std::string("abc123mno123xyz"), std::string("abc123mno123xyz") ) );
 }
 
-CASE( "find_first_not_of: position of regex in string: optionally use find_first_of([^...]): string-std::regex" )
+CASE( "find_first_not_of: position of character in set in string: optionally use find_first_of([^...]): string-std::regex" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -545,7 +545,7 @@ CASE( "find_first_not_of: position of regex in string: optionally use find_first
 
 // find_first_not_of_re()
 
-CASE( "find_first_not_of_re: position of regex in string: optionally use find_first_of_re([^...]): string-char*" )
+CASE( "find_first_not_of_re: position of character in set in string: optionally use find_first_of_re([^...]): string-char*" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -566,25 +566,25 @@ CASE( "find_first_not_of_re: position of regex in string: optionally use find_fi
 
 // find_last_not_of()
 
-CASE( "find_last_not_of: position of sub string in string - char*-char*" )
+CASE( "find_last_not_of: position of character in set in string - char*-char*" )
 {
     EXPECT(      11 == find_last_not_of("abc123mno123xyz", "zyx") );
     EXPECT( sv_npos == find_last_not_of("abc123mno123xyz", "abc123mno123xyz") );
 }
 
-CASE( "find_last_not_of: position of sub string in string - string-char*" )
+CASE( "find_last_not_of: position of character in set in string - string-char*" )
 {
     EXPECT(      11 == find_last_not_of(std::string("abc123mno123xyz"), "zyx") );
     EXPECT( sv_npos == find_last_not_of(std::string("abc123mno123xyz"), "abc123mno123xyz") );
 }
 
-CASE( "find_last_not_of: position of sub string in string - string-string" )
+CASE( "find_last_not_of: position of character in set in string - string-string" )
 {
     EXPECT(      11 == find_last_not_of(std::string("abc123mno123xyz"), std::string("zyx") ) );
     EXPECT( sv_npos == find_last_not_of(std::string("abc123mno123xyz"), std::string("abc123mno123xyz") ) );
 }
 
-CASE( "find_last_not_of: position of regex in string: optionally use find_last_of([^...]): string-std::regex" "[.TODO]" )
+CASE( "find_last_not_of: position of character in set in string: optionally use find_last_of([^...]): string-std::regex" "[.TODO]" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
@@ -606,7 +606,7 @@ CASE( "find_last_not_of: position of regex in string: optionally use find_last_o
 
 // find_last_not_of_re()
 
-CASE( "find_last_not_of_re: position of regex in string: optionally find_last_of_re([^...]): string-char*" "[.TODO]" )
+CASE( "find_last_not_of_re: position of character in set in string: optionally find_last_of_re([^...]): string-char*" "[.TODO]" )
 {
 #if string_CONFIG_PROVIDE_REGEX
 #if string_HAVE_REGEX
