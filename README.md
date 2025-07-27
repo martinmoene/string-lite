@@ -42,20 +42,6 @@ TBD
 
 TBD
 
-### Configuration
-
-```
-string_CONFIG_PROVIDE_CHAR_T
-string_CONFIG_PROVIDE_WCHAR_T
-string_CONFIG_PROVIDE_CHAR8_T
-string_CONFIG_PROVIDE_CHAR16_T
-string_CONFIG_PROVIDE_CHAR32_T
-
-string_CONFIG_PROVIDE_REGEX
-
-string_CONFIG_NO_EXCEPTIONS
-```
-
 ### Functions
 
 <!-- string-main.t.exe -l @ | cut --delimiter=: -f 1 |sort |uniq |clip -->
@@ -119,7 +105,35 @@ strip_right_re          to be implemented
 
 ### Configuration
 
+#### Tweak header
+
 TBD
+
+#### Provided character types
+
+```
+string_CONFIG_PROVIDE_CHAR_T
+string_CONFIG_PROVIDE_WCHAR_T
+string_CONFIG_PROVIDE_CHAR8_T
+string_CONFIG_PROVIDE_CHAR16_T
+string_CONFIG_PROVIDE_CHAR32_T
+```
+
+#### Provide `std::regex` functions
+
+```
+string_CONFIG_PROVIDE_REGEX
+```
+
+#### Standard selection macro
+
+TBD
+
+#### Disable exceptions
+
+```
+string_CONFIG_NO_EXCEPTIONS
+```
 
 ## Notes and references
 
