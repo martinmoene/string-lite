@@ -89,11 +89,11 @@ strip_left_re
 strip_right             non-regex
 strip_right_re          to be implemented
 
-replace_all             to be implemented
-replace_all_re          ...
-replace_first           ...
-replace_first_re        ...
-replace_last            ...
+replace_all             to be implemented (regex done)
+replace_all_re          done
+replace_first           to be implemented (regex done)
+replace_first_re        done
+replace_last            to be implemented
 replace_last_re         ...
 
 join
@@ -249,14 +249,14 @@ string_view: ...[.TODO]
 replace_all: Return string with all occurrences of sub string changed - char*-char*[.TODO]
 replace_all: Return string with all occurrences of sub string changed - string-string[.TODO]
 replace_all: Return string with all occurrences of sub string changed - string-string_view[.TODO]
-replace_all: Return string with all occurrences of regex changed - string-regex[.TODO]
-replace_all_re: Return string with all occurrences of regex changed - string-char*[.TODO]
+replace_all: Return string with all occurrences of regex changed - string-regex
+replace_all_re: Return string with all occurrences of regex changed - string-char*
 replace_first: Return string with first occurrence of sub string changed - char*-char*[.TODO]
 replace_first: Return string with first occurrence of sub string changed - string-string[.TODO]
 replace_first: Return string with first occurrence of sub string changed - string-string_view[.TODO]
 replace_first: Return string with first occurrence of sub string changed - string_view-string_view[.TODO]
-replace_first: Return string with first occurrence of regex changed - string-regex[.TODO]
-replace_first_re: Return string with first occurrence of regex changed - string-char*[.TODO]
+replace_first: Return string with first occurrence of regex changed - string-regex
+replace_first_re: Return string with first occurrence of regex changed - string-char*
 replace_last: Return string with last occurrence of sub string changed - char*-char*[.TODO]
 replace_last: Return string with last occurrence of sub string changed - string-string[.TODO]
 replace_last: Return string with last occurrence of sub string changed - string-string_view[.TODO]

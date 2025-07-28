@@ -856,14 +856,16 @@ CASE( "replace_all: Return string with all occurrences of sub string changed - s
     EXPECT( replace_all( std::string("abc123mno123xyz"), "123", "789") == std::string("abc789mno789xyz") );
 }
 
-CASE( "replace_all: Return string with all occurrences of regex changed - string-regex" "[.TODO]" )
+CASE( "replace_all: Return string with all occurrences of regex changed - string-regex" )
 {
-    EXPECT( false );
+    EXPECT( replace_all( std::string("abc123mno123xyz"), std::regex( "123"  ), "789") == std::string("abc789mno789xyz") );
+    EXPECT( replace_all( std::string("abc123mno123xyz"), std::regex("[1-3]+"), "789") == std::string("abc789mno789xyz") );
 }
 
-CASE( "replace_all_re: Return string with all occurrences of regex changed - string-char*" "[.TODO]" )
+CASE( "replace_all_re: Return string with all occurrences of regex changed - string-char*" )
 {
-    EXPECT( false );
+    EXPECT( replace_all_re( std::string("abc123mno123xyz"),  "123"  , "789") == std::string("abc789mno789xyz") );
+    EXPECT( replace_all_re( std::string("abc123mno123xyz"), "[1-3]+", "789") == std::string("abc789mno789xyz") );
 }
 
 // replace_first():
@@ -889,14 +891,16 @@ CASE( "replace_first: Return string with first occurrence of sub string changed 
     // EXPECT( replace_first( string_view("abc123mno123xyz"), "123", "789") == std::string("abc789mno789xyz") );
 }
 
-CASE( "replace_first: Return string with first occurrence of regex changed - string-regex" "[.TODO]" )
+CASE( "replace_first: Return string with first occurrence of regex changed - string-regex" )
 {
-    EXPECT( false );
+    EXPECT( replace_first( std::string("abc123mno123xyz"), std::regex( "123"  ), "789") == std::string("abc789mno123xyz") );
+    EXPECT( replace_first( std::string("abc123mno123xyz"), std::regex("[1-3]+"), "789") == std::string("abc789mno123xyz") );
 }
 
-CASE( "replace_first_re: Return string with first occurrence of regex changed - string-char*" "[.TODO]" )
+CASE( "replace_first_re: Return string with first occurrence of regex changed - string-char*" )
 {
-    EXPECT( false );
+    EXPECT( replace_first_re( std::string("abc123mno123xyz"),  "123"  , "789") == std::string("abc789mno123xyz") );
+    EXPECT( replace_first_re( std::string("abc123mno123xyz"), "[1-3]+", "789") == std::string("abc789mno123xyz") );
 }
 
 // replace_last():

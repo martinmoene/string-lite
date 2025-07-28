@@ -1176,6 +1176,20 @@ replace_all( std::string text, WhatT const & what, WithT const & with )
     return "[Implement replace_all()]";
 }
 
+template< typename WithT >
+string_nodiscard std::string
+replace_all( std::string text, std::regex const & re, WithT const & with )
+{
+    return std::regex_replace( text, re, with);
+}
+
+template< typename WhatT, typename WithT >
+string_nodiscard std::string
+replace_all_re( std::string text, WhatT const & what, WithT const & with )
+{
+    return std::regex_replace( text, std::regex(what), with);
+}
+
 // TODO: replace_first()
 
 #define string_MK_REPLACE_FIRST(T) /*TODO: MK()*/
@@ -1186,6 +1200,20 @@ replace_first( std::string text, WhatT const & what, WithT const & with )
 {
     #pragma message("TODO: Implement replace_first().")
     return "[Implement replace_first()]";
+}
+
+template< typename WithT >
+string_nodiscard std::string
+replace_first( std::string text, std::regex const & re, WithT const & with )
+{
+    return std::regex_replace( text, re, with, std::regex_constants::format_first_only );
+}
+
+template< typename WhatT, typename WithT >
+string_nodiscard std::string
+replace_first_re( std::string text, WhatT const & what, WithT const & with )
+{
+    return replace_first( text, std::regex( what ), with );
 }
 
 // TODO: replace_last()
