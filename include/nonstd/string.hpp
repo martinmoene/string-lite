@@ -1103,6 +1103,8 @@ strip_left( std::string text, SetT const & set )
     return text.erase( 0, text.find_first_not_of( set ) );
 }
 
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
 string_nodiscard std::string inline
 strip_left( std::string text, std::regex const & re )
 {
@@ -1116,6 +1118,8 @@ strip_left_re( std::string text, SetT const & set )
     return strip_left( text, std::regex( set ) );
 }
 
+#endif // regex
+
 // strip_right()
 
 #define string_MK_STRIP_RIGHT(T) /*TODO: MK()*/
@@ -1126,6 +1130,8 @@ strip_right( std::string text, SetT const & set )
 {
     return text.erase( text.find_last_not_of( set ) + 1 );
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 string_nodiscard std::string inline
 strip_right( std::string text, std::regex const & re )
@@ -1140,6 +1146,8 @@ strip_right_re( std::string text, SetT const & set )
     return strip_right( text, std::regex( set ) );
 }
 
+#endif // regex
+
 // strip()
 
 #define string_MK_STRIP(T) /*TODO: MK()*/
@@ -1150,6 +1158,8 @@ strip( std::string text, SetT const & set )
 {
     return strip_left( strip_right( text, set ), set );
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 string_nodiscard std::string inline
 strip( std::string text, std::regex const & re )
@@ -1164,17 +1174,40 @@ strip_re( std::string text, SetT const & set )
     return strip( text, std::regex( set ) );
 }
 
-// TODO: replace_all()
+#endif // regex
+
+// replace_all()
+
+namespace string {
+namespace detail {
+
+template< typename T, typename WithT >
+std::string replace_all( std::basic_string<T> text, std20::basic_string_view<T> what, WithT const & with )
+{
+    for ( ;; )
+    {
+        const auto pos = find_first(text, what);
+
+        if ( pos == std::string::npos )
+            break;
+
+        text.replace( pos, what.length(), with );
+    }
+    return text;
+}
+
+} // detail
+}// namespace string
 
 #define string_MK_REPLACE_ALL(T) /*TODO: MK()*/
 
-template< typename WhatT, typename WithT >
-string_nodiscard std::string
-replace_all( std::string text, WhatT const & what, WithT const & with )
+template< typename WithT >
+std::string replace_all( std::string text, std20::string_view what, WithT const & with )
 {
-    #pragma message("TODO: Implement replace_all().")
-    return "[Implement replace_all()]";
+    return detail::replace_all( text, what, with );
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 template< typename WithT >
 string_nodiscard std::string
@@ -1190,17 +1223,24 @@ replace_all_re( std::string text, WhatT const & what, WithT const & with )
     return std::regex_replace( text, std::regex(what), with);
 }
 
-// TODO: replace_first()
+#endif // regex
+
+// replace_first()
 
 #define string_MK_REPLACE_FIRST(T) /*TODO: MK()*/
 
-template< typename WhatT, typename WithT >
+template< typename WithT >
 string_nodiscard std::string
-replace_first( std::string text, WhatT const & what, WithT const & with )
+replace_first( std::string text, std20::string_view what, WithT const & with )
 {
-    #pragma message("TODO: Implement replace_first().")
-    return "[Implement replace_first()]";
+    const auto pos = find_first( text, what );
+
+    return pos != std::string::npos 
+        ? text.replace( pos, what.length(), with )
+        : "";
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 template< typename WithT >
 string_nodiscard std::string
@@ -1215,6 +1255,8 @@ replace_first_re( std::string text, WhatT const & what, WithT const & with )
 {
     return replace_first( text, std::regex( what ), with );
 }
+
+#endif // regex
 
 // TODO: replace_last()
 

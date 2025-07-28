@@ -699,6 +699,8 @@ CASE( "substring: Return substring given position and length - string_view-pos" 
 
 CASE( "substring: Return substring given regex - string-regex" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( substring(std20::string_view("abcxyz"), std::regex("[a-z]" )) == "a" );
     EXPECT( substring(std20::string_view("abcxyz"), std::regex("[c-y]+")) == "cxy" );
     EXPECT( substring(std20::string_view("abcxyz"), std::regex("[a-z]+")) == "abcxyz" );
@@ -706,10 +708,18 @@ CASE( "substring: Return substring given regex - string-regex" )
 
     EXPECT( substring(std20::string_view("abcxyz"), std::regex("^[b-z]+")) == "" );
     EXPECT( substring(std20::string_view("abcxyz"), std::regex("[a-y]+$")) == "" );
+#else
+    EXPECT( !!"substring is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 CASE( "substring_re: Return substring given regex - string-char*" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( substring_re(std20::string_view("abcxyz"),  "[a-z]"  ) == "a" );
     EXPECT( substring_re(std20::string_view("abcxyz"),  "[c-y]+" ) == "cxy" );
     EXPECT( substring_re(std20::string_view("abcxyz"),  "[a-z]+" ) == "abcxyz" );
@@ -717,6 +727,12 @@ CASE( "substring_re: Return substring given regex - string-char*" )
 
     EXPECT( substring_re(std20::string_view("abcxyz"), "^[b-z]+") == "" );
     EXPECT( substring_re(std20::string_view("abcxyz"), "[a-y]+$") == "" );
+#else
+    EXPECT( !!"substring is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // strip_left()
@@ -749,16 +765,32 @@ CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - 
 
 CASE( "strip_left: Remove characters in regex from left of string - string-regex" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( strip_left(" \t\nabc", std::regex("[^a-z]+" )) == std::string("abc") );
     EXPECT( strip_left(" \t\nabc", std::regex("[ \t\n]+")) == std::string("abc") );
     EXPECT( strip_left(" #$%&abc", std::regex("[ #$%&]+")) == std::string("abc") );
+#else
+    EXPECT( !!"strip_left is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 CASE( "strip_left_re: Remove characters in regex from left of string - string-char*" ) 
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( strip_left_re(" \t\nabc", "[^a-z]+" ) == std::string("abc") );
     EXPECT( strip_left_re(" \t\nabc", "[ \t\n]+") == std::string("abc") );
     EXPECT( strip_left_re(" #$%&abc", "[ #$%&]+") == std::string("abc") );
+#else
+    EXPECT( !!"strip_left_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // strip_right()
@@ -785,16 +817,32 @@ CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] 
 
 CASE( "strip_right: Remove characters in regex from right of string - string-regex" "[.TODO]" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( strip_right(std::string("abc \t\n"), std::regex("[^a-z]+" )) == std::string("abc") );
     EXPECT( strip_right(std::string("abc \t\n"), std::regex("[ \t\n]+")) == std::string("abc") );
     EXPECT( strip_right(std::string("abc #$%&"), std::regex("[ #$%&]+")) == std::string("abc") );
+#else
+    EXPECT( !!"strip_right is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 CASE( "strip_right_re: Remove characters in regex from right of string - string-char*" "[.TODO]" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( strip_right_re(std::string("abc \t\n"), "[^a-z]+" ) == std::string("abc") );
     EXPECT( strip_right_re(std::string("abc \t\n"), "[ \t\n]+") == std::string("abc") );
     EXPECT( strip_right_re(std::string("abc #$%&"), "[ #$%&]+") == std::string("abc") );
+#else
+    EXPECT( !!"strip_right_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // strip()
@@ -821,14 +869,30 @@ CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\
 
 CASE( "strip: Remove characters in regex from left and right of string - string-regex" "[.TODO]" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( strip(std::string(" \t\nabc \t\n"), std::regex("[ \t\n]+")) == std::string("abc") );
     EXPECT( strip(std::string(" #$%&abc #$%&"), std::regex("[ #$%&]+")) == std::string("abc") );
+#else
+    EXPECT( !!"strip is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 CASE( "strip_re: Remove characters in regex from left and right of string - string-char*" "[.TODO]" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( strip_re(std::string(" \t\nabc \t\n"), "[ \t\n]+") == std::string("abc") );
     EXPECT( strip_re(std::string(" #$%&abc #$%&"), "[ #$%&]+") == std::string("abc") );
+#else
+    EXPECT( !!"strip_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // TODO Add tests for (internal) string_view:
@@ -841,66 +905,98 @@ CASE( "string_view: ..." "[.TODO]" )
 
 // replace_all():
 
-CASE( "replace_all: Return string with all occurrences of sub string changed - char*-char*" "[.TODO]" )
+CASE( "replace_all: Return string with all occurrences of sub string changed - char*-char*" )
 {
     EXPECT( replace_all( "abc123mno123xyz", "123", "789") == std::string("abc789mno789xyz") );
 }
 
-CASE( "replace_all: Return string with all occurrences of sub string changed - string-string" "[.TODO]" )
+CASE( "replace_all: Return string with all occurrences of sub string changed - string-string" )
 {
     EXPECT( replace_all( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == std::string("abc789mno789xyz") );
 }
 
-CASE( "replace_all: Return string with all occurrences of sub string changed - string-string_view" "[.TODO]" )
+CASE( "replace_all: Return string with all occurrences of sub string changed - string-string_view" )
 {
     EXPECT( replace_all( std::string("abc123mno123xyz"), "123", "789") == std::string("abc789mno789xyz") );
 }
 
 CASE( "replace_all: Return string with all occurrences of regex changed - string-regex" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( replace_all( std::string("abc123mno123xyz"), std::regex( "123"  ), "789") == std::string("abc789mno789xyz") );
     EXPECT( replace_all( std::string("abc123mno123xyz"), std::regex("[1-3]+"), "789") == std::string("abc789mno789xyz") );
+#else
+    EXPECT( !!"replace_all is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 CASE( "replace_all_re: Return string with all occurrences of regex changed - string-char*" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( replace_all_re( std::string("abc123mno123xyz"),  "123"  , "789") == std::string("abc789mno789xyz") );
     EXPECT( replace_all_re( std::string("abc123mno123xyz"), "[1-3]+", "789") == std::string("abc789mno789xyz") );
+#else
+    EXPECT( !!"replace_all_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // replace_first():
 
-CASE( "replace_first: Return string with first occurrence of sub string changed - char*-char*" "[.TODO]" )
+CASE( "replace_first: Return string with first occurrence of sub string changed - char*-char*" )
 {
     EXPECT( replace_first( "abc123mno123xyz", "123", "789") == std::string("abc789mno123xyz") );
 }
 
-CASE( "replace_first: Return string with first occurrence of sub string changed - string-string" "[.TODO]" )
+CASE( "replace_first: Return string with first occurrence of sub string changed - string-string" )
 {
     EXPECT( replace_first( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == std::string("abc789mno123xyz") );
 }
 
-CASE( "replace_first: Return string with first occurrence of sub string changed - string-string_view" "[.TODO]" )
+CASE( "replace_first: Return string with first occurrence of sub string changed - string-string_view" )
 {
-    EXPECT( replace_first( std::string("abc123mno123xyz"), "123", "789") == std::string("abc789mno123xyz") );
+    EXPECT( replace_first( std::string("abc123mno123xyz"), std20::string_view("123"), "789") == std::string("abc789mno123xyz") );
 }
 
 CASE( "replace_first: Return string with first occurrence of sub string changed - string_view-string_view" "[.TODO]" )
 {
-    // TODO : implement detail::replace_first(it...)
-    // EXPECT( replace_first( string_view("abc123mno123xyz"), "123", "789") == std::string("abc789mno789xyz") );
+    EXPECT( false );
+    // EXPECT( replace_first( std20::string_view("abc123mno123xyz"), std20::string_view("123"), "789") == std::string("abc789mno123xyz") );
 }
 
 CASE( "replace_first: Return string with first occurrence of regex changed - string-regex" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( replace_first( std::string("abc123mno123xyz"), std::regex( "123"  ), "789") == std::string("abc789mno123xyz") );
     EXPECT( replace_first( std::string("abc123mno123xyz"), std::regex("[1-3]+"), "789") == std::string("abc789mno123xyz") );
+#else
+    EXPECT( !!"replace_first is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 CASE( "replace_first_re: Return string with first occurrence of regex changed - string-char*" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( replace_first_re( std::string("abc123mno123xyz"),  "123"  , "789") == std::string("abc789mno123xyz") );
     EXPECT( replace_first_re( std::string("abc123mno123xyz"), "[1-3]+", "789") == std::string("abc789mno123xyz") );
+#else
+    EXPECT( !!"replace_first_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 // replace_last():
@@ -928,12 +1024,28 @@ CASE( "replace_last: Return string with last occurrence of sub string changed - 
 
 CASE( "replace_last: Return string with last occurrence of regex changed - string-regex" "[.TODO]" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( false );
+#else
+    EXPECT( !!"replace_last is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 CASE( "replace_last_re: Return string with last occurrence of regex changed - string-char*" "[.TODO]" )
 {
+#if string_CONFIG_PROVIDE_REGEX
+#if string_HAVE_REGEX
     EXPECT( false );
+#else
+    EXPECT( !!"replace_last_re is not available (string_HAVE_REGEX)." );
+#endif
+#else
+    EXPECT( !!"regex is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
+#endif
 }
 
 #endif

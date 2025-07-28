@@ -89,10 +89,10 @@ strip_left_re
 strip_right             non-regex
 strip_right_re          to be implemented
 
-replace_all             to be implemented (regex done)
-replace_all_re          done
-replace_first           to be implemented (regex done)
-replace_first_re        done
+replace_all
+replace_all_re
+replace_first
+replace_first_re
 replace_last            to be implemented
 replace_last_re         ...
 
@@ -246,14 +246,14 @@ strip: Remove characters in set from left and right of string [" \t\n"] - other
 strip: Remove characters in regex from left and right of string - string-regex[.TODO]
 strip_re: Remove characters in regex from left and right of string - string-char*[.TODO]
 string_view: ...[.TODO]
-replace_all: Return string with all occurrences of sub string changed - char*-char*[.TODO]
-replace_all: Return string with all occurrences of sub string changed - string-string[.TODO]
-replace_all: Return string with all occurrences of sub string changed - string-string_view[.TODO]
+replace_all: Return string with all occurrences of sub string changed - char*-char*
+replace_all: Return string with all occurrences of sub string changed - string-string
+replace_all: Return string with all occurrences of sub string changed - string-string_view
 replace_all: Return string with all occurrences of regex changed - string-regex
 replace_all_re: Return string with all occurrences of regex changed - string-char*
-replace_first: Return string with first occurrence of sub string changed - char*-char*[.TODO]
-replace_first: Return string with first occurrence of sub string changed - string-string[.TODO]
-replace_first: Return string with first occurrence of sub string changed - string-string_view[.TODO]
+replace_first: Return string with first occurrence of sub string changed - char*-char*
+replace_first: Return string with first occurrence of sub string changed - string-string
+replace_first: Return string with first occurrence of sub string changed - string-string_view
 replace_first: Return string with first occurrence of sub string changed - string_view-string_view[.TODO]
 replace_first: Return string with first occurrence of regex changed - string-regex
 replace_first_re: Return string with first occurrence of regex changed - string-char*
