@@ -8,6 +8,7 @@
 
 // TODO: Plan
 // - [x] use C++20 std::string_view, not C++17 for presence of ctor(char* begin, char* end)
+// - [ ] Reconsider above for C++17 string-string_view interoperability ?
 // - [ ] implement functions
 // - [ ] support string_view as source?
 // - [ ] constexpr / string_constexpr / string_constexpr14
@@ -1184,9 +1185,13 @@ namespace detail {
 template< typename T, typename WithT >
 std::string replace_all( std::basic_string<T> text, std20::basic_string_view<T> what, WithT const & with )
 {
+    if ( with == what )
+        return text;
+
     for ( ;; )
     {
-        const auto pos = find_first(text, what);
+        // TODO: Prefer to advance from last position:
+        const auto pos = find_first( text, what );
 
         if ( pos == std::string::npos )
             break;
@@ -1197,7 +1202,7 @@ std::string replace_all( std::basic_string<T> text, std20::basic_string_view<T> 
 }
 
 } // detail
-}// namespace string
+} // namespace string
 
 #define string_MK_REPLACE_ALL(T) /*TODO: MK()*/
 
@@ -1213,14 +1218,14 @@ template< typename WithT >
 string_nodiscard std::string
 replace_all( std::string text, std::regex const & re, WithT const & with )
 {
-    return std::regex_replace( text, re, with);
+    return std::regex_replace( text, re, with );
 }
 
 template< typename WhatT, typename WithT >
 string_nodiscard std::string
 replace_all_re( std::string text, WhatT const & what, WithT const & with )
 {
-    return std::regex_replace( text, std::regex(what), with);
+    return std::regex_replace( text, std::regex(what), with );
 }
 
 #endif // regex
@@ -1264,7 +1269,8 @@ replace_first_re( std::string text, WhatT const & what, WithT const & with )
 
 template< typename WhatT, typename WithT >
 string_nodiscard std::string
-replace_last( std::string text, WhatT const & what, WithT const & with )
+replace_last( std::string , WhatT const & , WithT const &  )
+// replace_last( std::string text, WhatT const & what, WithT const & with )
 {
     #pragma message("TODO: Implement replace_last().")
     return "[Implement replace_last()]";
@@ -1882,7 +1888,8 @@ split_left(  std20::string_view text, char const * d ) -> std::tuple<std20::stri
 // Split string at given separator character, starting at right.
 
 string_nodiscard inline auto
-split_right(  std20::string_view text, char const * d ) -> std::tuple<std20::string_view, std20::string_view>
+split_right(  std20::string_view , char const * ) -> std::tuple<std20::string_view, std20::string_view>
+// split_right(  std20::string_view text, char const * d ) -> std::tuple<std20::string_view, std20::string_view>
 {
     return { "TODO", "TODO" };
     // return split_right( text, reverse_literal_delimiter(d) );
