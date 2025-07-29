@@ -705,6 +705,18 @@ using namespace string;
 // Searching:
 //
 
+namespace string {
+namespace detail {
+
+template< typename SeekT >
+string_nodiscard std::size_t find_first( std20::string_view text, SeekT const & seek, std::size_t pos )
+{
+    return text.find( seek, pos );
+}
+
+} // namespace detail
+} // namespace string
+
 // find_first()
 
 #define string_MK_FIND_FIRST(T) /*TODO: MK()*/
@@ -1188,10 +1200,9 @@ std::string replace_all( std::basic_string<T> text, std20::basic_string_view<T> 
     if ( with == what )
         return text;
 
-    for ( ;; )
+    for ( auto pos = detail::find_first( text, what, 0 ) ;; )
     {
-        // TODO: Prefer to advance from last position:
-        const auto pos = find_first( text, what );
+        pos = detail::find_first( text, what, pos );
 
         if ( pos == std::string::npos )
             break;
