@@ -1127,9 +1127,9 @@ string_nodiscard bool ends_with_re( std17::string_view text, SeekT const & seek 
 
 template< typename SetT >
 string_nodiscard std::string
-strip_left( std::string text, SetT const & set )
+strip_left( std17::string_view text, SetT const & set )
 {
-    return text.erase( 0, text.find_first_not_of( set ) );
+    return std::string( text ).erase( 0, text.find_first_not_of( set ) );
 }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
@@ -1155,9 +1155,9 @@ strip_left_re( std::string text, SetT const & set )
 
 template< typename SetT >
 string_nodiscard std::string
-strip_right( std::string text, SetT const & set )
+strip_right( std17::string_view text, SetT const & set )
 {
-    return text.erase( text.find_last_not_of( set ) + 1 );
+    return std::string( text ).erase( text.find_last_not_of( set ) + 1 );
 }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
@@ -1183,9 +1183,9 @@ strip_right_re( std::string text, SetT const & set )
 
 template< typename SetT >
 string_nodiscard std::string
-strip( std::string text, SetT const & set )
+strip( std17::string_view text, SetT const & set )
 {
-    return strip_left( strip_right( text, set ), set );
+    return strip_left( strip_right( std::string(text), set ), set );
 }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
@@ -1317,12 +1317,12 @@ replace_last( std::string , WhatT const & , WithT const &  )
 
 template< typename TailT >
 string_nodiscard std::string
-append( std::string text, TailT const & tail )
+append( std17::string_view text, TailT const & tail )
 {
 #if string_CPP20_000
-    return text.append( tail );     // requires std::string_view, but using nonstd::string_view with C++17
+    return std::string( text ).append( tail );     // requires std::string_view, but using nonstd::string_view with C++17
 #else
-    return text + std::string(tail);
+    return std::string( text ) + std::string(tail);
 #endif
 }
 
@@ -1333,7 +1333,7 @@ append( std::string text, TailT const & tail )
 string_nodiscard inline std::string
 substring( std17::string_view text, size_t pos = 0, size_t count = detail::npos )
 {
-    return detail::to_string( text.substr( pos, count ) );
+    return std::string( text ).substr( pos, count );
 }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX

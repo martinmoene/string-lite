@@ -201,21 +201,29 @@ find_last_re: position of regex in string: string-char*
 find_first_of: position of character in set in string - char*-char*
 find_first_of: position of character in set in string - string-char*
 find_first_of: position of character in set in string - string-string
+find_first_of: position of character in set in string - string-string_view
+find_first_of: position of character in set in string - string_view-string_view
 find_first_of: position of character in set in string: string-std::regex
 find_first_of_re: position of character in set in string: string-char*
 find_last_of: position of character in set in string - char*-char*
 find_last_of: position of character in set in string - string-char*
 find_last_of: position of character in set in string - string-string
+find_last_of: position of character in set in string - string-string_view
+find_last_of: position of character in set in string - string_view-string_view
 find_last_of: position of character in set in string: string-std::regex
 find_last_of_re: position of character in set in string: string-char*
 find_first_not_of: position of character in set in string - char*-char*
 find_first_not_of: position of character in set in string - string-char*
 find_first_not_of: position of character in set in string - string-string
+find_first_not_of: position of character in set in string - string-string_view
+find_first_not_of: position of character in set in string - string_view-string_view
 find_first_not_of: position of character in set in string: optionally use find_first_of([^...]): string-std::regex
 find_first_not_of_re: position of character in set in string: optionally use find_first_of_re([^...]): string-char*
 find_last_not_of: position of character in set in string - char*-char*
 find_last_not_of: position of character in set in string - string-char*
 find_last_not_of: position of character in set in string - string-string
+find_last_not_of: position of character in set in string - string-string_view
+find_last_not_of: position of character in set in string - string_view-string_view
 find_last_not_of: position of character in set in string: optionally use find_last_of([^...]): string-std::regex[.TODO]
 find_last_not_of_re: position of character in set in string: optionally find_last_of_re([^...]): string-char*[.TODO]
 to_lowercase: Return string in lowercase - char*
@@ -227,34 +235,47 @@ to_uppercase: Return string in uppercase - string_view
 append: Return string with second string append to first string - string-char*
 append: Return string with second string append to first string - string-string
 append: Return string with second string append to first string - string-string_view
+append: Return string with second string append to first string - string_view-string_view
 substring: Return substring given position and length - char*-pos
 substring: Return substring given position and length - string-pos
 substring: Return substring given position and length - string_view-pos
 substring: Return substring given regex - string-regex
 substring_re: Return substring given regex - string-char*
-strip_left: Remove characters in set from left of string [" \t\n"] - C-string
-strip_left: Remove characters in set from left of string [" \t\n"] - string
-strip_left: Remove characters in set from left of string [" \t\n"] - other
+strip_left: Remove characters in set from left of string [" \t\n"] - char*-char*
+strip_left: Remove characters in set from left of string [" \t\n"] - string-char*
+strip_left: Remove characters in set from left of string [" \t\n"] - string-string
+strip_left: Remove characters in set from left of string [" \t\n"] - string-string_view
+strip_left: Remove characters in set from left of string [" \t\n"] - string_view-string_view
+strip_left: Remove characters in set from left of string [" \t\n"] - other-char*
 strip_left: Remove characters in regex from left of string - string-regex
 strip_left_re: Remove characters in regex from left of string - string-char*
-strip_right: Remove characters in set from right of string [" \t\n"] - string
-strip_right: Remove characters in set from right of string [" \t\n"] - other
+strip_right: Remove characters in set from right of string [" \t\n"] - char*-char*
+strip_right: Remove characters in set from right of string [" \t\n"] - string-char*
+strip_right: Remove characters in set from right of string [" \t\n"] - string-string
+strip_right: Remove characters in set from right of string [" \t\n"] - string-string_view
+strip_right: Remove characters in set from right of string [" \t\n"] - string_view-string_view
+strip_right: Remove characters in set from right of string [" \t\n"] - other-char*
 strip_right: Remove characters in regex from right of string - string-regex[.TODO]
 strip_right_re: Remove characters in regex from right of string - string-char*[.TODO]
-strip: Remove characters in set from left and right of string [" \t\n"] - string
-strip: Remove characters in set from left and right of string [" \t\n"] - other
+strip: Remove characters in set from left and right of string [" \t\n"] - char*-char*
+strip: Remove characters in set from left and right of string [" \t\n"] - string-char*
+strip: Remove characters in set from left and right of string [" \t\n"] - string-string
+strip: Remove characters in set from left and right of string [" \t\n"] - string-string_view
+strip: Remove characters in set from left and right of string [" \t\n"] - string_view-string_view
+strip: Remove characters in set from left and right of string [" \t\n"] - other-char*
 strip: Remove characters in regex from left and right of string - string-regex[.TODO]
 strip_re: Remove characters in regex from left and right of string - string-char*[.TODO]
 string_view: ...[.TODO]
 replace_all: Return string with all occurrences of sub string changed - char*-char*
 replace_all: Return string with all occurrences of sub string changed - string-string
 replace_all: Return string with all occurrences of sub string changed - string-string_view
+replace_all: Return string with all occurrences of sub string changed - string_view-string_view
 replace_all: Return string with all occurrences of regex changed - string-regex
 replace_all_re: Return string with all occurrences of regex changed - string-char*
 replace_first: Return string with first occurrence of sub string changed - char*-char*
 replace_first: Return string with first occurrence of sub string changed - string-string
 replace_first: Return string with first occurrence of sub string changed - string-string_view
-replace_first: Return string with first occurrence of sub string changed - string_view-string_view[.TODO]
+replace_first: Return string with first occurrence of sub string changed - string_view-string_view
 replace_first: Return string with first occurrence of regex changed - string-regex
 replace_first_re: Return string with first occurrence of regex changed - string-char*
 replace_last: Return string with last occurrence of sub string changed - char*-char*[.TODO]

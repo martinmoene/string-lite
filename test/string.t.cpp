@@ -428,6 +428,18 @@ CASE( "find_first_of: position of character in set in string - string-string" )
     EXPECT( sv_npos == find_first_of(std::string("abc123mno123xyz"), std::string("789") ) );
 }
 
+CASE( "find_first_of: position of character in set in string - string-string_view" )
+{
+    EXPECT(       3 == find_first_of(std::string("abc123mno123xyz"), std17::string_view("321") ) );
+    EXPECT( sv_npos == find_first_of(std::string("abc123mno123xyz"), std17::string_view("789") ) );
+}
+
+CASE( "find_first_of: position of character in set in string - string_view-string_view" )
+{
+    EXPECT(       3 == find_first_of(std17::string_view("abc123mno123xyz"), std17::string_view("321") ) );
+    EXPECT( sv_npos == find_first_of(std17::string_view("abc123mno123xyz"), std17::string_view("789") ) );
+}
+
 CASE( "find_first_of: position of character in set in string: string-std::regex" )
 {
 #if string_CONFIG_PROVIDE_REGEX
@@ -462,20 +474,32 @@ CASE( "find_first_of_re: position of character in set in string: string-char*" )
 
 CASE( "find_last_of: position of character in set in string - char*-char*" )
 {
-    EXPECT(       11 == find_last_of("abc123mno123xyz", "123") );
+    EXPECT(      11 == find_last_of("abc123mno123xyz", "123") );
     EXPECT( sv_npos == find_last_of("abc123mno123xyz", "789") );
 }
 
 CASE( "find_last_of: position of character in set in string - string-char*" )
 {
-    EXPECT(       11 == find_last_of(std::string("abc123mno123xyz"), "123") );
+    EXPECT(      11 == find_last_of(std::string("abc123mno123xyz"), "123") );
     EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), "789") );
 }
 
 CASE( "find_last_of: position of character in set in string - string-string" )
 {
-    EXPECT(       11 == find_last_of(std::string("abc123mno123xyz"), std::string("123") ) );
+    EXPECT(      11 == find_last_of(std::string("abc123mno123xyz"), std::string("123") ) );
     EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), std::string("789") ) );
+}
+
+CASE( "find_last_of: position of character in set in string - string-string_view" )
+{
+    EXPECT(      11 == find_last_of(std::string("abc123mno123xyz"), std17::string_view("123") ) );
+    EXPECT( sv_npos == find_last_of(std::string("abc123mno123xyz"), std17::string_view("789") ) );
+}
+
+CASE( "find_last_of: position of character in set in string - string_view-string_view" )
+{
+    EXPECT(      11 == find_last_of(std17::string_view("abc123mno123xyz"), std17::string_view("123") ) );
+    EXPECT( sv_npos == find_last_of(std17::string_view("abc123mno123xyz"), std17::string_view("789") ) );
 }
 
 CASE( "find_last_of: position of character in set in string: string-std::regex" )
@@ -526,6 +550,18 @@ CASE( "find_first_not_of: position of character in set in string - string-string
 {
     EXPECT(       3 == find_first_not_of(std::string("abc123mno123xyz"), std::string("cba") ) );
     EXPECT( sv_npos == find_first_not_of(std::string("abc123mno123xyz"), std::string("abc123mno123xyz") ) );
+}
+
+CASE( "find_first_not_of: position of character in set in string - string-string_view" )
+{
+    EXPECT(       3 == find_first_not_of(std::string("abc123mno123xyz"), std17::string_view("cba") ) );
+    EXPECT( sv_npos == find_first_not_of(std::string("abc123mno123xyz"), std17::string_view("abc123mno123xyz") ) );
+}
+
+CASE( "find_first_not_of: position of character in set in string - string_view-string_view" )
+{
+    EXPECT(       3 == find_first_not_of(std17::string_view("abc123mno123xyz"), std17::string_view("cba") ) );
+    EXPECT( sv_npos == find_first_not_of(std17::string_view("abc123mno123xyz"), std17::string_view("abc123mno123xyz") ) );
 }
 
 CASE( "find_first_not_of: position of character in set in string: optionally use find_first_of([^...]): string-std::regex" )
@@ -582,6 +618,18 @@ CASE( "find_last_not_of: position of character in set in string - string-string"
 {
     EXPECT(      11 == find_last_not_of(std::string("abc123mno123xyz"), std::string("zyx") ) );
     EXPECT( sv_npos == find_last_not_of(std::string("abc123mno123xyz"), std::string("abc123mno123xyz") ) );
+}
+
+CASE( "find_last_not_of: position of character in set in string - string-string_view" )
+{
+    EXPECT(      11 == find_last_not_of(std::string("abc123mno123xyz"), std17::string_view("zyx") ) );
+    EXPECT( sv_npos == find_last_not_of(std::string("abc123mno123xyz"), std17::string_view("abc123mno123xyz") ) );
+}
+
+CASE( "find_last_not_of: position of character in set in string - string_view-string_view" )
+{
+    EXPECT(      11 == find_last_not_of(std17::string_view("abc123mno123xyz"), std17::string_view("zyx") ) );
+    EXPECT( sv_npos == find_last_not_of(std17::string_view("abc123mno123xyz"), std17::string_view("abc123mno123xyz") ) );
 }
 
 CASE( "find_last_not_of: position of character in set in string: optionally use find_last_of([^...]): string-std::regex" "[.TODO]" )
@@ -674,6 +722,11 @@ CASE( "append: Return string with second string append to first string - string-
     EXPECT( append(std::string("abc"), std17::string_view("xyz")) == std::string("abcxyz") );
 }
 
+CASE( "append: Return string with second string append to first string - string_view-string_view" )
+{
+    EXPECT( append(std17::string_view("abc"), std17::string_view("xyz")) == std::string("abcxyz") );
+}
+
 // substring()
 
 CASE( "substring: Return substring given position and length - char*-pos" )
@@ -737,19 +790,37 @@ CASE( "substring_re: Return substring given regex - string-char*" )
 
 // strip_left()
 
-CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - C-string" )
+CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - char*-char*" )
 {
     EXPECT( strip_left(" \t\nabc", " \t\n") == std::string("abc") );
     EXPECT( strip_left(" #$%&abc", " #$%&") == std::string("abc") );
 }
 
-CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - string" )
+CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - string-char*" )
 {
     EXPECT( strip_left(std::string(" \t\nabc"), " \t\n") == std::string("abc") );
     EXPECT( strip_left(std::string(" #$%&abc"), " #$%&") == std::string("abc") );
 }
 
-CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - other" )
+CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - string-string" )
+{
+    EXPECT( strip_left(std::string(" \t\nabc"), " \t\n") == std::string("abc") );
+    EXPECT( strip_left(std::string(" #$%&abc"), " #$%&") == std::string("abc") );
+}
+
+CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - string-string_view" )
+{
+    EXPECT( strip_left(std::string(" \t\nabc"), " \t\n") == std17::string_view("abc") );
+    EXPECT( strip_left(std::string(" #$%&abc"), " #$%&") == std17::string_view("abc") );
+}
+
+CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - string_view-string_view" )
+{
+    EXPECT( strip_left(std17::string_view(" \t\nabc"), " \t\n") == std17::string_view("abc") );
+    EXPECT( strip_left(std17::string_view(" #$%&abc"), " #$%&") == std17::string_view("abc") );
+}
+
+CASE( "strip_left: Remove characters in set from left of string [\" \\t\\n\"] - other-char*" )
 {
     EXPECT( strip_left(stringy(" \t\nabc"), " \t\n") == std::string("abc") );
     EXPECT( strip_left(stringy(" #$%&abc"), " #$%&") == std::string("abc") );
@@ -795,13 +866,37 @@ CASE( "strip_left_re: Remove characters in regex from left of string - string-ch
 
 // strip_right()
 
-CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] - string" )
+CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] - char*-char*" )
 {
     EXPECT( strip_right(std::string("abc \t\n"), " \t\n") == std::string("abc") );
     EXPECT( strip_right(std::string("abc #$%&"), " #$%&") == std::string("abc") );
 }
 
-CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] - other" )
+CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] - string-char*" )
+{
+    EXPECT( strip_right(std::string("abc \t\n"), " \t\n") == std::string("abc") );
+    EXPECT( strip_right(std::string("abc #$%&"), " #$%&") == std::string("abc") );
+}
+
+CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] - string-string" )
+{
+    EXPECT( strip_right(std::string("abc \t\n"), std::string(" \t\n")) == std::string("abc") );
+    EXPECT( strip_right(std::string("abc #$%&"), std::string(" #$%&")) == std::string("abc") );
+}
+
+CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] - string-string_view" )
+{
+    EXPECT( strip_right(std::string("abc \t\n"), std17::string_view(" \t\n")) == std::string("abc") );
+    EXPECT( strip_right(std::string("abc #$%&"), std17::string_view(" #$%&")) == std::string("abc") );
+}
+
+CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] - string_view-string_view" )
+{
+    EXPECT( strip_right(std17::string_view("abc \t\n"), std17::string_view(" \t\n")) == std::string("abc") );
+    EXPECT( strip_right(std17::string_view("abc #$%&"), std17::string_view(" #$%&")) == std::string("abc") );
+}
+
+CASE( "strip_right: Remove characters in set from right of string [\" \\t\\n\"] - other-char*" )
 {
     EXPECT( strip_right(stringy("abc \t\n"), " \t\n") == std::string("abc") );
     EXPECT( strip_right(stringy("abc #$%&"), " #$%&") == std::string("abc") );
@@ -847,13 +942,37 @@ CASE( "strip_right_re: Remove characters in regex from right of string - string-
 
 // strip()
 
-CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - string" )
+CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - char*-char*" )
+{
+    EXPECT( strip(" \t\nabc \t\n", " \t\n") == std::string("abc") );
+    EXPECT( strip(" #$%&abc #$%&", " #$%&") == std::string("abc") );
+}
+
+CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - string-char*" )
 {
     EXPECT( strip(std::string(" \t\nabc \t\n"), " \t\n") == std::string("abc") );
     EXPECT( strip(std::string(" #$%&abc #$%&"), " #$%&") == std::string("abc") );
 }
 
-CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - other" )
+CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - string-string" )
+{
+    EXPECT( strip(std::string(" \t\nabc \t\n"), std::string(" \t\n")) == std::string("abc") );
+    EXPECT( strip(std::string(" #$%&abc #$%&"), std::string(" #$%&")) == std::string("abc") );
+}
+
+CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - string-string_view" )
+{
+    EXPECT( strip(std::string(" \t\nabc \t\n"), std17::string_view(" \t\n")) == std::string("abc") );
+    EXPECT( strip(std::string(" #$%&abc #$%&"), std17::string_view(" #$%&")) == std::string("abc") );
+}
+
+CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - string_view-string_view" )
+{
+    EXPECT( strip(std17::string_view(" \t\nabc \t\n"), std17::string_view(" \t\n")) == std::string("abc") );
+    EXPECT( strip(std17::string_view(" #$%&abc #$%&"), std17::string_view(" #$%&")) == std::string("abc") );
+}
+
+CASE( "strip: Remove characters in set from left and right of string [\" \\t\\n\"] - other-char*" )
 {
     EXPECT( strip(stringy(" \t\nabc \t\n"), " \t\n") == std::string("abc") );
     EXPECT( strip(stringy(" #$%&abc #$%&"), " #$%&") == std::string("abc") );
