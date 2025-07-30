@@ -1124,25 +1124,24 @@ CASE( "replace_first_re: Return string with first occurrence of regex changed - 
 
 // replace_last():
 
-CASE( "replace_last: Return string with last occurrence of sub string changed - char*-char*" "[.TODO]" )
+CASE( "replace_last: Return string with last occurrence of sub string changed - char*-char*" )
 {
     EXPECT( replace_last( "abc123mno123xyz", "123", "789") == std::string("abc123mno789xyz") );
 }
 
-CASE( "replace_last: Return string with last occurrence of sub string changed - string-string" "[.TODO]" )
+CASE( "replace_last: Return string with last occurrence of sub string changed - string-string" )
 {
     EXPECT( replace_last( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == std::string("abc123mno789xyz") );
 }
 
-CASE( "replace_last: Return string with last occurrence of sub string changed - string-string_view" "[.TODO]" )
+CASE( "replace_last: Return string with last occurrence of sub string changed - string-string_view" )
 {
-    EXPECT( replace_last( std::string("abc123mno123xyz"), "123", "789") == std::string("abc123mno789xyz") );
+    EXPECT( replace_last( std::string("abc123mno123xyz"), std17::string_view("123"), "789") == std::string("abc123mno789xyz") );
 }
 
-CASE( "replace_last: Return string with last occurrence of sub string changed - string_view-string_view" "[.TODO]" )
+CASE( "replace_last: Return string with last occurrence of sub string changed - string_view-string_view" )
 {
-// TODO : implement detail::replace_last(it...)
-    // EXPECT( replace_last( string_view("abc123mno123xyz"), "123", "789") == std::string("abc789mno789xyz") );
+    EXPECT( replace_last( std17::string_view("abc123mno123xyz"), std17::string_view("123"), "789") == std::string("abc123mno789xyz") );
 }
 
 CASE( "replace_last: Return string with last occurrence of regex changed - string-regex" "[.TODO]" )

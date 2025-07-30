@@ -1294,17 +1294,21 @@ replace_first_re( std::string text, WhatT const & what, WithT const & with )
 
 #endif // regex
 
-// TODO: replace_last()
+// replace_last()
 
 #define string_MK_REPLACE_LAST(T) /*TODO: MK()*/
 
-template< typename WhatT, typename WithT >
+template< typename WithT >
 string_nodiscard std::string
-replace_last( std::string , WhatT const & , WithT const &  )
-// replace_last( std::string text, WhatT const & what, WithT const & with )
+replace_last( std17::string_view text,std17::string_view what, WithT const & with )
 {
-    #pragma message("TODO: Implement replace_last().")
-    return "[Implement replace_last()]";
+    std::string result( text );
+
+    const auto pos = find_last( result, what );
+
+    return pos != std::string::npos 
+        ? result.replace( pos, what.length(), with )
+        : "";
 }
 
 //

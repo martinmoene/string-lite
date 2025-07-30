@@ -93,8 +93,8 @@ replace_all
 replace_all_re
 replace_first
 replace_first_re
-replace_last            to be implemented
-replace_last_re         ...
+replace_last            non-regex
+replace_last_re         to be implemented
 
 join
 split
@@ -278,10 +278,10 @@ replace_first: Return string with first occurrence of sub string changed - strin
 replace_first: Return string with first occurrence of sub string changed - string_view-string_view
 replace_first: Return string with first occurrence of regex changed - string-regex
 replace_first_re: Return string with first occurrence of regex changed - string-char*
-replace_last: Return string with last occurrence of sub string changed - char*-char*[.TODO]
-replace_last: Return string with last occurrence of sub string changed - string-string[.TODO]
-replace_last: Return string with last occurrence of sub string changed - string-string_view[.TODO]
-replace_last: Return string with last occurrence of sub string changed - string_view-string_view[.TODO]
+replace_last: Return string with last occurrence of sub string changed - char*-char*
+replace_last: Return string with last occurrence of sub string changed - string-string
+replace_last: Return string with last occurrence of sub string changed - string-string_view
+replace_last: Return string with last occurrence of sub string changed - string_view-string_view
 replace_last: Return string with last occurrence of regex changed - string-regex[.TODO]
 replace_last_re: Return string with last occurrence of regex changed - string-char*[.TODO]
 join: Join strings from collection into a string separated by given separator
