@@ -675,6 +675,11 @@ CASE( "find_last_not_of_re: position of character in set in string: optionally f
 
 // to_lowercase(), to_uppercase:
 
+CASE( "to_lowercase: Return char in lowercase - char" )
+{
+    EXPECT( to_lowercase('A') == 'a' );
+}
+
 CASE( "to_lowercase: Return string in lowercase - char*" )
 {
     EXPECT( to_lowercase(ustr()) == lstr() );
@@ -688,6 +693,11 @@ CASE( "to_lowercase: Return string in lowercase - string" )
 CASE( "to_lowercase: Return string in lowercase - string_view" )
 {
     EXPECT( to_lowercase(std17::string_view(ustr())) == lstr() );
+}
+
+CASE( "to_uppercase: Return char in uppercase - char" )
+{
+    EXPECT( to_uppercase('a') == 'A' );
 }
 
 CASE( "to_uppercase: Return string in uppercase - char*" )

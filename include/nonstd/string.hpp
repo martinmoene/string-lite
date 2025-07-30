@@ -632,47 +632,12 @@ string_nodiscard string_constexpr CharT nullchr() noexcept
 
 #undef MK_DETAIL_TO_STRING_SV
 
-// template< class CharT, class Traits, class Allocator >
-// std::basic_string<CharT, Traits, Allocator>
-// to_string( std17::basic_string_view<CharT, Traits> v, Allocator const & a )
-// {
-//     return std::basic_string<CharT, Traits, Allocator>( v.begin(), v.end(), a );
-// }
-
-// Transform case (character):
-
-template< typename CharT >
-string_nodiscard CharT to_lowercase( CharT chr )
-{
-    return std::tolower( chr, std::locale() );
-}
-
-template< typename CharT >
-string_nodiscard CharT to_uppercase( CharT chr )
-{
-    return std::toupper( chr, std::locale() );
-}
-
-// Transform case; serve both CharT* and StringT&:
-
-template< typename CharT, typename Fn >
-string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text, Fn fn ) noexcept
-{
-    std::transform(
-        std::begin( text ), std::end( text )
-        , std::begin( text )
-        , fn
-    );
-    return text;
-}
-
 }  // namespace detail
 }  // namespace string
 
 // enable use of string-specific namespaces detail and stdxx:
 
 using namespace string;
-
 //
 // Observers
 //
@@ -1104,12 +1069,51 @@ string_nodiscard bool ends_with_re( std17::string_view text, SeekT const & seek 
 // Modifiers:
 //
 
+namespace string {
+namespace detail {
+
+    // Transform case (character):
+
+template< typename CharT >
+string_nodiscard CharT to_lowercase( CharT chr )
+{
+    return std::tolower( chr, std::locale() );
+}
+
+template< typename CharT >
+string_nodiscard CharT to_uppercase( CharT chr )
+{
+    return std::toupper( chr, std::locale() );
+}
+
+// Transform case; serve both CharT* and StringT&:
+
+template< typename CharT, typename Fn >
+string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text, Fn fn ) noexcept
+{
+    std::transform(
+        std::begin( text ), std::end( text )
+        , std::begin( text )
+        , fn
+    );
+    return text;
+}
+
+} // namespace detail
+} // namespace string
+
 // to_lowercase()
 // to_uppercase()
 
 // template string_nodiscard std::basic_string<char> to_lowercase( std17::basic_string_view<char> text ) noexcept;
 
-#define string_MK_TO_CASE(T, Function) \
+#define string_MK_TO_CASE_CHAR(T, Function) \
+    string_nodiscard inline T to_ ## Function( T chr ) noexcept \
+    { \
+        return detail::to_ ## Function<T>( chr ); \
+    }\
+
+#define string_MK_TO_CASE_STRING(T, Function) \
     string_nodiscard inline std::basic_string<T> to_ ## Function( std17::basic_string_view<T> text ) noexcept \
     { \
         return detail::to_case( std::basic_string<T>(text), detail::to_ ## Function<T> ); \
@@ -1938,49 +1942,55 @@ split_right(  std17::string_view , char const * ) -> std::tuple<std17::string_vi
 
 #if string_CONFIG_PROVIDE_CHAR_T
 
-string_MK_LENGTH       ( char )
-string_MK_SIZE         ( char )
-string_MK_IS_EMPTY     ( char )
-string_MK_FIND_FIRST   ( char )
-string_MK_FIND_LAST    ( char )
-string_MK_FIND_FIRST_OF( char )
-string_MK_FIND_LAST_OF ( char )
+string_MK_LENGTH        ( char )
+string_MK_SIZE          ( char )
+string_MK_IS_EMPTY      ( char )
+string_MK_FIND_FIRST    ( char )
+string_MK_FIND_LAST     ( char )
+string_MK_FIND_FIRST_OF ( char )
+string_MK_FIND_LAST_OF  ( char )
 string_MK_FIND_FIRST_NOT_OF( char )
 string_MK_FIND_LAST_NOT_OF ( char )
-string_MK_CONTAINS     ( char )
-string_MK_STARTS_WITH  ( char )
-string_MK_ENDS_WITH    ( char )
-string_MK_TO_CASE      ( char, lowercase )
-string_MK_TO_CASE      ( char, uppercase )
-string_MK_STRIP_LEFT   ( char )
-string_MK_STRIP_RIGHT  ( char )
-string_MK_STRIP        ( char )
-string_MK_REPLACE_ALL  ( char )
-string_MK_REPLACE_FIRST( char )
-string_MK_REPLACE_LAST ( char )
-string_MK_APPEND       ( char )
-string_MK_JOIN         ( char )
-string_MK_SPLIT        ( char )
+string_MK_CONTAINS      ( char )
+string_MK_STARTS_WITH   ( char )
+string_MK_ENDS_WITH     ( char )
+string_MK_TO_CASE_CHAR  ( char, lowercase )
+string_MK_TO_CASE_CHAR  ( char, uppercase )
+string_MK_TO_CASE_STRING( char, lowercase )
+string_MK_TO_CASE_STRING( char, uppercase )
+string_MK_STRIP_LEFT    ( char )
+string_MK_STRIP_RIGHT   ( char )
+string_MK_STRIP         ( char )
+string_MK_REPLACE_ALL   ( char )
+string_MK_REPLACE_FIRST ( char )
+string_MK_REPLACE_LAST  ( char )
+string_MK_APPEND        ( char )
+string_MK_JOIN          ( char )
+string_MK_SPLIT         ( char )
 // ...
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
 
-string_MK_LENGTH  ( wchar_t )
-string_MK_SIZE    ( wchar_t )
-string_MK_IS_EMPTY( wchar_t )
-string_MK_TO_CASE ( wchar_t, lowercase )
-string_MK_TO_CASE ( wchar_t, uppercase )
+string_MK_LENGTH        ( wchar_t )
+string_MK_SIZE          ( wchar_t )
+string_MK_IS_EMPTY      ( wchar_t )
+string_MK_TO_CASE_CHAR  ( wchar_t, lowercase )
+string_MK_TO_CASE_CHAR  ( wchar_t, uppercase )
+string_MK_TO_CASE_STRING( wchar_t, lowercase )
+string_MK_TO_CASE_STRING( wchar_t, uppercase )
 // ...
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR8_T && string_HAVE_CHAR8_T
 
-string_MK_LENGTH  ( char8_t )
-string_MK_SIZE    ( char8_t )
-string_MK_IS_EMPTY( char8_t )
-string_MK_TO_CASE ( char8_t , lowercase )
-string_MK_TO_CASE ( char8_t , uppercase )
+string_MK_LENGTH        ( char8_t )
+string_MK_SIZE          ( char8_t )
+string_MK_IS_EMPTY      ( char8_t )
+string_MK_TO_CASE_CHAR  ( char8_t, lowercase )
+string_MK_TO_CASE_CHAR  ( char8_t, uppercase )
+string_MK_TO_CASE_STRING( char8_t, lowercase )
+string_MK_TO_CASE_STRING( char8_t, uppercase )
 // ...
 // #undef string_MK_...
 #endif
