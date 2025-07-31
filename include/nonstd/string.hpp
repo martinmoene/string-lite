@@ -483,6 +483,11 @@ public:
             : to_pos( std::find_if( const_reverse_iterator( cbegin() + pos + 1 ), crend(), not_in_view( v ) ) );
     }
 
+    string_nodiscard string_constexpr int compare( basic_string_view v ) const string_noexcept
+    {
+        return Traits::compare( data(), v.data(), (std::min)(size(), v.size()) );
+    }
+
     string_nodiscard string_constexpr bool          empty()  const string_noexcept { return size_ == 0; }
     string_nodiscard string_constexpr size_type     size()   const string_noexcept { return size_; }
     string_nodiscard string_constexpr size_type     length() const string_noexcept { return size_; }
@@ -540,6 +545,13 @@ private:
     const_pointer data_;
     size_type     size_;
 };
+
+template< class CharT, class Traits >
+string_nodiscard string_constexpr bool
+operator==( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs ) string_noexcept
+{
+    return 0 == lhs.compare( rhs );
+}
 
 #if string_CONFIG_PROVIDE_CHAR_T
 typedef basic_string_view<char>      string_view;
@@ -714,10 +726,9 @@ string_nodiscard inline std::size_t find_first( std17::string_view text, std::re
 
 // find_first_re()
 
-template< typename SeekT >
-string_nodiscard std::size_t find_first_re( std17::string_view text, SeekT const & seek )
+string_nodiscard inline std::size_t find_first_re( std17::string_view text, std17::string_view re )
 {
-    return find_first( text, std::regex(seek) );
+    return find_first( text, std::regex(re.begin(), re.end()) );
 }
 
 #endif // regex
@@ -761,10 +772,9 @@ string_nodiscard inline std::size_t find_last( std17::string_view text, std::reg
 
 // find_last_re()
 
-template< typename SeekT >
-string_nodiscard std::size_t find_last_re( std17::string_view text, SeekT const & seek )
+string_nodiscard inline std::size_t find_last_re( std17::string_view text, std17::string_view re )
 {
-    return find_last( text, std::regex(seek) );
+    return find_last( text, std::regex(re.begin(), re.end()) );
 }
 
 #endif // regex
@@ -790,10 +800,9 @@ string_nodiscard inline std::size_t find_first_of( std17::string_view text, std:
 
 // find_first_of_re()
 
-template< typename SeekT >
-string_nodiscard inline std::size_t find_first_of_re( std17::string_view text, SeekT const & seek )
+string_nodiscard inline std::size_t find_first_of_re( std17::string_view text, std17::string_view re )
 {
-    return find_first_of( text, std::regex(seek) );
+    return find_first_of( text, std::regex(re.begin(), re.end()) );
 }
 
 #endif // regex
@@ -819,10 +828,9 @@ string_nodiscard inline std::size_t find_last_of( std17::string_view text, std::
 
 // find_last_of_re()
 
-template< typename SeekT >
-string_nodiscard inline std::size_t find_last_of_re( std17::string_view text, SeekT const & seek )
+string_nodiscard inline std::size_t find_last_of_re( std17::string_view text, std17::string_view re )
 {
-    return find_last_of( text, std::regex(seek) );
+    return find_last_of( text, std::regex(re.begin(), re.end()) );
 }
 
 #endif // regex
@@ -860,10 +868,9 @@ string_nodiscard inline std::size_t find_first_not_of( std17::string_view text, 
 
 // find_first_not_of_re()
 
-template< typename SeekT >
-string_nodiscard inline std::size_t find_first_not_of_re( std17::string_view text, SeekT const & seek )
+string_nodiscard inline std::size_t find_first_not_of_re( std17::string_view text, std17::string_view re )
 {
-    return find_first_not_of( text, std::regex(seek) );
+    return find_first_not_of( text, std::regex(re.begin(), re.end()) );
 }
 
 #endif // regex
@@ -882,7 +889,7 @@ string_nodiscard std::size_t find_last_not_of( std17::string_view text, SeekT co
 
 // TODO: find_last_not_of(regex), optionally use find_last_of_([^regex])
 
-string_nodiscard inline std::size_t find_last_not_of( std17::string_view text, std::regex const & re )
+string_nodiscard inline std::size_t find_last_not_of( std17::string_view /*text*/, std::regex const & /*re*/ )
 {
 #if 1
     return detail::npos;
@@ -911,10 +918,9 @@ string_nodiscard inline std::size_t find_last_not_of( std17::string_view text, s
 
 // find_first_not_of_re()
 
-template< typename SeekT >
-string_nodiscard inline std::size_t find_last_not_of_re( std17::string_view text, SeekT const & seek )
+string_nodiscard inline std::size_t find_last_not_of_re( std17::string_view text, std17::string_view re )
 {
-    return find_last_not_of( text, std::regex(seek) );
+    return find_last_not_of( text, std::regex(re.begin(), re.end()) );
 }
 
 #endif // regex
@@ -950,10 +956,9 @@ string_nodiscard inline bool contains( std17::string_view text, std::regex const
 
 #define string_MK_CONTAINS_RE(T) /*TODO: MK()*/
 
-template< typename SeekT >
-string_nodiscard bool contains_re( std17::string_view text, SeekT const & seek )
+string_nodiscard inline bool contains_re( std17::string_view text, std17::string_view re )
 {
-    return contains( text, std::regex(seek) );
+    return contains( text, std::regex(re.begin(), re.end()) );
 }
 
 #endif // regex
@@ -998,10 +1003,9 @@ string_nodiscard inline bool starts_with( std17::string_view text, std::regex co
 
 #define string_MK_STARTS_WITH_RE(T) /*TODO: MK()*/
 
-template< typename SeekT >
-string_nodiscard bool starts_with_re( std17::string_view text, SeekT const & seek )
+string_nodiscard inline bool starts_with_re( std17::string_view text, std17::string_view re )
 {
-    return 0 == find_first_re( text, seek );
+    return 0 == find_first_re( text, re );
 }
 
 #endif // regex
@@ -1057,10 +1061,9 @@ string_nodiscard inline bool ends_with( std17::string_view text, std::regex cons
 
 #define string_MK_ENDS_WITH_RE(T) /*TODO: MK()*/
 
-template< typename SeekT >
-string_nodiscard bool ends_with_re( std17::string_view text, SeekT const & seek )
+string_nodiscard inline bool ends_with_re( std17::string_view text, std17::string_view re )
 {
-    return ends_with( text, std::regex(seek) );
+    return ends_with( text, std::regex(re.begin(), re.end()) );
 }
 
 #endif // regex
@@ -1139,16 +1142,15 @@ strip_left( std17::string_view text, SetT const & set )
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 string_nodiscard std::string inline
-strip_left( std::string text, std::regex const & re )
+strip_left( std17::string_view text, std::regex const & re )
 {
-    return text.erase( 0, find_first_not_of( text, re ) );
+    return std::string( text ).erase( 0, find_first_not_of( text, re ) );
 }
 
-template< typename SetT >
-string_nodiscard std::string
-strip_left_re( std::string text, SetT const & set )
+string_nodiscard inline std::string
+strip_left_re( std17::string_view text, std17::string_view set )
 {
-    return strip_left( text, std::regex( set ) );
+    return strip_left( std::string( text ), std::regex(set.begin(), set.end()) );
 }
 
 #endif // regex
@@ -1167,16 +1169,15 @@ strip_right( std17::string_view text, SetT const & set )
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 string_nodiscard std::string inline
-strip_right( std::string text, std::regex const & re )
+strip_right( std17::string_view text, std::regex const & re )
 {
-    return text.erase( 0, find_last_not_of( text, re ) );
+    return std::string( text ).erase( 0, find_last_not_of( std::string( text ), re ) );
 }
 
-template< typename SetT >
-string_nodiscard std::string
-strip_right_re( std::string text, SetT const & set )
+string_nodiscard inline std::string
+strip_right_re( std17::string_view text, std17::string_view set )
 {
-    return strip_right( text, std::regex( set ) );
+    return strip_right( std::string( text ), std::regex(set.begin(), set.end()) );
 }
 
 #endif // regex
@@ -1189,22 +1190,21 @@ template< typename SetT >
 string_nodiscard std::string
 strip( std17::string_view text, SetT const & set )
 {
-    return strip_left( strip_right( std::string(text), set ), set );
+    return strip_left( strip_right( text, set ), set );
 }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 string_nodiscard std::string inline
-strip( std::string text, std::regex const & re )
+strip( std17::string_view text, std::regex const & re )
 {
     return strip_left( strip_right( text, re ), re );
 }
 
-template< typename SetT >
-string_nodiscard std::string
-strip_re( std::string text, SetT const & set )
+string_nodiscard inline std::string
+strip_re( std17::string_view text, std17::string_view set )
 {
-    return strip( text, std::regex( set ) );
+    return strip( text, std::regex(set.begin(), set.end()) );
 }
 
 #endif // regex
@@ -1214,8 +1214,8 @@ strip_re( std::string text, SetT const & set )
 namespace string {
 namespace detail {
 
-template< typename T, typename WithT >
-std::string replace_all( std17::basic_string_view<T> text, std17::basic_string_view<T> what, WithT const & with )
+template< typename T >
+std::string replace_all( std17::basic_string_view<T> text, std17::basic_string_view<T> what, std17::basic_string_view<T> with )
 {
     std::basic_string<T> result( text );
 
@@ -1229,7 +1229,11 @@ std::string replace_all( std17::basic_string_view<T> text, std17::basic_string_v
         if ( pos == std::string::npos )
             break;
 
+#if string_CPP17_OR_GREATER
         result.replace( pos, what.length(), with );
+#else
+        result.replace( pos, what.length(), std::string(with) );
+#endif
     }
     return result;
 }
@@ -1239,8 +1243,8 @@ std::string replace_all( std17::basic_string_view<T> text, std17::basic_string_v
 
 #define string_MK_REPLACE_ALL(T) /*TODO: MK()*/
 
-template< typename WithT >
-std::string replace_all( std17::string_view text, std17::string_view what, WithT const & with )
+string_nodiscard inline std::string
+replace_all( std17::string_view text, std17::string_view what, std17::string_view with )
 {
     return detail::replace_all( text, what, with );
 }
@@ -1249,16 +1253,15 @@ std::string replace_all( std17::string_view text, std17::string_view what, WithT
 
 template< typename WithT >
 string_nodiscard std::string
-replace_all( std::string text, std::regex const & re, WithT const & with )
+replace_all( std17::string_view text, std::regex const & re, WithT const & with )
 {
-    return std::regex_replace( text, re, with );
+    return std::regex_replace( std::string(text), re, with );
 }
 
-template< typename WhatT, typename WithT >
-string_nodiscard std::string
-replace_all_re( std::string text, WhatT const & what, WithT const & with )
+string_nodiscard inline std::string
+replace_all_re( std17::string_view text, std17::string_view what, std17::string_view with )
 {
-    return std::regex_replace( text, std::regex(what), with );
+    return std::regex_replace( std::string(text), std::regex(what.begin(), what.end()), std::string(with) );
 }
 
 #endif // regex
@@ -1267,33 +1270,30 @@ replace_all_re( std::string text, WhatT const & what, WithT const & with )
 
 #define string_MK_REPLACE_FIRST(T) /*TODO: MK()*/
 
-template< typename WithT >
-string_nodiscard std::string
-replace_first( std17::string_view text, std17::string_view what, WithT const & with )
+string_nodiscard inline std::string
+replace_first( std17::string_view text, std17::string_view what, std17::string_view with )
 {
     std::string result( text );
 
     const auto pos = find_first( result, what );
 
     return pos != std::string::npos 
-        ? result.replace( pos, what.length(), with )
+        ? result.replace( pos, what.length(), std::string(with) )
         : "";
 }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-template< typename WithT >
-string_nodiscard std::string
-replace_first( std::string text, std::regex const & re, WithT const & with )
+string_nodiscard inline std::string
+replace_first( std17::string_view text, std::regex const & re, std17::string_view with )
 {
-    return std::regex_replace( text, re, with, std::regex_constants::format_first_only );
+    return std::regex_replace( std::string(text), re, std::string(with), std::regex_constants::format_first_only );
 }
 
-template< typename WhatT, typename WithT >
-string_nodiscard std::string
-replace_first_re( std::string text, WhatT const & what, WithT const & with )
+string_nodiscard inline std::string
+replace_first_re( std17::string_view text, std17::string_view what, std17::string_view with )
 {
-    return replace_first( text, std::regex( what ), with );
+    return replace_first( text, std::regex(what.begin(), what.end()), with );
 }
 
 #endif // regex
@@ -1302,16 +1302,15 @@ replace_first_re( std::string text, WhatT const & what, WithT const & with )
 
 #define string_MK_REPLACE_LAST(T) /*TODO: MK()*/
 
-template< typename WithT >
-string_nodiscard std::string
-replace_last( std17::string_view text,std17::string_view what, WithT const & with )
+string_nodiscard inline std::string
+replace_last( std17::string_view text,std17::string_view what, std17::string_view with )
 {
     std::string result( text );
 
     const auto pos = find_last( result, what );
 
     return pos != std::string::npos 
-        ? result.replace( pos, what.length(), with )
+        ? result.replace( pos, what.length(), std::string(with) )
         : "";
 }
 
@@ -1371,9 +1370,9 @@ substring( std17::string_view text, std::regex const & re )
 // substring_re()
 
 string_nodiscard inline std::string
-substring_re( std17::string_view text, char const * re )
+substring_re( std17::string_view text, std17::string_view re )
 {
-    return substring( text, std::regex(re) );
+    return substring( text, std::regex(re.begin(), re.end()) );
 }
 
 #endif // regex

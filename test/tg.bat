@@ -20,7 +20,7 @@ echo %gpp% %version%: %std% %args%
 
 set unit_config=^
     -Dstring_STRING_HEADER=\"nonstd/string.hpp\" ^
-    -Dstring_TEST_NODISCARD=0
+    -Dstring_CONFIG_PROVIDE_REGEX=1
 
 ::string_CONFIG_SELECT_STRING_VIEW_INTERNAL
 ::string_CONFIG_SELECT_STRING_VIEW_NONSTD
