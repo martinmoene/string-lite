@@ -110,6 +110,8 @@ inline bool operator==( std::vector<std::string> const & a, std::vector<string_v
 
 namespace lest {
 
+    using nonstd::std17::operator==;
+
 } // namespace lest
 
 // #include "lest.hpp"
