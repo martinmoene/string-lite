@@ -721,7 +721,7 @@ string_nodiscard inline std::size_t find_first( std17::string_view text, std::re
 {
     std::match_results< std17::string_view::const_iterator > result;
 
-    return std::regex_search( text.begin(), text.end(), result, re ) ? result.position() : detail::npos;
+    return std::regex_search( text.begin(), text.end(), result, re ) ? result.position() : static_cast<size_t>( detail::npos );
 }
 
 // find_first_re()
@@ -863,7 +863,7 @@ string_nodiscard inline std::size_t find_first_not_of( std17::string_view text, 
 
     return std::regex_search( text.begin(), text.end(), result, re ) && result.position() == 0 && to_size(result.length()) < text.length()
         ? result.length() 
-        : detail::npos;
+        : static_cast<size_t>( detail::npos );
 }
 
 // find_first_not_of_re()
