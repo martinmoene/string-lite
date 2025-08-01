@@ -1326,8 +1326,8 @@ template< typename TailT >
 string_nodiscard std::string
 append( std17::string_view text, TailT const & tail )
 {
-#if string_CPP20_000
-    return std::string( text ).append( tail );     // requires std::string_view, but using nonstd::string_view with C++17
+#if string_CPP17_OR_GREATER
+    return std::string( text ).append( tail );
 #else
     return std::string( text ) + std::string(tail);
 #endif
