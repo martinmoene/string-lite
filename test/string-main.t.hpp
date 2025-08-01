@@ -1,4 +1,4 @@
-// Copyright 2021-2021 by Martin Moene
+// Copyright (c) 2025-2025 Martin Moene
 //
 // https://github.com/martinmoene/string-lite
 //

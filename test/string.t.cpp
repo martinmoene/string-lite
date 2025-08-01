@@ -1,4 +1,4 @@
-// Copyright 2021-2021 Martin Moene
+// Copyright 2025-2025 Martin Moene
 //
 // https://github.com/martinmoene/string-lite
 //
@@ -2197,10 +2197,8 @@ CASE( "split: Split string into vector of string_view given delimiter - literal_
 {
     std::vector<std::string> golden( make_vec_of_strings() );
 
-    std::cout << golden << "\n";
-
-    // EXPECT( split("abc..def..ghi", "..") == golden );
-    // EXPECT( split("abc..def..ghi", literal_delimiter("..")) == golden );
+    EXPECT( split("abc..def..ghi", "..") == golden );
+    EXPECT( split("abc..def..ghi", literal_delimiter("..")) == golden );
 }
 
 #if 0
