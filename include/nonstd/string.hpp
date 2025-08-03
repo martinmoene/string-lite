@@ -270,11 +270,11 @@ namespace detail {
 // npos
 
 #if string_CPP17_OR_GREATER
-    static string_constexpr size_t npos = size_t(-1);
+    static string_constexpr std::size_t npos = std::size_t(-1);
 #elif string_CPP11_OR_GREATER
-    enum : size_t { npos = size_t(-1) };
+    enum : std::size_t { npos = std::size_t(-1) };
 #else
-    enum { npos = size_t(-1) };
+    enum { npos = std::size_t(-1) };
 #endif
 
 } // namespace detail
@@ -340,9 +340,9 @@ public:
     // Constants:
 
 #if string_CPP17_OR_GREATER
-    static string_constexpr size_t npos = detail::npos;
+    static string_constexpr std::size_t npos = detail::npos;
 #elif string_CPP11_OR_GREATER
-    enum : size_t { npos = detail::npos };
+    enum : std::size_t { npos = detail::npos };
 #else
     enum { npos = detail::npos };
 #endif
@@ -574,7 +574,7 @@ typedef basic_string_view<char32_t>  u32string_view;
 #endif
 
 template< typename T >
-string_nodiscard inline size_t size( basic_string_view<T> const & sv )
+string_nodiscard inline std::size_t size( basic_string_view<T> const & sv )
 {
     return sv.size();
 }
@@ -660,7 +660,7 @@ using namespace string;
     string_nodiscard inline std::size_t length( std17::basic_string_view<T> text ) noexcept \
     { \
         return text.length(); \
-    }\
+    }
 
 // size()
 
@@ -668,7 +668,7 @@ using namespace string;
     string_nodiscard inline std::size_t size( std17::basic_string_view<T> text ) noexcept \
     { \
         return text.size(); \
-    }\
+    }
 
 // is_empty()
 
@@ -676,7 +676,7 @@ using namespace string;
     string_nodiscard inline bool is_empty( std17::basic_string_view<T> text ) noexcept \
     { \
         return text.empty(); \
-    }\
+    }
 
 //
 // Searching:
@@ -721,7 +721,7 @@ string_nodiscard inline std::size_t find_first( std17::string_view text, std::re
 {
     std::match_results< std17::string_view::const_iterator > result;
 
-    return std::regex_search( text.begin(), text.end(), result, re ) ? result.position() : static_cast<size_t>( detail::npos );
+    return std::regex_search( text.begin(), text.end(), result, re ) ? result.position() : static_cast<std::size_t>( detail::npos );
 }
 
 // find_first_re()
@@ -850,9 +850,9 @@ string_nodiscard std::size_t find_first_not_of( std17::string_view text, SeekT c
 // Avoid signed/unsigned mismatch.
 
 template< typename T >
-size_t to_size( T value )
+std::size_t to_size( T value )
 {
-    return static_cast<size_t>( value );
+    return static_cast<std::size_t>( value );
 }
 
 // find_first_not_of(regex), optionally use find_first_of_([^regex])
@@ -863,7 +863,7 @@ string_nodiscard inline std::size_t find_first_not_of( std17::string_view text, 
 
     return std::regex_search( text.begin(), text.end(), result, re ) && result.position() == 0 && to_size(result.length()) < text.length()
         ? result.length() 
-        : static_cast<size_t>( detail::npos );
+        : static_cast<std::size_t>( detail::npos );
 }
 
 // find_first_not_of_re()
@@ -897,10 +897,10 @@ string_nodiscard inline std::size_t find_last_not_of( std17::string_view /*text*
     auto elem_begin = std::regex_iterator<std17::string_view::const_iterator>( text.begin(), text.end(), re );
     auto elem_end   = std::regex_iterator<std17::string_view::const_iterator>();
 
-    size_t last_pos = detail::npos;
-    size_t prev_pos = 0;
-    size_t last_len = 0;
-    size_t prev_len = 0;
+    std::size_t last_pos = detail::npos;
+    std::size_t prev_pos = 0;
+    std::size_t last_len = 0;
+    std::size_t prev_len = 0;
     for (std::regex_iterator<std17::string_view::const_iterator> i = elem_begin; i != elem_end; ++i)
     {
         prev_pos = last_pos;
@@ -1046,8 +1046,8 @@ string_nodiscard inline bool ends_with( std17::string_view text, std::regex cons
     auto elem_begin = std::regex_iterator<std17::string_view::const_iterator>( text.begin(), text.end(), re );
     auto elem_end   = std::regex_iterator<std17::string_view::const_iterator>();
 
-    size_t last_pos = detail::npos;
-    size_t last_len = 0;
+    std::size_t last_pos = detail::npos;
+    std::size_t last_len = 0;
     for (std::regex_iterator<std17::string_view::const_iterator> i = elem_begin; i != elem_end; ++i)
     {
         last_pos = i->position();
@@ -1338,7 +1338,7 @@ append( std17::string_view text, TailT const & tail )
 #define string_MK_SUBSTRING(T) /*TODO: MK()*/
 
 string_nodiscard inline std::string
-substring( std17::string_view text, size_t pos = 0, size_t count = detail::npos )
+substring( std17::string_view text, std::size_t pos = 0, std::size_t count = detail::npos )
 {
     return std::string( text ).substr( pos, count );
 }
@@ -1430,7 +1430,7 @@ join( Coll const & coll, SepT const & sep )
 template< typename CharT >
 std17::basic_string_view<CharT> basic_delimiter_end(std17::basic_string_view<CharT> sv)
 {
-    return std17::basic_string_view<CharT>(sv.data() + sv.size(), size_t(0));
+    return std17::basic_string_view<CharT>(sv.data() + sv.size(), std::size_t(0));
 }
 
 // a single string delimiter:
@@ -1439,7 +1439,7 @@ template< typename CharT >
 class basic_literal_delimiter
 {
     const std::basic_string<CharT> delimiter_;
-    mutable size_t found_;
+    mutable std::size_t found_;
 
 public:
     explicit basic_literal_delimiter(std17::basic_string_view<CharT> sv)
@@ -1447,17 +1447,17 @@ public:
         , found_(0)
     {}
 
-    size_t length() const
+    std::size_t length() const
     {
         return delimiter_.length();
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, size_t pos) const
+    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, size_t pos) const
+    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         // out of range, return 'empty' if last match was at end of text, else return 'done':
         if ( pos >= text.length())
@@ -1513,17 +1513,17 @@ public:
     explicit basic_any_of_delimiter(std17::basic_string_view<CharT> sv)
         : delimiters_(detail::to_string(sv)) {}
 
-    size_t length() const
+    std::size_t length() const
     {
-        return (std::min)( size_t(1), delimiters_.length());
+        return (std::min)( std::size_t(1), delimiters_.length());
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, size_t pos) const
+    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, size_t pos) const
+    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         // out of range, return 'done':
         if ( pos > text.length())
@@ -1535,7 +1535,7 @@ public:
             return text.substr(pos, 1);
         }
 
-        size_t found = text.find_first_of(delimiters_, pos);
+        std::size_t found = text.find_first_of(delimiters_, pos);
 
         // at a delimiter, or searching past the last delimiter:
         if (found == pos || (pos == text.length()))
@@ -1566,23 +1566,23 @@ public:
 template< typename CharT >
 class basic_fixed_delimiter
 {
-    size_t len_;
+    std::size_t len_;
 
 public:
-    explicit basic_fixed_delimiter(size_t len)
+    explicit basic_fixed_delimiter(std::size_t len)
         : len_(len) {}
 
-    size_t length() const
+    std::size_t length() const
     {
         return 0;
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, size_t pos) const
+    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, size_t pos) const
+    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         // out of range, return 'done':
         if ( pos > text.length())
@@ -1593,7 +1593,7 @@ public:
     }
 };
 
-// TODO limit_delimiter - Delimiter template would take another Delimiter and a size_t limiting
+// TODO limit_delimiter - Delimiter template would take another Delimiter and a std::size_t limiting
 // the given delimiter to matching a max numbers of times. This is similar to the 3rd argument to
 // perl's split() function.
 
@@ -1607,10 +1607,10 @@ class basic_limit_delimiter;
 template< typename CharT >
 class basic_regex_delimiter
 {
-    std::regex     delimiter_re_;               // regular expression designating delimiters
-    size_t         delimiter_len_;              // length of regular expression
-    mutable size_t matched_delimiter_length_;   // length of the actually matched delimiter
-    mutable bool   trailing_delimiter_seen;     // whether to provide last empty result
+    std::regex          delimiter_re_;              // regular expression designating delimiters
+    std::size_t         delimiter_len_;             // length of regular expression
+    mutable std::size_t matched_delimiter_length_;  // length of the actually matched delimiter
+    mutable bool        trailing_delimiter_seen;    // whether to provide last empty result
 
 public:
     explicit basic_regex_delimiter(std17::basic_string_view<CharT> sv)
@@ -1620,17 +1620,17 @@ public:
         , trailing_delimiter_seen(false)
     {}
 
-    size_t length() const
+    std::size_t length() const
     {
         return matched_delimiter_length_;
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, size_t pos) const
+    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, size_t pos) const
+    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         // trailing empty entry:
         // TODO this feels like a hack, don't know any better at this moment
@@ -1671,7 +1671,7 @@ public:
         }
 
         // at a trailing delimiter, remember for next round:
-        else if ((size_t(m.position()) == s.length() - 1))
+        else if ((std::size_t(m.position()) == s.length() - 1))
         {
             trailing_delimiter_seen = true;
         }
@@ -1694,19 +1694,19 @@ public:
     explicit basic_char_delimiter(CharT c)
         : c_(c) {}
 
-    size_t length() const
+    std::size_t length() const
     {
         return 1;
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, size_t pos) const
+    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, size_t pos) const
+    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
-        size_t found = text.find(c_, pos);
+        std::size_t found = text.find(c_, pos);
 
         // nothing left, return 'done':
         if (found == std17::basic_string_view<CharT>::npos)
@@ -1782,19 +1782,19 @@ namespace detail {
 // free function length(), for delimiter:
 
 template< typename Coll >
-string_nodiscard inline size_t length( Coll const & coll )
+string_nodiscard inline std::size_t length( Coll const & coll )
 {
     return coll.length();
 }
 
 template< typename CharT, typename Delimiter >
 std::vector< std17::basic_string_view<CharT> >
-split( std17::basic_string_view<CharT> text, Delimiter delimiter, size_t Nsplit )
+split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Nsplit )
 {
     std::vector< std17::basic_string_view<CharT> > result;
 
-    size_t pos = 0;
-    size_t cnt = 1; // for Nsplit
+    std::size_t pos = 0;
+    std::size_t cnt = 1; // for Nsplit
 
     for( std17::basic_string_view<CharT> sv = delimiter(text, pos); sv.cbegin() != text.cend(); sv = delimiter(text, pos), ++cnt )
     {
