@@ -277,6 +277,12 @@ namespace detail {
     enum { npos = std::size_t(-1) };
 #endif
 
+template< typename T >
+std::size_t to_size_t(T value)
+{
+    return static_cast<std::size_t>( value );
+}
+
 } // namespace detail
 
 namespace std14 {
@@ -366,7 +372,7 @@ public:
 
     string_constexpr basic_string_view( CharT const * b, CharT const * e ) string_noexcept // C++20, non-standard noexcept
         : data_( b )
-        , size_( e - b )
+        , size_( detail::to_size_t(e - b) )
     {}
 
     string_constexpr basic_string_view( std::basic_string<CharT> & s ) string_noexcept // non-standard noexcept
@@ -1805,7 +1811,7 @@ split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Ns
         }
 
         result.push_back(sv);
-        pos = (sv.end() - text.begin()) + length(delimiter);
+        pos = to_size_t(sv.end() - text.begin()) + length(delimiter);
     }
 
     return result;
@@ -1820,27 +1826,27 @@ split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Ns
 
 template< typename CharT, typename Delimiter >
 string_nodiscard std::vector< std17::string_view >
-split( std17::string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+split( std17::string_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
 {
     return detail::split( text, delimiter, count );
 }
 
 #if string_CONFIG_PROVIDE_CHAR_T
 template<typename Delimiter> string_nodiscard std::vector< std17::string_view>
-split( std17::string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+split( std17::string_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
 {
     return detail::split(text, delimiter, count );
 }
 
 string_nodiscard inline std::vector<std17::string_view>
-split( std17::string_view text, char const * d, int count = std::numeric_limits<int>::max() )
+split( std17::string_view text, char const * d, std::size_t count = std::numeric_limits<std::size_t>::max() )
 {
     return detail::split(text, literal_delimiter(d), count );
 }
 
 #if 0
 string_nodiscard inline std::vector<std17::string_view>
-rsplit( std17::string_view text, char const * d, int count = std::numeric_limits<int>::max() )
+rsplit( std17::string_view text, char const * d, std::size_t count = std::numeric_limits<std::size_t>::max() )
 {
     return detail::split(text, reverse_literal_delimiter(d), count );
 }
@@ -1849,7 +1855,7 @@ rsplit( std17::string_view text, char const * d, int count = std::numeric_limits
 
 #if string_CONFIG_PROVIDE_WCHAR_T
 template<typename Delimiter> string_nodiscard std::vector<std17::wstring_view>
-split( std17::wstring_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+split( std17::wstring_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
 {
     return detail::split(text, delimiter, count );
 }
@@ -1863,7 +1869,7 @@ split( std17::wstring_view text, wchar_t const * d, int count = 0 )
 
 #if string_CONFIG_PROVIDE_CHAR8_T
 template<typename Delimiter> string_nodiscard std::vector<std17::u8string_view>
-split( std17::u8string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+split( std17::u8string_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
 {
     return detail::split(text, delimiter, count );
 }
@@ -1877,7 +1883,7 @@ split( std17::u8string_view text, char8_t const * d, int count = 0 )
 
 #if string_CONFIG_PROVIDE_CHAR16_T
 template<typename Delimiter> string_nodiscard std::vector<std17::u16string_view>
-split( std17::u16string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+split( std17::u16string_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
 {
     return detail::split(text, delimiter, count );
 }
@@ -1891,7 +1897,7 @@ split( std17::u16string_view text, char16_t const * d, int count = 0 )
 
 #if string_CONFIG_PROVIDE_CHAR32_T
 template<typename Delimiter> string_nodiscard std::vector<std17::u32string_view>
-split( std17::u32string_view text, Delimiter delimiter, int count = std::numeric_limits<int>::max() )
+split( std17::u32string_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
 {
     return detail::split(text, delimiter, count );
 }
