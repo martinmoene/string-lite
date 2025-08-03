@@ -197,7 +197,11 @@ enable_testing()
 
 if( HAS_STD_FLAGS )
     # unconditionally add C++98 variant for MSVC:
-    add_test(     NAME test-cpp98     COMMAND ${PROGRAM}-cpp98.t )
+    if( HAS_CPP98_FLAG )
+        # make_target( ${PROGRAM}-cpp98.t c++98 )
+    else()
+        add_test( NAME test-cppnoflag COMMAND ${PROGRAM}-cppnoflag.t )
+    endif()
 
     if( HAS_CPP11_FLAG )
         add_test( NAME test-cpp11     COMMAND ${PROGRAM}-cpp11.t )
