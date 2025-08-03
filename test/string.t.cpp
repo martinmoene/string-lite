@@ -10,6 +10,7 @@
 #ifdef _WIN32
 # define string_strdup  _strdup
 #else
+# include <string.h>  // strdup()
 # define string_strdup   strdup
 #endif
 
