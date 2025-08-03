@@ -17,6 +17,11 @@
 // - [ ] MK macros
 // - [ ] create functions via MK macros
 
+//
+// Make list of MK() macros:
+// grep "#define string_MK_" ../include/nonstd/string.hpp |cut -d" " -f 2
+//
+
 #ifndef NONSTD_STRING_BARE_HPP
 #define NONSTD_STRING_BARE_HPP
 
@@ -710,6 +715,8 @@ string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & 
     return text.find( seek );
 }
 
+#define string_MK_FIND_FIRST_CHAR(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_first( std17::string_view text, char seek ) string_noexcept
 {
 #if string_CPP17_000
@@ -723,6 +730,8 @@ string_nodiscard inline std::size_t find_first( std17::string_view text, char se
 
 // find_first(regex)
 
+#define string_MK_FIND_FIRST_REGEX(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_first( std17::string_view text, std::regex const & re )
 {
     std::match_results< std17::string_view::const_iterator > result;
@@ -732,11 +741,16 @@ string_nodiscard inline std::size_t find_first( std17::string_view text, std::re
 
 // find_first_re()
 
+#define string_MK_FIND_FIRST_RE(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_first_re( std17::string_view text, std17::string_view re )
 {
     return find_first( text, std::regex(re.begin(), re.end()) );
 }
 
+#else  // regex
+# define string_MK_FIND_FIRST_REGEX(T)  /*empty*/
+# define string_MK_FIND_FIRST_RE(T)     /*empty*/
 #endif // regex
 
 // find_last()
@@ -748,6 +762,8 @@ string_nodiscard std::size_t find_last( std17::string_view text, SeekT const & s
 {
     return text.rfind( seek );
 }
+
+#define string_MK_FIND_LAST_CHAR(T) /*TODO: MK()*/
 
 string_nodiscard inline std::size_t find_last( std17::string_view text, char seek )
 {
@@ -761,6 +777,8 @@ string_nodiscard inline std::size_t find_last( std17::string_view text, char see
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 // find_last(regex): use std::regex_iterator?
+
+#define string_MK_FIND_LAST_REGEX(T) /*TODO: MK()*/
 
 string_nodiscard inline std::size_t find_last( std17::string_view text, std::regex const & re )
 {
@@ -778,11 +796,16 @@ string_nodiscard inline std::size_t find_last( std17::string_view text, std::reg
 
 // find_last_re()
 
+#define string_MK_FIND_LAST_RE(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_last_re( std17::string_view text, std17::string_view re )
 {
     return find_last( text, std::regex(re.begin(), re.end()) );
 }
 
+#else  // regex
+# define string_MK_FIND_LAST_REGEX(T)   /*empty*/
+# define string_MK_FIND_LAST_RE(T)      /*empty*/
 #endif // regex
 
 // find_first_of()
@@ -799,6 +822,8 @@ string_nodiscard std::size_t find_first_of( std17::string_view text, SeekT const
 
 // find_first_of(regex)
 
+#define string_MK_FIND_FIRST_OF_REGEX(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_first_of( std17::string_view text, std::regex const & re )
 {
     return find_first( text, re );
@@ -806,11 +831,16 @@ string_nodiscard inline std::size_t find_first_of( std17::string_view text, std:
 
 // find_first_of_re()
 
+#define string_MK_FIND_FIRST_OF_RE(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_first_of_re( std17::string_view text, std17::string_view re )
 {
     return find_first_of( text, std::regex(re.begin(), re.end()) );
 }
 
+#else  // regex
+# define string_MK_FIND_FIRST_OF_REGEX(T)   /*empty*/
+# define string_MK_FIND_FIRST_OF_RE(T)      /*empty*/
 #endif // regex
 
 // find_last_of()
@@ -827,6 +857,8 @@ string_nodiscard std::size_t find_last_of( std17::string_view text, SeekT const 
 
 // TODO: find_last_of(regex)
 
+#define string_MK_FIND_LAST_OF_REGEX(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_last_of( std17::string_view text, std::regex const & re )
 {
     return find_last( text, re );
@@ -834,11 +866,16 @@ string_nodiscard inline std::size_t find_last_of( std17::string_view text, std::
 
 // find_last_of_re()
 
+#define string_MK_FIND_LAST_OF_RE(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_last_of_re( std17::string_view text, std17::string_view re )
 {
     return find_last_of( text, std::regex(re.begin(), re.end()) );
 }
 
+#else  // regex
+# define string_MK_FIND_LAST_OF_REGEX(T)    /*empty*/
+# define string_MK_FIND_LAST_OF_RE(T)       /*empty*/
 #endif // regex
 
 // find_first_not_of()
@@ -863,6 +900,8 @@ std::size_t to_size( T value )
 
 // find_first_not_of(regex), optionally use find_first_of_([^regex])
 
+#define string_MK_FIND_FIRST_NOT_OF_REGEX(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_first_not_of( std17::string_view text, std::regex const & re )
 {
     std::match_results< std17::string_view::const_iterator > result;
@@ -874,11 +913,16 @@ string_nodiscard inline std::size_t find_first_not_of( std17::string_view text, 
 
 // find_first_not_of_re()
 
+#define string_MK_FIND_FIRST_NOT_OF_RE(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_first_not_of_re( std17::string_view text, std17::string_view re )
 {
     return find_first_not_of( text, std::regex(re.begin(), re.end()) );
 }
 
+#else  // regex
+# define string_MK_FIND_FIRST_NOT_OF_REGEX(T)   /*empty*/
+# define string_MK_FIND_FIRST_NOT_OF_RE(T)      /*empty*/
 #endif // regex
 
 // find_last_not_of()
@@ -894,6 +938,8 @@ string_nodiscard std::size_t find_last_not_of( std17::string_view text, SeekT co
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 // TODO: find_last_not_of(regex), optionally use find_last_of_([^regex])
+
+#define string_MK_FIND_LAST_NOT_OF_REGEX(T) /*TODO: MK()*/
 
 string_nodiscard inline std::size_t find_last_not_of( std17::string_view /*text*/, std::regex const & /*re*/ )
 {
@@ -924,11 +970,16 @@ string_nodiscard inline std::size_t find_last_not_of( std17::string_view /*text*
 
 // find_first_not_of_re()
 
+#define string_MK_FIND_LAST_NOT_OF_RE(T) /*TODO: MK()*/
+
 string_nodiscard inline std::size_t find_last_not_of_re( std17::string_view text, std17::string_view re )
 {
     return find_last_not_of( text, std::regex(re.begin(), re.end()) );
 }
 
+#else  // regex
+# define string_MK_FIND_LAST_NOT_OF_REGEX(T)    /*empty*/
+# define string_MK_FIND_LAST_NOT_OF_RE(T)       /*empty*/
 #endif // regex
 
 // TODO: ??? find_if()
@@ -949,9 +1000,22 @@ string_nodiscard bool contains( std17::string_view text, SeekT const & seek )
 #endif
 }
 
+#define string_MK_CONTAINS_CHAR(T) /*TODO: MK()*/
+
+string_nodiscard inline bool contains( std17::string_view text, char seek )
+{
+#if string_CPP17_000
+    return contains( text, std::string( &seek, &seek + 1) );
+#else
+    return contains( text, std17::string_view( &seek, &seek + 1) );
+#endif
+}
+
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 // contains(regex)
+
+#define string_MK_CONTAINS_REGEX(T) /*TODO: MK()*/
 
 string_nodiscard inline bool contains( std17::string_view text, std::regex const & re )
 {
@@ -967,6 +1031,9 @@ string_nodiscard inline bool contains_re( std17::string_view text, std17::string
     return contains( text, std::regex(re.begin(), re.end()) );
 }
 
+#else  // regex
+# define string_MK_CONTAINS_REGEX(T)    /*empty*/
+# define string_MK_CONTAINS_RE(T)       /*empty*/
 #endif // regex
 
 // starts_with() - C++20
@@ -989,6 +1056,8 @@ string_nodiscard bool starts_with( std17::string_view text, SeekT const & seek )
 #endif
 }
 
+#define string_MK_STARTS_WITH_CHAR(T) /*TODO: MK()*/
+
 string_nodiscard inline bool starts_with( std17::string_view text, char seek )
 {
 #if string_CPP17_000
@@ -999,6 +1068,8 @@ string_nodiscard inline bool starts_with( std17::string_view text, char seek )
 }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
+#define string_MK_STARTS_WITH_REGEX(T) /*TODO: MK()*/
 
 string_nodiscard inline bool starts_with( std17::string_view text, std::regex const & re )
 {
@@ -1014,6 +1085,9 @@ string_nodiscard inline bool starts_with_re( std17::string_view text, std17::str
     return 0 == find_first_re( text, re );
 }
 
+#else  // regex
+# define string_MK_STARTS_WITH_REGEX(T)     /*empty*/
+# define string_MK_STARTS_WITH_RE(T)        /*empty*/
 #endif // regex
 
 // ends_with() - C++20
@@ -1036,6 +1110,8 @@ string_nodiscard bool ends_with( std17::string_view text, SeekT const & seek )
 #endif
 }
 
+#define string_MK_ENDS_WITH_CHAR(T) /*TODO: MK()*/
+
 string_nodiscard inline bool ends_with( std17::string_view text, char seek )
 {
 #if string_CPP17_000
@@ -1046,6 +1122,8 @@ string_nodiscard inline bool ends_with( std17::string_view text, char seek )
 }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
+#define string_MK_ENDS_WITH_REGEX(T) /*TODO: MK()*/
 
 string_nodiscard inline bool ends_with( std17::string_view text, std::regex const & re )
 {
@@ -1072,6 +1150,9 @@ string_nodiscard inline bool ends_with_re( std17::string_view text, std17::strin
     return ends_with( text, std::regex(re.begin(), re.end()) );
 }
 
+#else  // regex
+# define string_MK_ENDS_WITH_REGEX(T)   /*empty*/
+# define string_MK_ENDS_WITH_RE(T)      /*empty*/
 #endif // regex
 
 //
@@ -1147,11 +1228,17 @@ strip_left( std17::string_view text, SetT const & set )
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
+#define string_MK_STRIP_LEFT_REGEX(T) /*TODO: MK()*/
+
 string_nodiscard std::string inline
 strip_left( std17::string_view text, std::regex const & re )
 {
     return std::string( text ).erase( 0, find_first_not_of( text, re ) );
 }
+
+// strip_left_re()
+
+#define string_MK_STRIP_LEFT_RE(T) /*TODO: MK()*/
 
 string_nodiscard inline std::string
 strip_left_re( std17::string_view text, std17::string_view set )
@@ -1159,6 +1246,9 @@ strip_left_re( std17::string_view text, std17::string_view set )
     return strip_left( std::string( text ), std::regex(set.begin(), set.end()) );
 }
 
+#else  // regex
+# define string_MK_STRIP_LEFT_REGEX(T)      /*empty*/
+# define string_MK_STRIP_LEFT_RE(T)         /*empty*/
 #endif // regex
 
 // strip_right()
@@ -1174,11 +1264,17 @@ strip_right( std17::string_view text, SetT const & set )
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
+#define string_MK_STRIP_RIGHT_REGEX(T) /*TODO: MK()*/
+
 string_nodiscard std::string inline
 strip_right( std17::string_view text, std::regex const & re )
 {
     return std::string( text ).erase( 0, find_last_not_of( std::string( text ), re ) );
 }
+
+// strip_right_re()
+
+#define string_MK_STRIP_RIGHT_RE(T) /*TODO: MK()*/
 
 string_nodiscard inline std::string
 strip_right_re( std17::string_view text, std17::string_view set )
@@ -1186,6 +1282,9 @@ strip_right_re( std17::string_view text, std17::string_view set )
     return strip_right( std::string( text ), std::regex(set.begin(), set.end()) );
 }
 
+#else  // regex
+# define string_MK_STRIP_RIGHT_REGEX(T)     /*empty*/
+# define string_MK_STRIP_RIGHT_RE(T)        /*empty*/
 #endif // regex
 
 // strip()
@@ -1201,11 +1300,17 @@ strip( std17::string_view text, SetT const & set )
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
+#define string_MK_STRIP_REGEX(T) /*TODO: MK()*/
+
 string_nodiscard std::string inline
 strip( std17::string_view text, std::regex const & re )
 {
     return strip_left( strip_right( text, re ), re );
 }
+
+// strip_re()
+
+#define string_MK_STRIP_RE(T) /*TODO: MK()*/
 
 string_nodiscard inline std::string
 strip_re( std17::string_view text, std17::string_view set )
@@ -1213,6 +1318,9 @@ strip_re( std17::string_view text, std17::string_view set )
     return strip( text, std::regex(set.begin(), set.end()) );
 }
 
+#else  // regex
+# define string_MK_STRIP_REGEX(T) /*empty*/
+# define string_MK_STRIP_RE(T) /*empty*/
 #endif // regex
 
 // replace_all()
@@ -1247,6 +1355,8 @@ std::string replace_all( std17::basic_string_view<T> text, std17::basic_string_v
 } // detail
 } // namespace string
 
+// replace_all()
+
 #define string_MK_REPLACE_ALL(T) /*TODO: MK()*/
 
 string_nodiscard inline std::string
@@ -1257,6 +1367,8 @@ replace_all( std17::string_view text, std17::string_view what, std17::string_vie
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
+#define string_MK_REPLACE_ALL_REGEX(T) /*TODO: MK()*/
+
 template< typename WithT >
 string_nodiscard std::string
 replace_all( std17::string_view text, std::regex const & re, WithT const & with )
@@ -1264,12 +1376,19 @@ replace_all( std17::string_view text, std::regex const & re, WithT const & with 
     return std::regex_replace( std::string(text), re, with );
 }
 
+// replace_all_re()
+
+#define string_MK_REPLACE_ALL_RE(T) /*TODO: MK()*/
+
 string_nodiscard inline std::string
 replace_all_re( std17::string_view text, std17::string_view what, std17::string_view with )
 {
     return std::regex_replace( std::string(text), std::regex(what.begin(), what.end()), std::string(with) );
 }
 
+#else  // regex
+# define string_MK_REPLACE_ALL_REGEX(T) /*empty*/
+# define string_MK_REPLACE_ALL_RE(T) /*empty*/
 #endif // regex
 
 // replace_first()
@@ -1290,11 +1409,17 @@ replace_first( std17::string_view text, std17::string_view what, std17::string_v
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
+#define string_MK_REPLACE_FIRST_REGEX(T) /*TODO: MK()*/
+
 string_nodiscard inline std::string
 replace_first( std17::string_view text, std::regex const & re, std17::string_view with )
 {
     return std::regex_replace( std::string(text), re, std::string(with), std::regex_constants::format_first_only );
 }
+
+// replace_first_re()
+
+#define string_MK_REPLACE_FIRST_RE(T) /*TODO: MK()*/
 
 string_nodiscard inline std::string
 replace_first_re( std17::string_view text, std17::string_view what, std17::string_view with )
@@ -1302,6 +1427,9 @@ replace_first_re( std17::string_view text, std17::string_view what, std17::strin
     return replace_first( text, std::regex(what.begin(), what.end()), with );
 }
 
+#else  // regex
+# define string_MK_REPLACE_FIRST_REGEX(T)   /*empty*/
+# define string_MK_REPLACE_FIRST_RE(T)      /*empty*/
 #endif // regex
 
 // replace_last()
@@ -1319,6 +1447,31 @@ replace_last( std17::string_view text,std17::string_view what, std17::string_vie
         ? result.replace( pos, what.length(), std::string(with) )
         : "";
 }
+
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
+#define string_MK_REPLACE_LAST_REGEX(T) /*TODO: MK()*/
+
+string_nodiscard inline std::string
+replace_last( std17::string_view text, std::regex const & re, std17::string_view with )
+{
+    return "[replace_last: TODO]";
+}
+
+// replace_last_re()
+
+#define string_MK_REPLACE_LAST_RE(T) /*TODO: MK()*/
+
+string_nodiscard inline std::string
+replace_last_re( std17::string_view text, std17::string_view what, std17::string_view with )
+{
+    return replace_last( text, std::regex(what.begin(), what.end()), with );
+}
+
+#else  // regex
+# define string_MK_REPLACE_LAST_REGEX(T)    /*empty*/
+# define string_MK_REPLACE_LAST_RE(T)       /*empty*/
+#endif // regex
 
 //
 // Joining, splitting:
@@ -1367,6 +1520,8 @@ substring( std17::string_view text, std::regex const & re )
 } // namespace detail
 } // namespace string
 
+#define string_MK_SUBSTRING_REGEX(T) /*TODO: MK()*/
+
 string_nodiscard inline std::string
 substring( std17::string_view text, std::regex const & re )
 {
@@ -1375,12 +1530,17 @@ substring( std17::string_view text, std::regex const & re )
 
 // substring_re()
 
+#define string_MK_SUBSTRING_RE(T) /*TODO: MK()*/
+
 string_nodiscard inline std::string
 substring_re( std17::string_view text, std17::string_view re )
 {
     return substring( text, std::regex(re.begin(), re.end()) );
 }
 
+#else  // regex
+# define string_MK_SUBSTRING_REGEX(T)   /*empty*/
+# define string_MK_SUBSTRING_RE(T)      /*empty*/
 #endif // regex
 
 // join()
@@ -1946,32 +2106,91 @@ split_right(  std17::string_view , char const * ) -> std::tuple<std17::string_vi
 //
 
 #if string_CONFIG_PROVIDE_CHAR_T
+string_MK_IS_EMPTY        ( char )
+string_MK_LENGTH          ( char )
+string_MK_SIZE            ( char )
 
-string_MK_LENGTH        ( char )
-string_MK_SIZE          ( char )
-string_MK_IS_EMPTY      ( char )
-string_MK_FIND_FIRST    ( char )
-string_MK_FIND_LAST     ( char )
-string_MK_FIND_FIRST_OF ( char )
-string_MK_FIND_LAST_OF  ( char )
+string_MK_APPEND          ( char )
+
+string_MK_CONTAINS        ( char )      // includes char search type
+string_MK_CONTAINS_RE     ( char )
+string_MK_CONTAINS_REGEX  ( char )
+
+string_MK_STARTS_WITH     ( char )
+string_MK_STARTS_WITH_CHAR( char )
+string_MK_STARTS_WITH_RE  ( char )
+string_MK_STARTS_WITH_REGEX( char )
+
+string_MK_ENDS_WITH       ( char )
+string_MK_ENDS_WITH_CHAR  ( char )
+string_MK_ENDS_WITH_RE    ( char )
+string_MK_ENDS_WITH_REGEX ( char )
+
+string_MK_FIND_FIRST      ( char )
+string_MK_FIND_FIRST_CHAR ( char )
+string_MK_FIND_FIRST_RE   ( char )
+string_MK_FIND_FIRST_REGEX( char )
+
+string_MK_FIND_LAST       ( char )
+string_MK_FIND_LAST_CHAR  ( char )
+string_MK_FIND_LAST_RE    ( char )
+string_MK_FIND_LAST_REGEX ( char )
+
+string_MK_FIND_FIRST_OF   ( char )
+string_MK_FIND_FIRST_OF_RE( char )
+string_MK_FIND_FIRST_OF_REGEX( char )
+
+string_MK_FIND_LAST_OF    ( char )
+string_MK_FIND_LAST_OF_RE ( char )
+string_MK_FIND_LAST_OF_REGEX( char )
+
 string_MK_FIND_FIRST_NOT_OF( char )
-string_MK_FIND_LAST_NOT_OF ( char )
-string_MK_CONTAINS      ( char )
-string_MK_STARTS_WITH   ( char )
-string_MK_ENDS_WITH     ( char )
-string_MK_TO_CASE_CHAR  ( char, lowercase )
-string_MK_TO_CASE_CHAR  ( char, uppercase )
-string_MK_TO_CASE_STRING( char, lowercase )
-string_MK_TO_CASE_STRING( char, uppercase )
-string_MK_STRIP_LEFT    ( char )
-string_MK_STRIP_RIGHT   ( char )
-string_MK_STRIP         ( char )
-string_MK_REPLACE_ALL   ( char )
-string_MK_REPLACE_FIRST ( char )
-string_MK_REPLACE_LAST  ( char )
-string_MK_APPEND        ( char )
-string_MK_JOIN          ( char )
-string_MK_SPLIT         ( char )
+string_MK_FIND_FIRST_NOT_OF_RE( char )
+string_MK_FIND_FIRST_NOT_OF_REGEX( char )
+
+string_MK_FIND_LAST_NOT_OF( char )
+string_MK_FIND_LAST_NOT_OF_RE( char )
+string_MK_FIND_LAST_NOT_OF_REGEX( char )
+
+string_MK_REPLACE_ALL     ( char )
+string_MK_REPLACE_ALL_REGEX( char )
+string_MK_REPLACE_ALL_RE  ( char )
+
+string_MK_REPLACE_FIRST   ( char )
+string_MK_REPLACE_FIRST_RE( char )
+string_MK_REPLACE_FIRST_REGEX( char )
+
+string_MK_REPLACE_LAST    ( char )
+string_MK_REPLACE_LAST_RE ( char )
+string_MK_REPLACE_LAST_REGEX( char )
+
+string_MK_STRIP           ( char )
+string_MK_STRIP_RE        ( char )
+string_MK_STRIP_REGEX     ( char )
+
+string_MK_STRIP_LEFT      ( char )
+string_MK_STRIP_LEFT_RE   ( char )
+string_MK_STRIP_LEFT_REGEX( char )
+
+string_MK_STRIP_RIGHT     ( char )
+string_MK_STRIP_RIGHT     ( char )
+string_MK_STRIP_RIGHT_RE  ( char )
+string_MK_STRIP_RIGHT_REGEX( char )
+
+string_MK_SUBSTRING       ( char )
+string_MK_SUBSTRING_RE    ( char )
+string_MK_SUBSTRING_REGEX ( char )
+
+string_MK_TO_CASE_CHAR    ( char, lowercase )
+string_MK_TO_CASE_CHAR    ( char, uppercase )
+string_MK_TO_CASE_STRING  ( char, lowercase )
+string_MK_TO_CASE_STRING  ( char, uppercase )
+
+string_MK_JOIN            ( char )
+string_MK_SPLIT           ( char )
+// string_MK_SPLIT_LEFT      ( char )   // TODO
+// string_MK_SPLIT_RIGHT     ( char )   // TODO
+
 // ...
 #endif
 
