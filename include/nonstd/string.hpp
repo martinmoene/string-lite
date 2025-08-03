@@ -278,7 +278,7 @@ namespace detail {
 #endif
 
 template< typename T >
-std::size_t to_size_t(T value)
+string_constexpr std::size_t to_size_t(T value) string_noexcept
 {
     return static_cast<std::size_t>( value );
 }
@@ -663,7 +663,7 @@ using namespace string;
 // length()
 
 #define string_MK_LENGTH(T) \
-    string_nodiscard inline std::size_t length( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline string_constexpr std::size_t length( std17::basic_string_view<T> text ) string_noexcept \
     { \
         return text.length(); \
     }
@@ -671,7 +671,7 @@ using namespace string;
 // size()
 
 #define string_MK_SIZE(T) \
-    string_nodiscard inline std::size_t size( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline string_constexpr std::size_t size( std17::basic_string_view<T> text ) string_noexcept \
     { \
         return text.size(); \
     }
@@ -679,7 +679,7 @@ using namespace string;
 // is_empty()
 
 #define string_MK_IS_EMPTY(T) \
-    string_nodiscard inline bool is_empty( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline string_constexpr bool is_empty( std17::basic_string_view<T> text ) string_noexcept \
     { \
         return text.empty(); \
     }
@@ -692,7 +692,7 @@ namespace string {
 namespace detail {
 
 template< typename SeekT >
-string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & seek, std::size_t pos )
+string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & seek, std::size_t pos ) string_noexcept
 {
     return text.find( seek, pos );
 }
@@ -705,12 +705,12 @@ string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & 
 #define string_MK_FIND_FIRST(T) /*TODO: MK()*/
 
 template< typename SeekT >
-string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & seek )
+string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & seek ) string_noexcept
 {
     return text.find( seek );
 }
 
-string_nodiscard inline std::size_t find_first( std17::string_view text, char seek )
+string_nodiscard inline std::size_t find_first( std17::string_view text, char seek ) string_noexcept
 {
 #if string_CPP17_000
     return find_first( text, std::string( &seek, &seek + 1 ) );
@@ -979,7 +979,7 @@ string_nodiscard bool starts_with( std17::string_view text, SeekT const & seek )
 #if string_CPP20_OR_GREATER
     return text.starts_with( seek );
 #else
-    std17::string_view look( seek );
+    const std17::string_view look( seek );
 
     if ( size( look ) > size( text ) )
     {
@@ -1026,7 +1026,7 @@ string_nodiscard bool ends_with( std17::string_view text, SeekT const & seek )
 #if string_CPP20_OR_GREATER
     return text.ends_with( seek );
 #else
-    std17::string_view look( seek );
+    const std17::string_view look( seek );
 
     if ( size( look ) > size( text ) )
     {
@@ -1098,7 +1098,7 @@ string_nodiscard CharT to_uppercase( CharT chr )
 // Transform case; serve both CharT* and StringT&:
 
 template< typename CharT, typename Fn >
-string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text, Fn fn ) noexcept
+string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text, Fn fn )
 {
     std::transform(
         std::begin( text ), std::end( text )
@@ -1114,16 +1114,16 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
 // to_lowercase()
 // to_uppercase()
 
-// template string_nodiscard std::basic_string<char> to_lowercase( std17::basic_string_view<char> text ) noexcept;
+// template string_nodiscard std::basic_string<char> to_lowercase( std17::basic_string_view<char> text ) string_noexcept;
 
 #define string_MK_TO_CASE_CHAR(T, Function) \
-    string_nodiscard inline T to_ ## Function( T chr ) noexcept \
+    string_nodiscard inline T to_ ## Function( T chr ) \
     { \
         return detail::to_ ## Function<T>( chr ); \
     }\
 
 #define string_MK_TO_CASE_STRING(T, Function) \
-    string_nodiscard inline std::basic_string<T> to_ ## Function( std17::basic_string_view<T> text ) noexcept \
+    string_nodiscard inline std::basic_string<T> to_ ## Function( std17::basic_string_view<T> text ) \
     { \
         return detail::to_case( std::basic_string<T>(text), detail::to_ ## Function<T> ); \
     }\
@@ -1434,9 +1434,9 @@ join( Coll const & coll, SepT const & sep )
 // - char_delimiter - single-char delimiter
 
 template< typename CharT >
-std17::basic_string_view<CharT> basic_delimiter_end(std17::basic_string_view<CharT> sv)
+std17::basic_string_view<CharT> basic_delimiter_end(std17::basic_string_view<CharT> sv) string_noexcept
 {
-    return std17::basic_string_view<CharT>(sv.data() + sv.size(), std::size_t(0));
+    return std17::basic_string_view<CharT>{ sv.data() + sv.size(), std::size_t(0) };
 }
 
 // a single string delimiter:
