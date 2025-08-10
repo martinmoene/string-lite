@@ -50,7 +50,7 @@ int main()
 
 // cl -nologo -EHsc -I../include 01-basic.cpp && 01-basic.exe
 // clang-cl -EHsc -D_CRT_SECURE_NO_WARNINGS -I../include 01-basic.cpp && 01-basic.exe
-// g++ -std=c++98 -Wall -I../include -o 01-basic.exe 01-basic.cpp && 01-basic.exe
+// g++ -std=c++11 -Wall -I../include -o 01-basic.exe 01-basic.cpp && 01-basic.exe
 
 // Output:
 // ['Hello', ' world', ]

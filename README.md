@@ -1,6 +1,6 @@
 # string bare: string facilities for C++11 and later (In Progress)
 
-[![Language](https://img.shields.io/badge/C%2B%2B-11/14/17/20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-BSL-blue.svg)](https://opensource.org/licenses/BSL-1.0) [![Build Status](https://github.com/martinmoene/string-bare/actions/workflows/ci.yml/badge.svg)](https://github.com/martinmoene/string-bare/actions/workflows/ci.yml) [![Version](https://badge.fury.io/gh/martinmoene%2Fstring-lite.svg)](https://github.com/martinmoene/string-bare/releases) [![download](https://img.shields.io/badge/latest-download-blue.svg)](https://github.com/martinmoene/string-bare/blob/master/include/nonstd/string.hpp) <!-- [![Conan](https://img.shields.io/badge/on-conan-blue.svg)](https://conan.io/center/string-lite) [![Try it on wandbox](https://img.shields.io/badge/on-wandbox-blue.svg)](https://wandbox.org/) [![Try it on godbolt online](https://img.shields.io/badge/on-godbolt-blue.svg)](https://godbolt.org/) -->
+[![Language](https://img.shields.io/badge/C%2B%2B-11/14/17/20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-BSL-blue.svg)](https://opensource.org/licenses/BSL-1.0) [![Build Status](https://github.com/martinmoene/string-bare/actions/workflows/ci.yml/badge.svg)](https://github.com/martinmoene/string-bare/actions/workflows/ci.yml) [![Version](https://badge.fury.io/gh/martinmoene%2Fstring-bare.svg)](https://github.com/martinmoene/string-bare/releases) [![download](https://img.shields.io/badge/latest-download-blue.svg)](https://github.com/martinmoene/string-bare/blob/master/include/nonstd/string.hpp) <!-- [![Conan](https://img.shields.io/badge/on-conan-blue.svg)](https://conan.io/center/string-bare) [![Try it on wandbox](https://img.shields.io/badge/on-wandbox-blue.svg)](https://wandbox.org/) [![Try it on godbolt online](https://img.shields.io/badge/on-godbolt-blue.svg)](https://godbolt.org/) -->
 
 Another attempt at a hopefully generally useful C++ string algorithm library.
 
@@ -22,19 +22,60 @@ Initially writing code for `char` type strings, followed by generalising and ena
 
 ## Example usage
 
-TBD
+```cpp
+// Use nonstd::string's split():
+
+#include "nonstd/string.hpp"
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+template< typename T >
+std::string contents(std::vector<T> const & coll)
+{
+    // using to_string() for nonstd::string::string_view:
+
+    std::stringstream os;
+    for ( auto const & elem : coll )
+        os << "'" << to_string(elem) << "', ";
+    return os.str();
+}
+
+template< typename T >
+std::ostream & operator<<(std::ostream & os, std::vector<T> const & coll )
+{
+    return os << "[" << contents(coll) << "]";
+}
+
+int main()
+{
+    std::cout << nonstd::string::split("Hello, world", ",");
+}
+```
+
+### Compile and run
+
+```bash
+prompt> g++ -std=c++11 -Wall -I../include -o 01-basic.exe 01-basic.cpp && 01-basic.exe
+['Hello', ' world', ]
+```
 
 ## In a nutshell
 
-TBD
+**string bare** is a single-file header-only library to provide various string algorithms. Firstly meant to get you up and running easily, not necessarily to provide everything that might be useful and in the most efficient manner.
+
+Creating *string bare* I've had a look at the [C++ standard](https://eel.is/c++draft/#strings), [Boost](https://www.boost.org/doc/libs/1_60_0/doc/html/string_algo.html), [Facebook Folly](https://github.com/facebook/folly/blob/master/folly/String.h), the [Python standard library](https://docs.python.org/3/library/string.html), the [proposal for `std::split()`](http://wg21.link/n3593) and several algorithms I created over time.
+
+**Features and properties of string bare** are ease of installation (single header), freedom of dependencies other than the standard library.
 
 ## License
 
-*string bare* is distributed under the [Boost Software License](https://github.com/martinmoene/bit-lite/blob/master/LICENSE.txt).
+*string bare* is distributed under the [Boost Software License](https://github.com/martinmoene/bit-bare/blob/master/LICENSE.txt).
 
 ## Dependencies
 
-*string lite* has no other dependencies than the [C++ standard library](http://en.cppreference.com/w/cpp/header).
+*string bare* has no other dependencies than the [C++ standard library](http://en.cppreference.com/w/cpp/header).
 
 ## Installation and use
 
@@ -47,99 +88,111 @@ TBD
 ### Functions
 
 <!-- string-main.t.exe -l @ | cut --delimiter=: -f 1 |sort |uniq |clip -->
-Note, in the following names like SeekT indicate template parameters.
+<!-- Note, in the following names like SeekT indicate template parameters. -->
 
 Current functions in the library:
 
 ```
-bool is_empty(string_view)
-size_t length(string_view)
-size_t size(string_view)
+length()
+size()
 
-bool contains( char | SeekT | std::regex)
-*** bool contains_re( SeekT )
+is_empty()
 
-bool starts_with( char | SeekT | std::regex)
-*** bool starts_with_re( SeekT )
+contains()
+contains_re()
 
-bool ends_with( char | SeekT | std::regex)
-*** bool ends_with_re( SeekT )
+starts_with()
+starts_with_re()
 
-size_t find_first(string_view, char | SeekT | std::regex)
-size_t find_first_re(string_view, SeekT)
-size_t find_first_of(string_view, SeekT | std::regex)
-*** size_t find_first_of_re(string_view, SeekT)
-size_t find_first_not_of(string_view, SeekT | std::regex)
-*** size_t find_first_not_of_re(string_view, SeekT)
+ends_with()
+ends_with_re()
 
-size_t find_last(string_view, char | SeekT | std::regex)
-*** size_t find_last_re(string_view, SeekT)
-size_t find_last_of(string_view, SeekT | std::regex)
-*** size_t find_last_of_re(string_view, SeekT)
-size_t find_last_not_of(string_view, SeekT | std::regex)        non-regex
-*** size_t find_last_not_of_re(string_view, SeekT)              to be implemented
+find_first()
+find_first_re()
 
-char to_lowercase(char)
-char to_uppercase(char)
-string to_lowercase(string_view)
-string to_uppercase(string_view)
+find_first_of()
+find_first_of_re()
 
-string append(string_view, TailT)
+find_first_not_of()
+find_first_not_of_re()
 
-string substring(string_view, size_t pos, size_t count)
-*** string substring_re(string_view, string_view)
+find_last()
+find_last_re()
 
-strip
-strip_left
-strip_left_re
-strip_right             non-regex
-strip_right_re          to be implemented
+find_last_of()
+find_last_of_re()
 
-replace_all
-replace_all_re
-replace_first
-replace_first_re
-replace_last            non-regex
-replace_last_re         to be implemented
+find_last_not_of()
+find_last_not_of_re()
 
-join
-split
+to_lowercase()
+to_uppercase()
 
-split_left
-split_right             to be implemented
+append()
+
+substring()
+
+strip()
+
+strip_left()
+strip_left_re()
+
+strip_right()
+strip_right_re()
+
+replace_all()
+replace_all_re()
+
+replace_first()
+replace_first_re()
+
+replace_last()
+replace_last_re()
+
+join()
+split()
+
+split_left()
+split_right()
 ```
 
 ### Configuration
 
 #### Tweak header
 
-TBD
+If the compiler supports [`__has_include()`](https://en.cppreference.com/w/cpp/preprocessor/include), *string bare* supports the [tweak header](https://vector-of-bool.github.io/2020/10/04/lib-configuration.html) mechanism. Provide your *tweak header* as `nonstd/string.tweak.hpp` in a folder in the include-search-path. In the tweak header, provide definitions as documented below, like `#define string_CPLUSPLUS 201103L`.
 
 #### Provided character types
 
-```
-string_CONFIG_PROVIDE_CHAR_T
-string_CONFIG_PROVIDE_WCHAR_T
-string_CONFIG_PROVIDE_CHAR8_T
-string_CONFIG_PROVIDE_CHAR16_T
-string_CONFIG_PROVIDE_CHAR32_T
-```
+To be implemented:
+
+-D<b>string_CONFIG_PROVIDE_XXX_T</b>=1  
+Define the character type to provide the string algorithms for.
+
+`string_CONFIG_PROVIDE_XXX_T` can be one or more of:
+
+- `string_CONFIG_PROVIDE_CHAR_T`, default 1
+- `string_CONFIG_PROVIDE_WCHAR_T`, default 0
+- `string_CONFIG_PROVIDE_CHAR8_T`, default 0
+- `string_CONFIG_PROVIDE_CHAR16_T`, default 0
+- `string_CONFIG_PROVIDE_CHAR32_T`, default 0
 
 #### Provide `std::regex` functions
 
-```
-string_CONFIG_PROVIDE_REGEX
-```
+-D<b>string_CONFIG_PROVIDE_REGEX</b>=1  
+Define this to 0 if you want to compile without regular expressions. Default is `1`. Note that including regular expressions incurs significant compilation overhead.
 
 #### Standard selection macro
 
-TBD
+\-D<b>string\_CPLUSPLUS</b>=199711L  
+Define this macro to override the auto-detection of the supported C++ standard, if your compiler does not set the `__cplusplus` macro correctly.
 
 #### Disable exceptions
 
-```
-string_CONFIG_NO_EXCEPTIONS
-```
+TODO:
+
+-D<b>string_CONFIG_NO_EXCEPTIONS</b>=0  
+Define this to 1 if you want to compile without exceptions. If not defined, the header tries and detect if exceptions have been disabled (e.g. via `-fno-exceptions`). Default is undefined.
 
 ## Notes and references
 
