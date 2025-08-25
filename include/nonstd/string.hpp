@@ -10,6 +10,13 @@
 // - [x] use C++20 std::string_view, not C++17 for presence of ctor(char* begin, char* end)
 // - [x] Reconsider above for C++17 string-string_view interoperability ?
 // - [ ] implement functions
+//   - [ ] contains(regex)
+//   - [ ] contains_re()
+//   - [ ] find(regex)
+//   - [ ] find_re()
+//   - [ ] find_of(regex)
+//   - [ ] find_of_re()
+//   - [ ] other
 // - [ ] support string_view as source?
 // - [ ] constexpr / string_constexpr / string_constexpr14
 // - [ ] nodiscard / string_nodiscard
@@ -24,6 +31,8 @@
 
 #ifndef NONSTD_STRING_BARE_HPP
 #define NONSTD_STRING_BARE_HPP
+
+using CharT = char;
 
 #define string_bare_MAJOR  0
 #define string_bare_MINOR  0
@@ -255,7 +264,7 @@
 #if string_HAVE_STRING_VIEW
 # include <string_view>
 #else
-// # pragma message("string.hpp: Using internal nonstd::std17::string_view.")
+// # pragma message("string.hpp: Using internal nonstd::std17::basic_string_view<CharT>.")
 #endif
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
@@ -565,11 +574,11 @@ operator==( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits>
 }
 
 #if string_CONFIG_PROVIDE_CHAR_T
-typedef basic_string_view<char>      string_view;
+typedef basic_string_view<char>     string_view;
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
-typedef basic_string_view<wchar_t>   wstring_view;
+typedef basic_string_view<wchar_t>  wstring_view;
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR8_T && string_HAVE_CHAR8_T
@@ -584,8 +593,8 @@ typedef basic_string_view<char16_t>  u16string_view;
 typedef basic_string_view<char32_t>  u32string_view;
 #endif
 
-template< typename T >
-string_nodiscard inline std::size_t size( basic_string_view<T> const & sv )
+template< typename CharT >
+string_nodiscard inline std::size_t size( basic_string_view<CharT> const & sv )
 {
     return sv.size();
 }
@@ -621,18 +630,34 @@ string_nodiscard string_constexpr CharT nullchr() noexcept
     return 0;
 }
 
+#if string_CONFIG_PROVIDE_CHAR_T
+string_nodiscard string_constexpr char const * nullstr( char ) noexcept
+{
+    return "";
+}
+#endif
+
+#if string_CONFIG_PROVIDE_WCHAR_T
+string_nodiscard string_constexpr wchar_t const * nullstr( wchar_t ) noexcept
+{
+    return L"";
+}
+#endif
+
+// TODO: nullstr() for other character types
+
 #if string_HAVE_STRING_VIEW
-    #define MK_DETAIL_TO_STRING_SV(T)               \
-    string_nodiscard inline std::basic_string<T>    \
-    to_string( std17::basic_string_view<T> sv )     \
-    {                                               \
-        return std::basic_string<T>( sv );          \
+    #define MK_DETAIL_TO_STRING_SV(T)                           \
+    string_nodiscard inline std::basic_string<T>                \
+    to_string( std17::basic_string_view<T> sv )                 \
+    {                                                           \
+        return std::basic_string<T>( sv );                      \
     }
 #else
-    #define MK_DETAIL_TO_STRING_SV(T)               \
-    string_nodiscard inline std::basic_string<T>    \
-    to_string( std17::basic_string_view<T> sv )     \
-    {                                               \
+    #define MK_DETAIL_TO_STRING_SV(T)                           \
+    string_nodiscard inline std::basic_string<T>                \
+    to_string( std17::basic_string_view<T> sv )                 \
+    {                                                           \
         return std::basic_string<T>( sv.begin(), sv.end() );    \
     }
 #endif
@@ -667,37 +692,67 @@ using namespace string;
 
 // length()
 
-#define string_MK_LENGTH(T) \
-    string_nodiscard inline string_constexpr std::size_t length( std17::basic_string_view<T> text ) string_noexcept \
-    { \
-        return text.length(); \
+#define string_MK_LENGTH(T)                                         \
+    string_nodiscard inline string_constexpr std::size_t            \
+    length( std17::basic_string_view<T> text ) string_noexcept      \
+    {                                                               \
+        return text.length();                                       \
     }
 
 // size()
 
-#define string_MK_SIZE(T) \
-    string_nodiscard inline string_constexpr std::size_t size( std17::basic_string_view<T> text ) string_noexcept \
-    { \
-        return text.size(); \
+#define string_MK_SIZE(T)                                           \
+    string_nodiscard inline string_constexpr std::size_t            \
+    size( std17::basic_string_view<T> text ) string_noexcept        \
+    {                                                               \
+        return text.size();                                         \
     }
 
 // is_empty()
 
-#define string_MK_IS_EMPTY(T) \
-    string_nodiscard inline string_constexpr bool is_empty( std17::basic_string_view<T> text ) string_noexcept \
-    { \
-        return text.empty(); \
+#define string_MK_IS_EMPTY(T)                                       \
+    string_nodiscard inline string_constexpr bool                   \
+    is_empty( std17::basic_string_view<T> text ) string_noexcept    \
+{                                                                   \
+        return text.empty();                                        \
     }
 
 //
 // Searching:
 //
 
+#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+
+// find(regex)
+
+#define string_MK_FIND_REGEX(T) /*TODO: MK()*/
+
+string_nodiscard inline std::size_t find( std17::basic_string_view<CharT> text, std::regex const & re )
+{
+    std::match_results< std17::basic_string_view<CharT>::const_iterator > result;
+
+    return std::regex_search( text.begin(), text.end(), result, re ) ? result.position() : static_cast<std::size_t>( detail::npos );
+}
+
+// find_re()
+
+#define string_MK_FIND_RE(T) /*TODO: MK()*/
+
+string_nodiscard inline std::size_t find_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
+{
+    return find( text, std::regex(re.begin(), re.end()) );
+}
+
+#else  // regex
+# define string_MK_FIND_REGEX(T)  /*empty*/
+# define string_MK_FIND_RE(T)     /*empty*/
+#endif // regex
+
 namespace string {
 namespace detail {
 
-template< typename SeekT >
-string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & seek, std::size_t pos ) string_noexcept
+template< typename CharT, typename SeekT >
+string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, SeekT const & seek, std::size_t pos ) string_noexcept
 {
     return text.find( seek, pos );
 }
@@ -707,280 +762,263 @@ string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & 
 
 // find_first()
 
-#define string_MK_FIND_FIRST(T) /*TODO: MK()*/
+#define string_MK_FIND_FIRST(CharT)         \
+    template< typename SeekT >              \
+    string_nodiscard std::size_t            \
+    find_first( std17::basic_string_view<CharT> text, SeekT const & seek ) string_noexcept \
+    {                                       \
+        return text.find( seek );           \
+    }
 
-template< typename SeekT >
-string_nodiscard std::size_t find_first( std17::string_view text, SeekT const & seek ) string_noexcept
-{
-    return text.find( seek );
-}
-
-#define string_MK_FIND_FIRST_CHAR(T) /*TODO: MK()*/
-
-string_nodiscard inline std::size_t find_first( std17::string_view text, char seek ) string_noexcept
-{
 #if string_CPP17_000
-    return find_first( text, std::string( &seek, &seek + 1 ) );
+# define string_MK_FIND_FIRST_CHAR(CharT)   \
+    string_nodiscard inline std::size_t     \
+    find_first( std17::basic_string_view<CharT> text, CharT seek ) string_noexcept \
+    {                                       \
+        return find_first( text, std::basic_string<CharT>( &seek, &seek + 1 ) ); \
+    }
 #else
-    return find_first( text, std17::string_view( &seek, &seek + 1 ) );
+# define string_MK_FIND_FIRST_CHAR(CharT)   \
+    string_nodiscard inline std::size_t     \
+    find_first( std17::basic_string_view<CharT> text, CharT seek ) string_noexcept \
+    {                                       \
+        return find_first( text, std17::basic_string_view<CharT>( &seek, &seek + 1 ) ); \
+    }
 #endif
-}
-
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// find_first(regex)
-
-#define string_MK_FIND_FIRST_REGEX(T) /*TODO: MK()*/
-
-string_nodiscard inline std::size_t find_first( std17::string_view text, std::regex const & re )
-{
-    std::match_results< std17::string_view::const_iterator > result;
-
-    return std::regex_search( text.begin(), text.end(), result, re ) ? result.position() : static_cast<std::size_t>( detail::npos );
-}
-
-// find_first_re()
-
-#define string_MK_FIND_FIRST_RE(T) /*TODO: MK()*/
-
-string_nodiscard inline std::size_t find_first_re( std17::string_view text, std17::string_view re )
-{
-    return find_first( text, std::regex(re.begin(), re.end()) );
-}
-
-#else  // regex
-# define string_MK_FIND_FIRST_REGEX(T)  /*empty*/
-# define string_MK_FIND_FIRST_RE(T)     /*empty*/
-#endif // regex
 
 // find_last()
 
-#define string_MK_FIND_LAST(T) /*TODO: MK()*/
-
-template< typename SeekT >
-string_nodiscard std::size_t find_last( std17::string_view text, SeekT const & seek )
-{
-    return text.rfind( seek );
-}
-
-#define string_MK_FIND_LAST_CHAR(T) /*TODO: MK()*/
-
-string_nodiscard inline std::size_t find_last( std17::string_view text, char seek )
-{
-#if string_CPP17_000
-    return find_last( text, std::string( &seek, &seek + 1 ) );
-#else
-    return find_last( text, std17::string_view( &seek, &seek + 1 ) );
-#endif
-}
-
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// find_last(regex): use std::regex_iterator?
-
-#define string_MK_FIND_LAST_REGEX(T) /*TODO: MK()*/
-
-string_nodiscard inline std::size_t find_last( std17::string_view text, std::regex const & re )
-{
-    auto elem_begin = std::regex_iterator<std17::string_view::const_iterator>( text.begin(), text.end(), re );
-    auto elem_end   = std::regex_iterator<std17::string_view::const_iterator>();
-
-    size_t last_pos = detail::npos;
-    for (std::regex_iterator<std17::string_view::const_iterator> i = elem_begin; i != elem_end; ++i)
-    {
-        last_pos = i->position();
+#define string_MK_FIND_LAST(CharT)          \
+    template< typename SeekT >              \
+    string_nodiscard std::size_t            \
+    find_last( std17::basic_string_view<CharT> text, SeekT const & seek )  \
+    {                                       \
+        return text.rfind( seek );          \
     }
 
-    return last_pos;
-}
+#if string_CPP17_000
+# define string_MK_FIND_LAST_CHAR(CharT)    \
+    string_nodiscard inline std::size_t     \
+    find_last( std17::basic_string_view<CharT> text, CharT seek )    \
+    {                                       \
+        return find_last( text, std::basic_string<CharT>( &seek, &seek + 1 ) ); \
+    }
+#else
+# define string_MK_FIND_LAST_CHAR(CharT)    \
+    string_nodiscard inline std::size_t     \
+    find_last( std17::basic_string_view<CharT> text, CharT seek )    \
+    {                                       \
+        return find_last( text, std17::basic_string_view<CharT>( &seek, &seek + 1 ) );  \
+    }
+#endif
 
-// find_last_re()
+// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-#define string_MK_FIND_LAST_RE(T) /*TODO: MK()*/
+// // find_last(regex): use std::regex_iterator?
 
-string_nodiscard inline std::size_t find_last_re( std17::string_view text, std17::string_view re )
-{
-    return find_last( text, std::regex(re.begin(), re.end()) );
-}
+// #define string_MK_FIND_LAST_REGEX(T) /*TODO: MK()*/
 
-#else  // regex
-# define string_MK_FIND_LAST_REGEX(T)   /*empty*/
-# define string_MK_FIND_LAST_RE(T)      /*empty*/
-#endif // regex
+// string_nodiscard inline std::size_t find_last( std17::basic_string_view<CharT> text, std::regex const & re )
+// {
+//     auto elem_begin = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>( text.begin(), text.end(), re );
+//     auto elem_end   = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>();
+
+//     size_t last_pos = detail::npos;
+//     for (std::regex_iterator<std17::basic_string_view<CharT>::const_iterator> i = elem_begin; i != elem_end; ++i)
+//     {
+//         last_pos = i->position();
+//     }
+
+//     return last_pos;
+// }
+
+// // find_last_re()
+
+// #define string_MK_FIND_LAST_RE(T) /*TODO: MK()*/
+
+// string_nodiscard inline std::size_t find_last_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
+// {
+//     return find_last( text, std::regex(re.begin(), re.end()) );
+// }
+
+// #else  // regex
+// # define string_MK_FIND_LAST_REGEX(T)   /*empty*/
+// # define string_MK_FIND_LAST_RE(T)      /*empty*/
+// #endif // regex
 
 // find_first_of()
 
-#define string_MK_FIND_FIRST_OF(T) /*TODO: MK()*/
+#define string_MK_FIND_FIRST_OF(CharT)      \
+    template< typename SeekT >              \
+    string_nodiscard std::size_t            \
+    find_first_of( std17::basic_string_view<CharT> text, SeekT const & seek )   \
+    {                                       \
+        return text.find_first_of( seek );  \
+    }
 
-template< typename SeekT >
-string_nodiscard std::size_t find_first_of( std17::string_view text, SeekT const & seek )
-{
-    return text.find_first_of( seek );
-}
+// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+// // find_first_of(regex)
 
-// find_first_of(regex)
+// #define string_MK_FIND_FIRST_OF_REGEX(T) /*TODO: MK()*/
 
-#define string_MK_FIND_FIRST_OF_REGEX(T) /*TODO: MK()*/
+// string_nodiscard inline std::size_t find_first_of( std17::basic_string_view<CharT> text, std::regex const & re )
+// {
+//     return find( text, re );
+// }
 
-string_nodiscard inline std::size_t find_first_of( std17::string_view text, std::regex const & re )
-{
-    return find_first( text, re );
-}
+// // find_first_of_re()
 
-// find_first_of_re()
+// #define string_MK_FIND_FIRST_OF_RE(T) /*TODO: MK()*/
 
-#define string_MK_FIND_FIRST_OF_RE(T) /*TODO: MK()*/
+// string_nodiscard inline std::size_t find_first_of_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
+// {
+//     return find_first_of( text, std::regex(re.begin(), re.end()) );
+// }
 
-string_nodiscard inline std::size_t find_first_of_re( std17::string_view text, std17::string_view re )
-{
-    return find_first_of( text, std::regex(re.begin(), re.end()) );
-}
-
-#else  // regex
-# define string_MK_FIND_FIRST_OF_REGEX(T)   /*empty*/
-# define string_MK_FIND_FIRST_OF_RE(T)      /*empty*/
-#endif // regex
+// #else  // regex
+// # define string_MK_FIND_FIRST_OF_REGEX(T)   /*empty*/
+// # define string_MK_FIND_FIRST_OF_RE(T)      /*empty*/
+// #endif // regex
 
 // find_last_of()
 
-#define string_MK_FIND_LAST_OF(T) /*TODO: MK()*/
+#define string_MK_FIND_LAST_OF(CharT)       \
+    template< typename SeekT >              \
+    string_nodiscard std::size_t            \
+    find_last_of( std17::basic_string_view<CharT> text, SeekT const & seek )    \
+    {                                       \
+        return text.find_last_of( seek );   \
+    }
 
-template< typename SeekT >
-string_nodiscard std::size_t find_last_of( std17::string_view text, SeekT const & seek )
-{
-    return text.find_last_of( seek );
-}
+// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+// // TODO: find_last_of(regex)
 
-// TODO: find_last_of(regex)
+// #define string_MK_FIND_LAST_OF_REGEX(T) /*TODO: MK()*/
 
-#define string_MK_FIND_LAST_OF_REGEX(T) /*TODO: MK()*/
+// string_nodiscard inline std::size_t find_last_of( std17::basic_string_view<CharT> text, std::regex const & re )
+// {
+//     return find_last( text, re );
+// }
 
-string_nodiscard inline std::size_t find_last_of( std17::string_view text, std::regex const & re )
-{
-    return find_last( text, re );
-}
+// // find_last_of_re()
 
-// find_last_of_re()
+// #define string_MK_FIND_LAST_OF_RE(T) /*TODO: MK()*/
 
-#define string_MK_FIND_LAST_OF_RE(T) /*TODO: MK()*/
+// string_nodiscard inline std::size_t find_last_of_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
+// {
+//     return find_last_of( text, std::regex(re.begin(), re.end()) );
+// }
 
-string_nodiscard inline std::size_t find_last_of_re( std17::string_view text, std17::string_view re )
-{
-    return find_last_of( text, std::regex(re.begin(), re.end()) );
-}
-
-#else  // regex
-# define string_MK_FIND_LAST_OF_REGEX(T)    /*empty*/
-# define string_MK_FIND_LAST_OF_RE(T)       /*empty*/
-#endif // regex
+// #else  // regex
+// # define string_MK_FIND_LAST_OF_REGEX(T)    /*empty*/
+// # define string_MK_FIND_LAST_OF_RE(T)       /*empty*/
+// #endif // regex
 
 // find_first_not_of()
 
-#define string_MK_FIND_FIRST_NOT_OF(T) /*TODO: MK()*/
+#define string_MK_FIND_FIRST_NOT_OF(CharT)      \
+    template< typename SeekT >                  \
+    string_nodiscard std::size_t                \
+    find_first_not_of( std17::basic_string_view<CharT> text, SeekT const & seek )   \
+    {                                           \
+        return text.find_first_not_of( seek );  \
+    }
 
-template< typename SeekT >
-string_nodiscard std::size_t find_first_not_of( std17::string_view text, SeekT const & seek )
-{
-    return text.find_first_not_of( seek );
-}
+// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+// // Avoid signed/unsigned mismatch.
 
-// Avoid signed/unsigned mismatch.
+// template< typename T >
+// std::size_t to_size( T value )
+// {
+//     return static_cast<std::size_t>( value );
+// }
 
-template< typename T >
-std::size_t to_size( T value )
-{
-    return static_cast<std::size_t>( value );
-}
+// // find_first_not_of(regex), optionally use find_first_of_([^regex])
 
-// find_first_not_of(regex), optionally use find_first_of_([^regex])
+// #define string_MK_FIND_FIRST_NOT_OF_REGEX(T) /*TODO: MK()*/
 
-#define string_MK_FIND_FIRST_NOT_OF_REGEX(T) /*TODO: MK()*/
+// string_nodiscard inline std::size_t find_first_not_of( std17::basic_string_view<CharT> text, std::regex const & re )
+// {
+//     std::match_results< std17::basic_string_view<CharT>::const_iterator > result;
 
-string_nodiscard inline std::size_t find_first_not_of( std17::string_view text, std::regex const & re )
-{
-    std::match_results< std17::string_view::const_iterator > result;
+//     return std::regex_search( text.begin(), text.end(), result, re ) && result.position() == 0 && to_size(result.length()) < text.length()
+//         ? result.length()
+//         : static_cast<std::size_t>( detail::npos );
+// }
 
-    return std::regex_search( text.begin(), text.end(), result, re ) && result.position() == 0 && to_size(result.length()) < text.length()
-        ? result.length() 
-        : static_cast<std::size_t>( detail::npos );
-}
+// // find_first_not_of_re()
 
-// find_first_not_of_re()
+// #define string_MK_FIND_FIRST_NOT_OF_RE(T) /*TODO: MK()*/
 
-#define string_MK_FIND_FIRST_NOT_OF_RE(T) /*TODO: MK()*/
+// string_nodiscard inline std::size_t find_first_not_of_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
+// {
+//     return find_first_not_of( text, std::regex(re.begin(), re.end()) );
+// }
 
-string_nodiscard inline std::size_t find_first_not_of_re( std17::string_view text, std17::string_view re )
-{
-    return find_first_not_of( text, std::regex(re.begin(), re.end()) );
-}
-
-#else  // regex
-# define string_MK_FIND_FIRST_NOT_OF_REGEX(T)   /*empty*/
-# define string_MK_FIND_FIRST_NOT_OF_RE(T)      /*empty*/
-#endif // regex
+// #else  // regex
+// # define string_MK_FIND_FIRST_NOT_OF_REGEX(T)   /*empty*/
+// # define string_MK_FIND_FIRST_NOT_OF_RE(T)      /*empty*/
+// #endif // regex
 
 // find_last_not_of()
 
-#define string_MK_FIND_LAST_NOT_OF(T) /*TODO: MK()*/
-
-template< typename SeekT >
-string_nodiscard std::size_t find_last_not_of( std17::string_view text, SeekT const & seek )
-{
-    return text.find_last_not_of( seek );
-}
-
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// TODO: find_last_not_of(regex), optionally use find_last_of_([^regex])
-
-#define string_MK_FIND_LAST_NOT_OF_REGEX(T) /*TODO: MK()*/
-
-string_nodiscard inline std::size_t find_last_not_of( std17::string_view /*text*/, std::regex const & /*re*/ )
-{
-#if 1
-    return detail::npos;
-#else
-    auto elem_begin = std::regex_iterator<std17::string_view::const_iterator>( text.begin(), text.end(), re );
-    auto elem_end   = std::regex_iterator<std17::string_view::const_iterator>();
-
-    std::size_t last_pos = detail::npos;
-    std::size_t prev_pos = 0;
-    std::size_t last_len = 0;
-    std::size_t prev_len = 0;
-    for (std::regex_iterator<std17::string_view::const_iterator> i = elem_begin; i != elem_end; ++i)
-    {
-        prev_pos = last_pos;
-        prev_len = last_len;
-        last_pos = i->position();
-        last_len = i->length();
+#define string_MK_FIND_LAST_NOT_OF(CharT)       \
+    template< typename SeekT >                  \
+    string_nodiscard std::size_t                \
+    find_last_not_of( std17::basic_string_view<CharT> text, SeekT const & seek )    \
+    {                                           \
+        return text.find_last_not_of( seek );   \
     }
 
-    std::cout << "\nfind_last_not_of pos:" << last_pos << " last_len:" << last_len << "\n";
+// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-    // TODO: add checks:
-    return last_pos == detail::npos ? 0 : last_pos - 1;
-#endif
-}
+// // TODO: find_last_not_of(regex), optionally use find_last_of_([^regex])
 
-// find_first_not_of_re()
+// #define string_MK_FIND_LAST_NOT_OF_REGEX(T) /*TODO: MK()*/
 
-#define string_MK_FIND_LAST_NOT_OF_RE(T) /*TODO: MK()*/
+// string_nodiscard inline std::size_t find_last_not_of( std17::basic_string_view<CharT> /*text*/, std::regex const & /*re*/ )
+// {
+// #if 1
+//     return detail::npos;
+// #else
+//     auto elem_begin = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>( text.begin(), text.end(), re );
+//     auto elem_end   = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>();
 
-string_nodiscard inline std::size_t find_last_not_of_re( std17::string_view text, std17::string_view re )
-{
-    return find_last_not_of( text, std::regex(re.begin(), re.end()) );
-}
+//     std::size_t last_pos = detail::npos;
+//     std::size_t prev_pos = 0;
+//     std::size_t last_len = 0;
+//     std::size_t prev_len = 0;
+//     for (std::regex_iterator<std17::basic_string_view<CharT>::const_iterator> i = elem_begin; i != elem_end; ++i)
+//     {
+//         prev_pos = last_pos;
+//         prev_len = last_len;
+//         last_pos = i->position();
+//         last_len = i->length();
+//     }
 
-#else  // regex
-# define string_MK_FIND_LAST_NOT_OF_REGEX(T)    /*empty*/
-# define string_MK_FIND_LAST_NOT_OF_RE(T)       /*empty*/
-#endif // regex
+//     std::cout << "\nfind_last_not_of pos:" << last_pos << " last_len:" << last_len << "\n";
+
+//     // TODO: add checks:
+//     return last_pos == detail::npos ? 0 : last_pos - 1;
+// #endif
+// }
+
+// // find_first_not_of_re()
+
+// #define string_MK_FIND_LAST_NOT_OF_RE(T) /*TODO: MK()*/
+
+// string_nodiscard inline std::size_t find_last_not_of_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
+// {
+//     return find_last_not_of( text, std::regex(re.begin(), re.end()) );
+// }
+
+// #else  // regex
+// # define string_MK_FIND_LAST_NOT_OF_REGEX(T)    /*empty*/
+// # define string_MK_FIND_LAST_NOT_OF_RE(T)       /*empty*/
+// #endif // regex
 
 // TODO: ??? find_if()
 
@@ -988,28 +1026,21 @@ string_nodiscard inline std::size_t find_last_not_of_re( std17::string_view text
 
 // contains() - C++23
 
-#define string_MK_CONTAINS(T) /*TODO: MK()*/
-
-template< typename SeekT >
-string_nodiscard bool contains( std17::string_view text, SeekT const & seek )
-{
 #if string_CPP23_OR_GREATER
-    return text.contains( seek );
+# define string_MK_CONTAINS(CharT)      \
+    template< typename SeekT >          \
+    string_nodiscard bool contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
+    {                                   \
+        return text.contains( seek );   \
+    }
 #else
-    return detail::npos != find_first(text, seek);
+# define string_MK_CONTAINS(CharT)      \
+    template< typename SeekT >          \
+    string_nodiscard bool contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
+    {                                   \
+        return detail::npos != find_first(text, seek);  \
+    }
 #endif
-}
-
-#define string_MK_CONTAINS_CHAR(T) /*TODO: MK()*/
-
-string_nodiscard inline bool contains( std17::string_view text, char seek )
-{
-#if string_CPP17_000
-    return contains( text, std::string( &seek, &seek + 1) );
-#else
-    return contains( text, std17::string_view( &seek, &seek + 1) );
-#endif
-}
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
@@ -1017,7 +1048,7 @@ string_nodiscard inline bool contains( std17::string_view text, char seek )
 
 #define string_MK_CONTAINS_REGEX(T) /*TODO: MK()*/
 
-string_nodiscard inline bool contains( std17::string_view text, std::regex const & re )
+string_nodiscard inline bool contains( std17::basic_string_view<CharT> text, std::regex const & re )
 {
     return std::regex_search( text.begin(), text.end(), re );
 }
@@ -1026,7 +1057,7 @@ string_nodiscard inline bool contains( std17::string_view text, std::regex const
 
 #define string_MK_CONTAINS_RE(T) /*TODO: MK()*/
 
-string_nodiscard inline bool contains_re( std17::string_view text, std17::string_view re )
+string_nodiscard inline bool contains_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
 {
     return contains( text, std::regex(re.begin(), re.end()) );
 }
@@ -1038,51 +1069,62 @@ string_nodiscard inline bool contains_re( std17::string_view text, std17::string
 
 // starts_with() - C++20
 
-#define string_MK_STARTS_WITH(T) /*TODO: MK()*/
-
-template< typename SeekT >
-string_nodiscard bool starts_with( std17::string_view text, SeekT const & seek )
-{
 #if string_CPP20_OR_GREATER
-    return text.starts_with( seek );
-#else
-    const std17::string_view look( seek );
-
-    if ( size( look ) > size( text ) )
-    {
-        return false;
+# define string_MK_STARTS_WITH(CharT)                               \
+    template< typename SeekT >                                      \
+    string_nodiscard bool                                           \
+    starts_with( std17::basic_string_view<CharT> text, SeekT const & seek ) \
+    {                                                               \
+        return text.starts_with( seek );                            \
     }
-    return std::equal( look.begin(), look.end(), text.begin() );
-#endif
-}
-
-#define string_MK_STARTS_WITH_CHAR(T) /*TODO: MK()*/
-
-string_nodiscard inline bool starts_with( std17::string_view text, char seek )
-{
-#if string_CPP17_000
-    return starts_with( text, std::string( &seek, &seek + 1) );
 #else
-    return starts_with( text, std17::string_view( &seek, &seek + 1) );
-#endif
-}
+# define string_MK_STARTS_WITH(CharT)                               \
+    template< typename SeekT >                                      \
+    string_nodiscard bool                                           \
+    starts_with( std17::basic_string_view<CharT> text, SeekT const & seek ) \
+    {                                                               \
+        const std17::basic_string_view<CharT> look( seek );         \
+                                                                    \
+        if ( size( look ) > size( text ) )                          \
+        {                                                           \
+            return false;                                           \
+        }                                                           \
+        return std::equal( look.begin(), look.end(), text.begin() );\
+    }
+#endif  // string_CPP20_OR_GREATER
+
+#if string_CPP17_000
+# define string_MK_STARTS_WITH_CHAR(CharT)                          \
+    string_nodiscard inline bool                                    \
+    starts_with( std17::basic_string_view<CharT> text, CharT seek ) \
+    {                                                               \
+        return starts_with( text, std::basic_string<CharT>( &seek, &seek + 1) );    \
+    }
+#else
+# define string_MK_STARTS_WITH_CHAR(CharT)                          \
+    string_nodiscard inline bool                                    \
+    starts_with( std17::basic_string_view<CharT> text, CharT seek ) \
+    {                                                               \
+        return starts_with( text, std17::basic_string_view<CharT>( &seek, &seek + 1) ); \
+    }
+#endif  // string_CPP17_000
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 #define string_MK_STARTS_WITH_REGEX(T) /*TODO: MK()*/
 
-string_nodiscard inline bool starts_with( std17::string_view text, std::regex const & re )
+string_nodiscard inline bool starts_with( std17::basic_string_view<CharT> text, std::regex const & re )
 {
-    return 0 == find_first( text, re );
+    return 0 == find( text, re );
 }
 
 // starts_with_re()
 
 #define string_MK_STARTS_WITH_RE(T) /*TODO: MK()*/
 
-string_nodiscard inline bool starts_with_re( std17::string_view text, std17::string_view re )
+string_nodiscard inline bool starts_with_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
 {
-    return 0 == find_first_re( text, re );
+    return 0 == find_re( text, re );
 }
 
 #else  // regex
@@ -1092,47 +1134,58 @@ string_nodiscard inline bool starts_with_re( std17::string_view text, std17::str
 
 // ends_with() - C++20
 
-#define string_MK_ENDS_WITH(T) /*TODO: MK()*/
-
-template< typename SeekT >
-string_nodiscard bool ends_with( std17::string_view text, SeekT const & seek )
-{
 #if string_CPP20_OR_GREATER
-    return text.ends_with( seek );
-#else
-    const std17::string_view look( seek );
-
-    if ( size( look ) > size( text ) )
-    {
-        return false;
+# define string_MK_ENDS_WITH(CharT)         \
+    template< typename SeekT >              \
+    string_nodiscard bool                   \
+    ends_with( std17::basic_string_view<CharT> text, SeekT const & seek )   \
+    {                                       \
+        return text.ends_with( seek );      \
     }
-    return std::equal( look.rbegin(), look.rend(), text.rbegin() );
-#endif
-}
-
-#define string_MK_ENDS_WITH_CHAR(T) /*TODO: MK()*/
-
-string_nodiscard inline bool ends_with( std17::string_view text, char seek )
-{
-#if string_CPP17_000
-    return ends_with( text, std::string( &seek, &seek + 1) );
 #else
-    return ends_with( text, std17::string_view( &seek, &seek + 1) );
+# define string_MK_ENDS_WITH(CharT)         \
+    template< typename SeekT >              \
+    string_nodiscard bool                   \
+    ends_with( std17::basic_string_view<CharT> text, SeekT const & seek )   \
+    {                                       \
+        const std17::basic_string_view<CharT> look( seek ); \
+                                            \
+        if ( size( look ) > size( text ) )  \
+        {                                   \
+            return false;                   \
+    }                                       \
+        return std::equal( look.rbegin(), look.rend(), text.rbegin() ); \
+    }
 #endif
-}
+
+#if string_CPP17_000
+# define string_MK_ENDS_WITH_CHAR(CharT)    \
+    string_nodiscard inline bool            \
+    ends_with( std17::basic_string_view<CharT> text, CharT seek )   \
+    {                                       \
+        return ends_with( text, std::basic_string<CharT>( &seek, &seek + 1) );  \
+    }
+#else
+# define string_MK_ENDS_WITH_CHAR(CharT)    \
+    string_nodiscard inline bool            \
+    ends_with( std17::basic_string_view<CharT> text, CharT seek )   \
+    {                                       \
+        return ends_with( text, std17::basic_string_view<CharT>( &seek, &seek + 1) );   \
+    }
+#endif
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 #define string_MK_ENDS_WITH_REGEX(T) /*TODO: MK()*/
 
-string_nodiscard inline bool ends_with( std17::string_view text, std::regex const & re )
+string_nodiscard inline bool ends_with( std17::basic_string_view<CharT> text, std::regex const & re )
 {
-    auto elem_begin = std::regex_iterator<std17::string_view::const_iterator>( text.begin(), text.end(), re );
-    auto elem_end   = std::regex_iterator<std17::string_view::const_iterator>();
+    auto elem_begin = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>( text.begin(), text.end(), re );
+    auto elem_end   = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>();
 
     std::size_t last_pos = detail::npos;
     std::size_t last_len = 0;
-    for (std::regex_iterator<std17::string_view::const_iterator> i = elem_begin; i != elem_end; ++i)
+    for (std::regex_iterator<std17::basic_string_view<CharT>::const_iterator> i = elem_begin; i != elem_end; ++i)
     {
         last_pos = i->position();
         last_len = i->length();
@@ -1145,7 +1198,7 @@ string_nodiscard inline bool ends_with( std17::string_view text, std::regex cons
 
 #define string_MK_ENDS_WITH_RE(T) /*TODO: MK()*/
 
-string_nodiscard inline bool ends_with_re( std17::string_view text, std17::string_view re )
+string_nodiscard inline bool ends_with_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
 {
     return ends_with( text, std::regex(re.begin(), re.end()) );
 }
@@ -1195,19 +1248,19 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
 // to_lowercase()
 // to_uppercase()
 
-// template string_nodiscard std::basic_string<char> to_lowercase( std17::basic_string_view<char> text ) string_noexcept;
+// template string_nodiscard std::basic_string<CharT> to_lowercase( std17::basic_string_view<CharT> text ) string_noexcept;
 
-#define string_MK_TO_CASE_CHAR(T, Function) \
-    string_nodiscard inline T to_ ## Function( T chr ) \
-    { \
-        return detail::to_ ## Function<T>( chr ); \
-    }\
+#define string_MK_TO_CASE_CHAR(CharT, Function)                 \
+    string_nodiscard inline CharT to_ ## Function( CharT chr )  \
+    {                                                           \
+        return detail::to_ ## Function<CharT>( chr );           \
+    }
 
-#define string_MK_TO_CASE_STRING(T, Function) \
-    string_nodiscard inline std::basic_string<T> to_ ## Function( std17::basic_string_view<T> text ) \
-    { \
-        return detail::to_case( std::basic_string<T>(text), detail::to_ ## Function<T> ); \
-    }\
+#define string_MK_TO_CASE_STRING(CharT, Function)               \
+    string_nodiscard inline std::basic_string<CharT> to_ ## Function( std17::basic_string_view<CharT> text )    \
+    {                                                           \
+        return detail::to_case( std::basic_string<CharT>(text), detail::to_ ## Function<CharT> );   \
+    }
 
 // template< typename StringT >
 // inline StringT const default_strip_set()
@@ -1217,103 +1270,101 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
 
 // strip_left()
 
-#define string_MK_STRIP_LEFT(T) /*TODO: MK()*/
+#define string_MK_STRIP_LEFT(CharT)                                                         \
+    template< typename SetT >                                                               \
+    string_nodiscard std::basic_string<CharT>                                               \
+    strip_left( std17::basic_string_view<CharT> text, SetT const & set )                    \
+    {                                                                                       \
+        return std::basic_string<CharT>( text ).erase( 0, text.find_first_not_of( set ) );  \
+    }
 
-template< typename SetT >
-string_nodiscard std::string
-strip_left( std17::string_view text, SetT const & set )
-{
-    return std::string( text ).erase( 0, text.find_first_not_of( set ) );
-}
+// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+// #define string_MK_STRIP_LEFT_REGEX(T) /*TODO: MK()*/
 
-#define string_MK_STRIP_LEFT_REGEX(T) /*TODO: MK()*/
+// string_nodiscard std::basic_string<CharT> inline
+// strip_left( std17::basic_string_view<CharT> text, std::regex const & re )
+// {
+//     return std::basic_string<CharT>( text ).erase( 0, find_first_not_of( text, re ) );
+// }
 
-string_nodiscard std::string inline
-strip_left( std17::string_view text, std::regex const & re )
-{
-    return std::string( text ).erase( 0, find_first_not_of( text, re ) );
-}
+// // strip_left_re()
 
-// strip_left_re()
+// #define string_MK_STRIP_LEFT_RE(T) /*TODO: MK()*/
 
-#define string_MK_STRIP_LEFT_RE(T) /*TODO: MK()*/
+// string_nodiscard inline std::basic_string<CharT>
+// strip_left_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
+// {
+//     return strip_left( std::basic_string<CharT>( text ), std::regex(set.begin(), set.end()) );
+// }
 
-string_nodiscard inline std::string
-strip_left_re( std17::string_view text, std17::string_view set )
-{
-    return strip_left( std::string( text ), std::regex(set.begin(), set.end()) );
-}
-
-#else  // regex
-# define string_MK_STRIP_LEFT_REGEX(T)      /*empty*/
-# define string_MK_STRIP_LEFT_RE(T)         /*empty*/
-#endif // regex
+// #else  // regex
+// # define string_MK_STRIP_LEFT_REGEX(T)      /*empty*/
+// # define string_MK_STRIP_LEFT_RE(T)         /*empty*/
+// #endif // regex
 
 // strip_right()
 
-#define string_MK_STRIP_RIGHT(T) /*TODO: MK()*/
+#define string_MK_STRIP_RIGHT(CharT)                                                        \
+    template< typename SetT >                                                               \
+    string_nodiscard std::basic_string<CharT>                                               \
+    strip_right( std17::basic_string_view<CharT> text, SetT const & set )                   \
+    {                                                                                       \
+        return std::basic_string<CharT>( text ).erase( text.find_last_not_of( set ) + 1 );  \
+    }
 
-template< typename SetT >
-string_nodiscard std::string
-strip_right( std17::string_view text, SetT const & set )
-{
-    return std::string( text ).erase( text.find_last_not_of( set ) + 1 );
-}
+// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+// #define string_MK_STRIP_RIGHT_REGEX(T) /*TODO: MK()*/
 
-#define string_MK_STRIP_RIGHT_REGEX(T) /*TODO: MK()*/
+// string_nodiscard std::basic_string<CharT> inline
+// strip_right( std17::basic_string_view<CharT> text, std::regex const & re )
+// {
+//     return std::basic_string<CharT>( text ).erase( 0, find_last_not_of( std::basic_string<CharT>( text ), re ) );
+// }
 
-string_nodiscard std::string inline
-strip_right( std17::string_view text, std::regex const & re )
-{
-    return std::string( text ).erase( 0, find_last_not_of( std::string( text ), re ) );
-}
+// // strip_right_re()
 
-// strip_right_re()
+// #define string_MK_STRIP_RIGHT_RE(T) /*TODO: MK()*/
 
-#define string_MK_STRIP_RIGHT_RE(T) /*TODO: MK()*/
+// string_nodiscard inline std::basic_string<CharT>
+// strip_right_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
+// {
+//     return strip_right( std::basic_string<CharT>( text ), std::regex(set.begin(), set.end()) );
+// }
 
-string_nodiscard inline std::string
-strip_right_re( std17::string_view text, std17::string_view set )
-{
-    return strip_right( std::string( text ), std::regex(set.begin(), set.end()) );
-}
-
-#else  // regex
-# define string_MK_STRIP_RIGHT_REGEX(T)     /*empty*/
-# define string_MK_STRIP_RIGHT_RE(T)        /*empty*/
-#endif // regex
+// #else  // regex
+// # define string_MK_STRIP_RIGHT_REGEX(T)     /*empty*/
+// # define string_MK_STRIP_RIGHT_RE(T)        /*empty*/
+// #endif // regex
 
 // strip()
 
-#define string_MK_STRIP(T) /*TODO: MK()*/
-
-template< typename SetT >
-string_nodiscard std::string
-strip( std17::string_view text, SetT const & set )
-{
-    return strip_left( strip_right( text, set ), set );
-}
+#define string_MK_STRIP(CharT)                                      \
+    template< typename SetT >                                       \
+    string_nodiscard std::basic_string<CharT>                       \
+    strip( std17::basic_string_view<CharT> text, SetT const & set ) \
+    {                                                               \
+        return strip_left( strip_right( text, set ), set );         \
+    }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 #define string_MK_STRIP_REGEX(T) /*TODO: MK()*/
 
-string_nodiscard std::string inline
-strip( std17::string_view text, std::regex const & re )
+string_nodiscard std::basic_string<CharT> inline
+strip( std17::basic_string_view<CharT> text, std::regex const & re )
 {
-    return strip_left( strip_right( text, re ), re );
+    return "[TODO]";
+    // return strip_left( strip_right( text, re ), re );
 }
 
 // strip_re()
 
 #define string_MK_STRIP_RE(T) /*TODO: MK()*/
 
-string_nodiscard inline std::string
-strip_re( std17::string_view text, std17::string_view set )
+string_nodiscard inline std::basic_string<CharT>
+strip_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
 {
     return strip( text, std::regex(set.begin(), set.end()) );
 }
@@ -1328,25 +1379,26 @@ strip_re( std17::string_view text, std17::string_view set )
 namespace string {
 namespace detail {
 
-template< typename T >
-std::string replace_all( std17::basic_string_view<T> text, std17::basic_string_view<T> what, std17::basic_string_view<T> with )
+template< typename CharT >
+std::basic_string<CharT>
+replace_all( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> what, std17::basic_string_view<CharT> with )
 {
-    std::basic_string<T> result( text );
+    std::basic_string<CharT> result( text );
 
     if ( with == what )
         return result;
 
-    for ( auto pos = detail::find_first( result, what, 0 ) ;; )
+    for ( auto pos = detail::find_first<CharT>( result, what, 0 ) ;; )
     {
-        pos = detail::find_first( result, what, pos );
+        pos = detail::find_first<CharT>( result, what, pos );
 
-        if ( pos == std::string::npos )
+        if ( pos == std::basic_string<CharT>::npos )
             break;
 
 #if string_CPP17_OR_GREATER
         result.replace( pos, what.length(), with );
 #else
-        result.replace( pos, what.length(), std::string(with) );
+        result.replace( pos, what.length(), std::basic_string<CharT>(with) );
 #endif
     }
     return result;
@@ -1357,33 +1409,35 @@ std::string replace_all( std17::basic_string_view<T> text, std17::basic_string_v
 
 // replace_all()
 
-#define string_MK_REPLACE_ALL(T) /*TODO: MK()*/
-
-string_nodiscard inline std::string
-replace_all( std17::string_view text, std17::string_view what, std17::string_view with )
-{
-    return detail::replace_all( text, what, with );
-}
+#define string_MK_REPLACE_ALL(CharT)                    \
+    string_nodiscard inline std::basic_string<CharT>    \
+    replace_all(                                        \
+        std17::basic_string_view<CharT> text            \
+        , std17::basic_string_view<CharT> what          \
+        , std17::basic_string_view<CharT> with )        \
+    {                                                   \
+        return detail::replace_all( text, what, with ); \
+    }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 #define string_MK_REPLACE_ALL_REGEX(T) /*TODO: MK()*/
 
 template< typename WithT >
-string_nodiscard std::string
-replace_all( std17::string_view text, std::regex const & re, WithT const & with )
+string_nodiscard std::basic_string<CharT>
+replace_all( std17::basic_string_view<CharT> text, std::regex const & re, WithT const & with )
 {
-    return std::regex_replace( std::string(text), re, with );
+    return std::regex_replace( std::basic_string<CharT>(text), re, with );
 }
 
 // replace_all_re()
 
 #define string_MK_REPLACE_ALL_RE(T) /*TODO: MK()*/
 
-string_nodiscard inline std::string
-replace_all_re( std17::string_view text, std17::string_view what, std17::string_view with )
+string_nodiscard inline std::basic_string<CharT>
+replace_all_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> what, std17::basic_string_view<CharT> with )
 {
-    return std::regex_replace( std::string(text), std::regex(what.begin(), what.end()), std::string(with) );
+    return std::regex_replace( std::basic_string<CharT>(text), std::regex(what.begin(), what.end()), std::basic_string<CharT>(with) );
 }
 
 #else  // regex
@@ -1393,85 +1447,89 @@ replace_all_re( std17::string_view text, std17::string_view what, std17::string_
 
 // replace_first()
 
-#define string_MK_REPLACE_FIRST(T) /*TODO: MK()*/
+#define string_MK_REPLACE_FIRST(CharT)                  \
+    string_nodiscard inline std::basic_string<CharT>    \
+    replace_first(                                      \
+        std17::basic_string_view<CharT> text            \
+        , std17::basic_string_view<CharT> what          \
+        , std17::basic_string_view<CharT> with )        \
+    {                                                   \
+        std::basic_string<CharT> result( text );        \
+                                                        \
+        const auto pos = find_first( result, what );    \
+                                                        \
+        return pos != std::basic_string<CharT>::npos    \
+            ? result.replace( pos, what.length(), std::basic_string<CharT>(with) )  \
+            : detail::nullstr(CharT{});                 \
+    }
 
-string_nodiscard inline std::string
-replace_first( std17::string_view text, std17::string_view what, std17::string_view with )
-{
-    std::string result( text );
+// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-    const auto pos = find_first( result, what );
+// #define string_MK_REPLACE_FIRST_REGEX(T) /*TODO: MK()*/
 
-    return pos != std::string::npos 
-        ? result.replace( pos, what.length(), std::string(with) )
-        : "";
-}
+// string_nodiscard inline std::basic_string<CharT>
+// replace_first( std17::basic_string_view<CharT> text, std::regex const & re, std17::basic_string_view<CharT> with )
+// {
+//     return std::regex_replace( std::basic_string<CharT>(text), re, std::basic_string<CharT>(with), std::regex_constants::format_first_only );
+// }
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+// // replace_first_re()
 
-#define string_MK_REPLACE_FIRST_REGEX(T) /*TODO: MK()*/
+// #define string_MK_REPLACE_FIRST_RE(T) /*TODO: MK()*/
 
-string_nodiscard inline std::string
-replace_first( std17::string_view text, std::regex const & re, std17::string_view with )
-{
-    return std::regex_replace( std::string(text), re, std::string(with), std::regex_constants::format_first_only );
-}
+// string_nodiscard inline std::basic_string<CharT>
+// replace_first_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> what, std17::basic_string_view<CharT> with )
+// {
+//     return replace_first( text, std::regex(what.begin(), what.end()), with );
+// }
 
-// replace_first_re()
-
-#define string_MK_REPLACE_FIRST_RE(T) /*TODO: MK()*/
-
-string_nodiscard inline std::string
-replace_first_re( std17::string_view text, std17::string_view what, std17::string_view with )
-{
-    return replace_first( text, std::regex(what.begin(), what.end()), with );
-}
-
-#else  // regex
-# define string_MK_REPLACE_FIRST_REGEX(T)   /*empty*/
-# define string_MK_REPLACE_FIRST_RE(T)      /*empty*/
-#endif // regex
+// #else  // regex
+// # define string_MK_REPLACE_FIRST_REGEX(T)   /*empty*/
+// # define string_MK_REPLACE_FIRST_RE(T)      /*empty*/
+// #endif // regex
 
 // replace_last()
 
-#define string_MK_REPLACE_LAST(T) /*TODO: MK()*/
+#define string_MK_REPLACE_LAST(CharT)                   \
+    string_nodiscard inline std::basic_string<CharT>    \
+    replace_last(                                       \
+        std17::basic_string_view<CharT> text            \
+        , std17::basic_string_view<CharT> what          \
+        , std17::basic_string_view<CharT> with )        \
+    {                                                   \
+        std::basic_string<CharT> result( text );        \
+                                                        \
+        const auto pos = find_last( result, what );     \
+                                                        \
+        return pos != std::basic_string<CharT>::npos    \
+            ? result.replace( pos, what.length(), std::basic_string<CharT>(with) )  \
+            : detail::nullstr(CharT{});                 \
+    }
 
-string_nodiscard inline std::string
-replace_last( std17::string_view text,std17::string_view what, std17::string_view with )
-{
-    std::string result( text );
+// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
-    const auto pos = find_last( result, what );
+// #define string_MK_REPLACE_LAST_REGEX(T) /*TODO: MK()*/
 
-    return pos != std::string::npos 
-        ? result.replace( pos, what.length(), std::string(with) )
-        : "";
-}
+// string_nodiscard inline std::basic_string<CharT>
+// replace_last( std17::basic_string_view<CharT> text, std::regex const & re, std17::basic_string_view<CharT> with )
+// {
+//     return "[replace_last: TODO]";
+// }
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
+// // replace_last_re()
 
-#define string_MK_REPLACE_LAST_REGEX(T) /*TODO: MK()*/
+// #define string_MK_REPLACE_LAST_RE(T) /*TODO: MK()*/
 
-string_nodiscard inline std::string
-replace_last( std17::string_view text, std::regex const & re, std17::string_view with )
-{
-    return "[replace_last: TODO]";
-}
+// string_nodiscard inline std::basic_string<CharT>
+// replace_last_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> what, std17::basic_string_view<CharT> with )
+// {
+//     return replace_last( text, std::regex(what.begin(), what.end()), with );
+// }
 
-// replace_last_re()
-
-#define string_MK_REPLACE_LAST_RE(T) /*TODO: MK()*/
-
-string_nodiscard inline std::string
-replace_last_re( std17::string_view text, std17::string_view what, std17::string_view with )
-{
-    return replace_last( text, std::regex(what.begin(), what.end()), with );
-}
-
-#else  // regex
-# define string_MK_REPLACE_LAST_REGEX(T)    /*empty*/
-# define string_MK_REPLACE_LAST_RE(T)       /*empty*/
-#endif // regex
+// #else  // regex
+// # define string_MK_REPLACE_LAST_REGEX(T)    /*empty*/
+// # define string_MK_REPLACE_LAST_RE(T)       /*empty*/
+// #endif // regex
 
 //
 // Joining, splitting:
@@ -1479,42 +1537,46 @@ replace_last_re( std17::string_view text, std17::string_view what, std17::string
 
 // append()
 
-#define string_MK_APPEND(T) /*TODO: MK()*/
-
-template< typename TailT >
-string_nodiscard std::string
-append( std17::string_view text, TailT const & tail )
-{
 #if string_CPP17_OR_GREATER
-    return std::string( text ).append( tail );
+# define string_MK_APPEND(CharT)                                        \
+    template< typename TailT >                                          \
+    string_nodiscard std::basic_string<CharT>                           \
+    append( std17::basic_string_view<CharT> text, TailT const & tail )  \
+    {                                                                   \
+        return std::basic_string<CharT>( text ).append( tail );         \
+    }
 #else
-    return std::string( text ) + std::string(tail);
-#endif
-}
+# define string_MK_APPEND(CharT)                                        \
+    template< typename TailT >                                          \
+    string_nodiscard std::basic_string<CharT>                           \
+    append( std17::basic_string_view<CharT> text, TailT const & tail )  \
+    {                                                                   \
+        return std::basic_string<CharT>( text ) + std::basic_string<CharT>(tail); \
+    }
+# endif
 
 // substring()
 
-#define string_MK_SUBSTRING(T) /*TODO: MK()*/
-
-string_nodiscard inline std::string
-substring( std17::string_view text, std::size_t pos = 0, std::size_t count = detail::npos )
-{
-    return std::string( text ).substr( pos, count );
-}
+#define string_MK_SUBSTRING(CharT)                                      \
+    string_nodiscard inline std::basic_string<CharT>                    \
+    substring( std17::basic_string_view<CharT> text, std::size_t pos = 0, std::size_t count = detail::npos )    \
+    {                                                                   \
+        return std::basic_string<CharT>( text ).substr( pos, count );   \
+    }
 
 #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
 
 namespace string {
 namespace detail {
 
-string_nodiscard inline std::string
-substring( std17::string_view text, std::regex const & re )
+string_nodiscard inline std::basic_string<CharT>
+substring( std17::basic_string_view<CharT> text, std::regex const & re )
 {
-    std::match_results< std17::string_view::const_iterator > result;
+    std::match_results< std17::basic_string_view<CharT>::const_iterator > result;
 
     return std::regex_search( text.begin(), text.end(), result, re )
         ? to_string( text.substr( result.position(), result.length() ) )
-        : std::string{};
+        : std::basic_string<CharT>{};
 }
 
 } // namespace detail
@@ -1522,8 +1584,8 @@ substring( std17::string_view text, std::regex const & re )
 
 #define string_MK_SUBSTRING_REGEX(T) /*TODO: MK()*/
 
-string_nodiscard inline std::string
-substring( std17::string_view text, std::regex const & re )
+string_nodiscard inline std::basic_string<CharT>
+substring( std17::basic_string_view<CharT> text, std::regex const & re )
 {
     return detail::substring( text, re );
 }
@@ -1532,8 +1594,8 @@ substring( std17::string_view text, std::regex const & re )
 
 #define string_MK_SUBSTRING_RE(T) /*TODO: MK()*/
 
-string_nodiscard inline std::string
-substring_re( std17::string_view text, std17::string_view re )
+string_nodiscard inline std::basic_string<CharT>
+substring_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
 {
     return substring( text, std::regex(re.begin(), re.end()) );
 }
@@ -1545,41 +1607,28 @@ substring_re( std17::string_view text, std17::string_view re )
 
 // join()
 
-namespace string {
-namespace detail {
-
-template< typename Coll, typename SepT, typename Result >
-string_nodiscard Result
-join( Coll const & coll, SepT const & sep, Result result )
-{
-    typename Coll::const_iterator const coll_begin = coll.cbegin();
-    typename Coll::const_iterator const coll_end   = coll.cend();
-
-    typename Coll::const_iterator pos = coll_begin;
-
-    if ( pos != coll_end )
-    {
-        result = append( result, *pos++ );
+#define string_MK_JOIN(CharT)                                           \
+    template< typename Coll >                                           \
+    string_nodiscard std::basic_string<CharT>                           \
+    join( Coll const & coll, std::basic_string<CharT> const & sep )     \
+    {                                                                   \
+        std::basic_string<CharT> result{};                              \
+        typename Coll::const_iterator const coll_begin = coll.cbegin(); \
+        typename Coll::const_iterator const coll_end   = coll.cend();   \
+        typename Coll::const_iterator pos = coll_begin;                 \
+                                                                        \
+        if ( pos != coll_end )                                          \
+        {                                                               \
+            result = append( result, *pos++ );                          \
+        }                                                               \
+                                                                        \
+        for ( ; pos != coll_end; ++pos )                                \
+        {                                                               \
+            result = append( append( result,  sep ), *pos );            \
+        }                                                               \
+                                                                        \
+        return result;                                                  \
     }
-
-    for ( ; pos != coll_end; ++pos )
-    {
-        result = append( append( result,  sep ), *pos );
-    }
-
-    return result;
-}
-} // namespace detail
-} // namespace string
-
-#define string_MK_JOIN(T) /*TODO: MK()*/
-
-template< typename Coll, typename SepT >
-string_nodiscard std::string
-join( Coll const & coll, SepT const & sep )
-{
-    return detail::join( coll, sep, std::string() );
-}
 
 // TODO: split
 
@@ -1594,7 +1643,8 @@ join( Coll const & coll, SepT const & sep )
 // - char_delimiter - single-char delimiter
 
 template< typename CharT >
-std17::basic_string_view<CharT> basic_delimiter_end(std17::basic_string_view<CharT> sv) string_noexcept
+string_nodiscard std17::basic_string_view<CharT>
+basic_delimiter_end(std17::basic_string_view<CharT> sv) string_noexcept
 {
     return std17::basic_string_view<CharT>{ sv.data() + sv.size(), std::size_t(0) };
 }
@@ -1982,109 +2032,53 @@ split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Ns
 
 // split -> vector
 
-#define string_MK_SPLIT(T) /*TODO: MK()*/
+#define string_MK_SPLIT_DELIM(CharT)                                                                \
+    template< typename Delimiter                                                                    \
+        , typename std::enable_if<                                                                  \
+            !( std::is_same< Delimiter, CharT const *>::value                                       \
+            || std::is_same< Delimiter, std::basic_string<CharT>>::value                            \
+            || std::is_same< Delimiter, std17::basic_string_view<CharT>>::value ), int >::type = 0  \
+    >                                                                                               \
+    string_nodiscard std::vector< std17::basic_string_view<CharT>>                                  \
+    split(                                                                                          \
+        std17::basic_string_view<CharT> text, Delimiter delimiter                                   \
+        , std::size_t count = std::numeric_limits<std::size_t>::max() )                             \
+    {                                                                                               \
+        return detail::split(text, delimiter, count );                                              \
+    }
 
-template< typename CharT, typename Delimiter >
-string_nodiscard std::vector< std17::string_view >
-split( std17::string_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
-{
-    return detail::split( text, delimiter, count );
-}
 
-#if string_CONFIG_PROVIDE_CHAR_T
-template<typename Delimiter> string_nodiscard std::vector< std17::string_view>
-split( std17::string_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
-{
-    return detail::split(text, delimiter, count );
-}
-
-string_nodiscard inline std::vector<std17::string_view>
-split( std17::string_view text, char const * d, std::size_t count = std::numeric_limits<std::size_t>::max() )
-{
-    return detail::split(text, literal_delimiter(d), count );
-}
-
-#if 0
-string_nodiscard inline std::vector<std17::string_view>
-rsplit( std17::string_view text, char const * d, std::size_t count = std::numeric_limits<std::size_t>::max() )
-{
-    return detail::split(text, reverse_literal_delimiter(d), count );
-}
-#endif
-#endif
-
-#if string_CONFIG_PROVIDE_WCHAR_T
-template<typename Delimiter> string_nodiscard std::vector<std17::wstring_view>
-split( std17::wstring_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
-{
-    return detail::split(text, delimiter, count );
-}
-
-string_nodiscard inline std::vector<std17::wstring_view>
-split( std17::wstring_view text, wchar_t const * d, int count = 0 )
-{
-    return detail::split(text, wliteral_delimiter(d), count );
-}
-#endif
-
-#if string_CONFIG_PROVIDE_CHAR8_T
-template<typename Delimiter> string_nodiscard std::vector<std17::u8string_view>
-split( std17::u8string_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
-{
-    return detail::split(text, delimiter, count );
-}
-
-string_nodiscard inline std::vector<std17::u8string_view>
-split( std17::u8string_view text, char8_t const * d, int count = 0 )
-{
-    return detail::split(text, u8literal_delimiter(d), count );
-}
-#endif
-
-#if string_CONFIG_PROVIDE_CHAR16_T
-template<typename Delimiter> string_nodiscard std::vector<std17::u16string_view>
-split( std17::u16string_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
-{
-    return detail::split(text, delimiter, count );
-}
-
-string_nodiscard inline std::vector<std17::u16string_view>
-split( std17::u16string_view text, char16_t const * d, int count = 0 )
-{
-    return detail::split(text, u16literal_delimiter(d), count );
-}
-#endif
-
-#if string_CONFIG_PROVIDE_CHAR32_T
-template<typename Delimiter> string_nodiscard std::vector<std17::u32string_view>
-split( std17::u32string_view text, Delimiter delimiter, std::size_t count = std::numeric_limits<std::size_t>::max() )
-{
-    return detail::split(text, delimiter, count );
-}
-
-inline string_nodiscard std::vector<std17::u32string_view>
-split( std17::u32string_view text, char32_t const * d, int count = 0 )
-{
-    return detail::split(text, u32literal_delimiter(d), count );
-}
-#endif
+#define string_MK_SPLIT_STRING(CharT)                                                               \
+    string_nodiscard inline std::vector<std17::basic_string_view<CharT>>                            \
+    split(                                                                                          \
+        std17::basic_string_view<CharT> text                                                        \
+        , std17::basic_string_view<CharT> set                                                       \
+        , std::size_t count = std::numeric_limits<std::size_t>::max() )                             \
+    {                                                                                               \
+        return detail::split(text, basic_literal_delimiter<CharT>(set), count );                    \
+    }
 
 #if string_CONFIG_PROVIDE_CHAR_T
 
 // split_left -> tuple
 
-template<typename Delimiter> string_nodiscard auto
-split_left( std17::string_view const & text, Delimiter delimiter ) -> std::tuple<std17::string_view, std17::string_view>
-{
-    auto const result = split( text, delimiter, 2 );
-
-    return { result[0], result[1] };
+#define string_MK_SPLIT_LEFT_DELIM( CharT )                                                 \
+template< typename Delimiter >                                                              \
+string_nodiscard auto                                                                       \
+split_left( std17::basic_string_view<CharT> text, Delimiter delimiter )                     \
+    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>         \
+{                                                                                           \
+    auto const result = split( text, delimiter, 2 );                                        \
+                                                                                            \
+    return { result[0], result[1] };                                                        \
 }
 
-string_nodiscard inline auto
-split_left(  std17::string_view text, char const * d ) -> std::tuple<std17::string_view, std17::string_view>
-{
-    return split_left( text, literal_delimiter(d) );
+#define string_MK_SPLIT_LEFT_STRING( CharT )                                                \
+string_nodiscard inline auto                                                                \
+split_left(  std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )    \
+    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>         \
+{                                                                                           \
+    return split_left( text, basic_literal_delimiter<CharT>(set) );                         \
 }
 
 // TODO: split_right -> tuple
@@ -2092,11 +2086,13 @@ split_left(  std17::string_view text, char const * d ) -> std::tuple<std17::stri
 // Split string at given separator character, starting at right.
 
 string_nodiscard inline auto
-split_right(  std17::string_view , char const * ) -> std::tuple<std17::string_view, std17::string_view>
-// split_right(  std17::string_view text, char const * d ) -> std::tuple<std17::string_view, std17::string_view>
+split_right( std17::basic_string_view<CharT> , std17::basic_string_view<CharT>  ) 
+    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
+// split_right( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
+//  -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
 {
     return { "TODO", "TODO" };
-    // return split_right( text, reverse_literal_delimiter(d) );
+    // return split_right( text, basic_reverse_literal_delimiter<CharT>(set) );
 }
 
 #endif // string_CONFIG_PROVIDE_CHAR_T
@@ -2106,117 +2102,123 @@ split_right(  std17::string_view , char const * ) -> std::tuple<std17::string_vi
 //
 
 #if string_CONFIG_PROVIDE_CHAR_T
-string_MK_IS_EMPTY        ( char )
-string_MK_LENGTH          ( char )
-string_MK_SIZE            ( char )
 
-string_MK_APPEND          ( char )
-
-string_MK_CONTAINS        ( char )      // includes char search type
-string_MK_CONTAINS_RE     ( char )
-string_MK_CONTAINS_REGEX  ( char )
-
-string_MK_STARTS_WITH     ( char )
-string_MK_STARTS_WITH_CHAR( char )
-string_MK_STARTS_WITH_RE  ( char )
-string_MK_STARTS_WITH_REGEX( char )
-
-string_MK_ENDS_WITH       ( char )
-string_MK_ENDS_WITH_CHAR  ( char )
-string_MK_ENDS_WITH_RE    ( char )
-string_MK_ENDS_WITH_REGEX ( char )
-
-string_MK_FIND_FIRST      ( char )
-string_MK_FIND_FIRST_CHAR ( char )
-string_MK_FIND_FIRST_RE   ( char )
-string_MK_FIND_FIRST_REGEX( char )
-
-string_MK_FIND_LAST       ( char )
-string_MK_FIND_LAST_CHAR  ( char )
-string_MK_FIND_LAST_RE    ( char )
-string_MK_FIND_LAST_REGEX ( char )
-
-string_MK_FIND_FIRST_OF   ( char )
-string_MK_FIND_FIRST_OF_RE( char )
-string_MK_FIND_FIRST_OF_REGEX( char )
-
-string_MK_FIND_LAST_OF    ( char )
-string_MK_FIND_LAST_OF_RE ( char )
-string_MK_FIND_LAST_OF_REGEX( char )
-
+string_MK_IS_EMPTY         ( char )
+string_MK_LENGTH           ( char )
+string_MK_SIZE             ( char )
+string_MK_FIND_FIRST       ( char )
+string_MK_FIND_FIRST_CHAR  ( char )
+string_MK_FIND_LAST        ( char )
+string_MK_FIND_LAST_CHAR   ( char )
+string_MK_FIND_FIRST_OF    ( char )
+string_MK_FIND_LAST_OF     ( char )
 string_MK_FIND_FIRST_NOT_OF( char )
-string_MK_FIND_FIRST_NOT_OF_RE( char )
-string_MK_FIND_FIRST_NOT_OF_REGEX( char )
-
-string_MK_FIND_LAST_NOT_OF( char )
-string_MK_FIND_LAST_NOT_OF_RE( char )
-string_MK_FIND_LAST_NOT_OF_REGEX( char )
-
-string_MK_REPLACE_ALL     ( char )
-string_MK_REPLACE_ALL_REGEX( char )
-string_MK_REPLACE_ALL_RE  ( char )
-
-string_MK_REPLACE_FIRST   ( char )
-string_MK_REPLACE_FIRST_RE( char )
-string_MK_REPLACE_FIRST_REGEX( char )
-
-string_MK_REPLACE_LAST    ( char )
-string_MK_REPLACE_LAST_RE ( char )
-string_MK_REPLACE_LAST_REGEX( char )
-
-string_MK_STRIP           ( char )
-string_MK_STRIP_RE        ( char )
-string_MK_STRIP_REGEX     ( char )
-
-string_MK_STRIP_LEFT      ( char )
-string_MK_STRIP_LEFT_RE   ( char )
-string_MK_STRIP_LEFT_REGEX( char )
-
-string_MK_STRIP_RIGHT     ( char )
-string_MK_STRIP_RIGHT     ( char )
-string_MK_STRIP_RIGHT_RE  ( char )
-string_MK_STRIP_RIGHT_REGEX( char )
-
-string_MK_SUBSTRING       ( char )
-string_MK_SUBSTRING_RE    ( char )
-string_MK_SUBSTRING_REGEX ( char )
-
-string_MK_TO_CASE_CHAR    ( char, lowercase )
-string_MK_TO_CASE_CHAR    ( char, uppercase )
-string_MK_TO_CASE_STRING  ( char, lowercase )
-string_MK_TO_CASE_STRING  ( char, uppercase )
-
-string_MK_JOIN            ( char )
-string_MK_SPLIT           ( char )
-// string_MK_SPLIT_LEFT      ( char )   // TODO
-// string_MK_SPLIT_RIGHT     ( char )   // TODO
-
+string_MK_FIND_LAST_NOT_OF ( char )
+string_MK_APPEND           ( char )
+string_MK_CONTAINS         ( char )      // includes char search type
+string_MK_STARTS_WITH      ( char )
+string_MK_STARTS_WITH_CHAR ( char )
+string_MK_ENDS_WITH        ( char )
+string_MK_ENDS_WITH_CHAR   ( char )
+string_MK_REPLACE_ALL      ( char )
+string_MK_REPLACE_FIRST    ( char )
+string_MK_REPLACE_LAST     ( char )
+string_MK_STRIP_LEFT       ( char )
+string_MK_STRIP_RIGHT      ( char )
+string_MK_STRIP            ( char )
+string_MK_SUBSTRING        ( char )
+string_MK_TO_CASE_CHAR     ( char, lowercase )
+string_MK_TO_CASE_CHAR     ( char, uppercase )
+string_MK_TO_CASE_STRING   ( char, lowercase )
+string_MK_TO_CASE_STRING   ( char, uppercase )
+string_MK_JOIN             ( char )
+string_MK_SPLIT_DELIM      ( char )
+string_MK_SPLIT_STRING     ( char )
+string_MK_SPLIT_LEFT_DELIM ( char )
+string_MK_SPLIT_LEFT_STRING( char )
+// string_MK_SPLIT_RIGHT_DELIM ( char )
+// string_MK_SPLIT_RIGHT_STRING( char )
 // ...
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
 
-string_MK_LENGTH        ( wchar_t )
-string_MK_SIZE          ( wchar_t )
-string_MK_IS_EMPTY      ( wchar_t )
-string_MK_TO_CASE_CHAR  ( wchar_t, lowercase )
-string_MK_TO_CASE_CHAR  ( wchar_t, uppercase )
-string_MK_TO_CASE_STRING( wchar_t, lowercase )
-string_MK_TO_CASE_STRING( wchar_t, uppercase )
+string_MK_IS_EMPTY         ( wchar_t )
+string_MK_LENGTH           ( wchar_t )
+string_MK_SIZE             ( wchar_t )
+string_MK_APPEND           ( wchar_t )
+string_MK_CONTAINS         ( wchar_t )      // includes wchar_t search type
+string_MK_STARTS_WITH      ( wchar_t )
+string_MK_STARTS_WITH_CHAR ( wchar_t )
+string_MK_ENDS_WITH        ( wchar_t )
+string_MK_ENDS_WITH_CHAR   ( wchar_t )
+string_MK_FIND_FIRST       ( wchar_t )
+string_MK_FIND_FIRST_CHAR  ( wchar_t )
+string_MK_FIND_LAST        ( wchar_t )
+string_MK_FIND_LAST_CHAR   ( wchar_t )
+string_MK_FIND_FIRST_OF    ( wchar_t )
+string_MK_FIND_LAST_OF     ( wchar_t )
+string_MK_FIND_FIRST_NOT_OF( wchar_t )
+string_MK_FIND_LAST_NOT_OF ( wchar_t )
+string_MK_REPLACE_ALL      ( wchar_t )
+string_MK_REPLACE_FIRST    ( wchar_t )
+string_MK_REPLACE_LAST     ( wchar_t )
+string_MK_STRIP_LEFT       ( wchar_t )
+string_MK_STRIP_RIGHT      ( wchar_t )
+string_MK_STRIP            ( wchar_t )
+string_MK_SUBSTRING        ( wchar_t )
+string_MK_TO_CASE_CHAR     ( wchar_t, lowercase )
+string_MK_TO_CASE_CHAR     ( wchar_t, uppercase )
+string_MK_TO_CASE_STRING   ( wchar_t, lowercase )
+string_MK_TO_CASE_STRING   ( wchar_t, uppercase )
+string_MK_JOIN             ( wchar_t )
+string_MK_SPLIT_DELIM      ( wchar_t )
+string_MK_SPLIT_STRING     ( wchar_t )
+string_MK_SPLIT_LEFT_DELIM ( wchar_t )
+string_MK_SPLIT_LEFT_STRING( wchar_t )
+// string_MK_SPLIT_RIGHT_DELIM ( wchar_t )
+// string_MK_SPLIT_RIGHT_STRING( wchar_t )
 // ...
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR8_T && string_HAVE_CHAR8_T
 
-string_MK_LENGTH        ( char8_t )
-string_MK_SIZE          ( char8_t )
-string_MK_IS_EMPTY      ( char8_t )
-string_MK_TO_CASE_CHAR  ( char8_t, lowercase )
-string_MK_TO_CASE_CHAR  ( char8_t, uppercase )
-string_MK_TO_CASE_STRING( char8_t, lowercase )
-string_MK_TO_CASE_STRING( char8_t, uppercase )
+string_MK_IS_EMPTY         ( char8_t )
+string_MK_LENGTH           ( char8_t )
+string_MK_SIZE             ( char8_t )
+string_MK_APPEND           ( char8_t )
+string_MK_CONTAINS         ( char8_t )      // includes char search type
+string_MK_STARTS_WITH      ( char8_t )
+string_MK_STARTS_WITH_CHAR ( char8_t )
+string_MK_ENDS_WITH        ( char8_t )
+string_MK_ENDS_WITH_CHAR   ( char8_t )
+string_MK_FIND_FIRST       ( char8_t )
+string_MK_FIND_FIRST_CHAR  ( char8_t )
+string_MK_FIND_LAST        ( char8_t )
+string_MK_FIND_LAST_CHAR   ( char8_t )
+string_MK_FIND_FIRST_OF    ( char8_t )
+string_MK_FIND_LAST_OF     ( char8_t )
+string_MK_FIND_FIRST_NOT_OF( char8_t )
+string_MK_FIND_LAST_NOT_OF ( char8_t )
+string_MK_REPLACE_ALL      ( char8_t )
+string_MK_REPLACE_FIRST    ( char8_t )
+string_MK_REPLACE_LAST     ( char8_t )
+string_MK_STRIP_LEFT       ( char8_t )
+string_MK_STRIP_RIGHT      ( char8_t )
+string_MK_STRIP            ( char8_t )
+string_MK_SUBSTRING        ( char8_t )
+string_MK_TO_CASE_CHAR     ( char8_t, lowercase )
+string_MK_TO_CASE_CHAR     ( char8_t, uppercase )
+string_MK_TO_CASE_STRING   ( char8_t, lowercase )
+string_MK_TO_CASE_STRING   ( char8_t, uppercase )
+string_MK_JOIN             ( char8_t )
+string_MK_SPLIT_DELIM      ( char8_t )
+string_MK_SPLIT_STRING     ( char8_t )
+string_MK_SPLIT_LEFT_DELIM ( char8_t )
+string_MK_SPLIT_LEFT_STRING( char8_t )
+// string_MK_SPLIT_RIGHT_DELIM ( char8_t )
+// string_MK_SPLIT_RIGHT_STRING( char8_t )
 // ...
-// #undef string_MK_...
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR16_T
@@ -2240,6 +2242,8 @@ string_MK_IS_EMPTY( char32_t )
 // ...
 // #undef string_MK_...
 #endif
+
+// TODO: #undef string_MK_*
 
 #undef string_MK_LENGTH
 #undef string_MK_SIZE
