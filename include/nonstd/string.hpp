@@ -721,33 +721,6 @@ using namespace string;
 // Searching:
 //
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// find(regex)
-
-#define string_MK_FIND_REGEX(T) /*TODO: MK()*/
-
-string_nodiscard inline std::size_t find( std17::basic_string_view<CharT> text, std::regex const & re )
-{
-    std::match_results< std17::basic_string_view<CharT>::const_iterator > result;
-
-    return std::regex_search( text.begin(), text.end(), result, re ) ? result.position() : static_cast<std::size_t>( detail::npos );
-}
-
-// find_re()
-
-#define string_MK_FIND_RE(T) /*TODO: MK()*/
-
-string_nodiscard inline std::size_t find_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
-{
-    return find( text, std::regex(re.begin(), re.end()) );
-}
-
-#else  // regex
-# define string_MK_FIND_REGEX(T)  /*empty*/
-# define string_MK_FIND_RE(T)     /*empty*/
-#endif // regex
-
 namespace string {
 namespace detail {
 
@@ -812,40 +785,6 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
     }
 #endif
 
-// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// // find_last(regex): use std::regex_iterator?
-
-// #define string_MK_FIND_LAST_REGEX(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::size_t find_last( std17::basic_string_view<CharT> text, std::regex const & re )
-// {
-//     auto elem_begin = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>( text.begin(), text.end(), re );
-//     auto elem_end   = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>();
-
-//     size_t last_pos = detail::npos;
-//     for (std::regex_iterator<std17::basic_string_view<CharT>::const_iterator> i = elem_begin; i != elem_end; ++i)
-//     {
-//         last_pos = i->position();
-//     }
-
-//     return last_pos;
-// }
-
-// // find_last_re()
-
-// #define string_MK_FIND_LAST_RE(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::size_t find_last_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
-// {
-//     return find_last( text, std::regex(re.begin(), re.end()) );
-// }
-
-// #else  // regex
-// # define string_MK_FIND_LAST_REGEX(T)   /*empty*/
-// # define string_MK_FIND_LAST_RE(T)      /*empty*/
-// #endif // regex
-
 // find_first_of()
 
 #define string_MK_FIND_FIRST_OF(CharT)      \
@@ -855,31 +794,6 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
     {                                       \
         return text.find_first_of( seek );  \
     }
-
-// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// // find_first_of(regex)
-
-// #define string_MK_FIND_FIRST_OF_REGEX(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::size_t find_first_of( std17::basic_string_view<CharT> text, std::regex const & re )
-// {
-//     return find( text, re );
-// }
-
-// // find_first_of_re()
-
-// #define string_MK_FIND_FIRST_OF_RE(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::size_t find_first_of_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
-// {
-//     return find_first_of( text, std::regex(re.begin(), re.end()) );
-// }
-
-// #else  // regex
-// # define string_MK_FIND_FIRST_OF_REGEX(T)   /*empty*/
-// # define string_MK_FIND_FIRST_OF_RE(T)      /*empty*/
-// #endif // regex
 
 // find_last_of()
 
@@ -891,31 +805,6 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
         return text.find_last_of( seek );   \
     }
 
-// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// // TODO: find_last_of(regex)
-
-// #define string_MK_FIND_LAST_OF_REGEX(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::size_t find_last_of( std17::basic_string_view<CharT> text, std::regex const & re )
-// {
-//     return find_last( text, re );
-// }
-
-// // find_last_of_re()
-
-// #define string_MK_FIND_LAST_OF_RE(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::size_t find_last_of_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
-// {
-//     return find_last_of( text, std::regex(re.begin(), re.end()) );
-// }
-
-// #else  // regex
-// # define string_MK_FIND_LAST_OF_REGEX(T)    /*empty*/
-// # define string_MK_FIND_LAST_OF_RE(T)       /*empty*/
-// #endif // regex
-
 // find_first_not_of()
 
 #define string_MK_FIND_FIRST_NOT_OF(CharT)      \
@@ -926,43 +815,6 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
         return text.find_first_not_of( seek );  \
     }
 
-// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// // Avoid signed/unsigned mismatch.
-
-// template< typename T >
-// std::size_t to_size( T value )
-// {
-//     return static_cast<std::size_t>( value );
-// }
-
-// // find_first_not_of(regex), optionally use find_first_of_([^regex])
-
-// #define string_MK_FIND_FIRST_NOT_OF_REGEX(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::size_t find_first_not_of( std17::basic_string_view<CharT> text, std::regex const & re )
-// {
-//     std::match_results< std17::basic_string_view<CharT>::const_iterator > result;
-
-//     return std::regex_search( text.begin(), text.end(), result, re ) && result.position() == 0 && to_size(result.length()) < text.length()
-//         ? result.length()
-//         : static_cast<std::size_t>( detail::npos );
-// }
-
-// // find_first_not_of_re()
-
-// #define string_MK_FIND_FIRST_NOT_OF_RE(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::size_t find_first_not_of_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
-// {
-//     return find_first_not_of( text, std::regex(re.begin(), re.end()) );
-// }
-
-// #else  // regex
-// # define string_MK_FIND_FIRST_NOT_OF_REGEX(T)   /*empty*/
-// # define string_MK_FIND_FIRST_NOT_OF_RE(T)      /*empty*/
-// #endif // regex
-
 // find_last_not_of()
 
 #define string_MK_FIND_LAST_NOT_OF(CharT)       \
@@ -972,53 +824,6 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
     {                                           \
         return text.find_last_not_of( seek );   \
     }
-
-// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// // TODO: find_last_not_of(regex), optionally use find_last_of_([^regex])
-
-// #define string_MK_FIND_LAST_NOT_OF_REGEX(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::size_t find_last_not_of( std17::basic_string_view<CharT> /*text*/, std::regex const & /*re*/ )
-// {
-// #if 1
-//     return detail::npos;
-// #else
-//     auto elem_begin = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>( text.begin(), text.end(), re );
-//     auto elem_end   = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>();
-
-//     std::size_t last_pos = detail::npos;
-//     std::size_t prev_pos = 0;
-//     std::size_t last_len = 0;
-//     std::size_t prev_len = 0;
-//     for (std::regex_iterator<std17::basic_string_view<CharT>::const_iterator> i = elem_begin; i != elem_end; ++i)
-//     {
-//         prev_pos = last_pos;
-//         prev_len = last_len;
-//         last_pos = i->position();
-//         last_len = i->length();
-//     }
-
-//     std::cout << "\nfind_last_not_of pos:" << last_pos << " last_len:" << last_len << "\n";
-
-//     // TODO: add checks:
-//     return last_pos == detail::npos ? 0 : last_pos - 1;
-// #endif
-// }
-
-// // find_first_not_of_re()
-
-// #define string_MK_FIND_LAST_NOT_OF_RE(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::size_t find_last_not_of_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
-// {
-//     return find_last_not_of( text, std::regex(re.begin(), re.end()) );
-// }
-
-// #else  // regex
-// # define string_MK_FIND_LAST_NOT_OF_REGEX(T)    /*empty*/
-// # define string_MK_FIND_LAST_NOT_OF_RE(T)       /*empty*/
-// #endif // regex
 
 // TODO: ??? find_if()
 
@@ -1041,31 +846,6 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
         return detail::npos != find_first(text, seek);  \
     }
 #endif
-
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// contains(regex)
-
-#define string_MK_CONTAINS_REGEX(T) /*TODO: MK()*/
-
-string_nodiscard inline bool contains( std17::basic_string_view<CharT> text, std::regex const & re )
-{
-    return std::regex_search( text.begin(), text.end(), re );
-}
-
-// contains_re()
-
-#define string_MK_CONTAINS_RE(T) /*TODO: MK()*/
-
-string_nodiscard inline bool contains_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
-{
-    return contains( text, std::regex(re.begin(), re.end()) );
-}
-
-#else  // regex
-# define string_MK_CONTAINS_REGEX(T)    /*empty*/
-# define string_MK_CONTAINS_RE(T)       /*empty*/
-#endif // regex
 
 // starts_with() - C++20
 
@@ -1109,29 +889,6 @@ string_nodiscard inline bool contains_re( std17::basic_string_view<CharT> text, 
     }
 #endif  // string_CPP17_000
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-#define string_MK_STARTS_WITH_REGEX(T) /*TODO: MK()*/
-
-string_nodiscard inline bool starts_with( std17::basic_string_view<CharT> text, std::regex const & re )
-{
-    return 0 == find( text, re );
-}
-
-// starts_with_re()
-
-#define string_MK_STARTS_WITH_RE(T) /*TODO: MK()*/
-
-string_nodiscard inline bool starts_with_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
-{
-    return 0 == find_re( text, re );
-}
-
-#else  // regex
-# define string_MK_STARTS_WITH_REGEX(T)     /*empty*/
-# define string_MK_STARTS_WITH_RE(T)        /*empty*/
-#endif // regex
-
 // ends_with() - C++20
 
 #if string_CPP20_OR_GREATER
@@ -1173,40 +930,6 @@ string_nodiscard inline bool starts_with_re( std17::basic_string_view<CharT> tex
         return ends_with( text, std17::basic_string_view<CharT>( &seek, &seek + 1) );   \
     }
 #endif
-
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-#define string_MK_ENDS_WITH_REGEX(T) /*TODO: MK()*/
-
-string_nodiscard inline bool ends_with( std17::basic_string_view<CharT> text, std::regex const & re )
-{
-    auto elem_begin = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>( text.begin(), text.end(), re );
-    auto elem_end   = std::regex_iterator<std17::basic_string_view<CharT>::const_iterator>();
-
-    std::size_t last_pos = detail::npos;
-    std::size_t last_len = 0;
-    for (std::regex_iterator<std17::basic_string_view<CharT>::const_iterator> i = elem_begin; i != elem_end; ++i)
-    {
-        last_pos = i->position();
-        last_len = i->length();
-    }
-
-    return text.length() == last_pos + last_len;
-}
-
-// ends_with_re()
-
-#define string_MK_ENDS_WITH_RE(T) /*TODO: MK()*/
-
-string_nodiscard inline bool ends_with_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
-{
-    return ends_with( text, std::regex(re.begin(), re.end()) );
-}
-
-#else  // regex
-# define string_MK_ENDS_WITH_REGEX(T)   /*empty*/
-# define string_MK_ENDS_WITH_RE(T)      /*empty*/
-#endif // regex
 
 //
 // Modifiers:
@@ -1278,31 +1001,6 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
         return std::basic_string<CharT>( text ).erase( 0, text.find_first_not_of( set ) );  \
     }
 
-// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// #define string_MK_STRIP_LEFT_REGEX(T) /*TODO: MK()*/
-
-// string_nodiscard std::basic_string<CharT> inline
-// strip_left( std17::basic_string_view<CharT> text, std::regex const & re )
-// {
-//     return std::basic_string<CharT>( text ).erase( 0, find_first_not_of( text, re ) );
-// }
-
-// // strip_left_re()
-
-// #define string_MK_STRIP_LEFT_RE(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::basic_string<CharT>
-// strip_left_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
-// {
-//     return strip_left( std::basic_string<CharT>( text ), std::regex(set.begin(), set.end()) );
-// }
-
-// #else  // regex
-// # define string_MK_STRIP_LEFT_REGEX(T)      /*empty*/
-// # define string_MK_STRIP_LEFT_RE(T)         /*empty*/
-// #endif // regex
-
 // strip_right()
 
 #define string_MK_STRIP_RIGHT(CharT)                                                        \
@@ -1313,31 +1011,6 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
         return std::basic_string<CharT>( text ).erase( text.find_last_not_of( set ) + 1 );  \
     }
 
-// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// #define string_MK_STRIP_RIGHT_REGEX(T) /*TODO: MK()*/
-
-// string_nodiscard std::basic_string<CharT> inline
-// strip_right( std17::basic_string_view<CharT> text, std::regex const & re )
-// {
-//     return std::basic_string<CharT>( text ).erase( 0, find_last_not_of( std::basic_string<CharT>( text ), re ) );
-// }
-
-// // strip_right_re()
-
-// #define string_MK_STRIP_RIGHT_RE(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::basic_string<CharT>
-// strip_right_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
-// {
-//     return strip_right( std::basic_string<CharT>( text ), std::regex(set.begin(), set.end()) );
-// }
-
-// #else  // regex
-// # define string_MK_STRIP_RIGHT_REGEX(T)     /*empty*/
-// # define string_MK_STRIP_RIGHT_RE(T)        /*empty*/
-// #endif // regex
-
 // strip()
 
 #define string_MK_STRIP(CharT)                                      \
@@ -1347,32 +1020,6 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
     {                                                               \
         return strip_left( strip_right( text, set ), set );         \
     }
-
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-#define string_MK_STRIP_REGEX(T) /*TODO: MK()*/
-
-string_nodiscard std::basic_string<CharT> inline
-strip( std17::basic_string_view<CharT> text, std::regex const & re )
-{
-    return "[TODO]";
-    // return strip_left( strip_right( text, re ), re );
-}
-
-// strip_re()
-
-#define string_MK_STRIP_RE(T) /*TODO: MK()*/
-
-string_nodiscard inline std::basic_string<CharT>
-strip_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
-{
-    return strip( text, std::regex(set.begin(), set.end()) );
-}
-
-#else  // regex
-# define string_MK_STRIP_REGEX(T) /*empty*/
-# define string_MK_STRIP_RE(T) /*empty*/
-#endif // regex
 
 // replace_all()
 
@@ -1419,32 +1066,6 @@ replace_all( std17::basic_string_view<CharT> text, std17::basic_string_view<Char
         return detail::replace_all( text, what, with ); \
     }
 
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-#define string_MK_REPLACE_ALL_REGEX(T) /*TODO: MK()*/
-
-template< typename WithT >
-string_nodiscard std::basic_string<CharT>
-replace_all( std17::basic_string_view<CharT> text, std::regex const & re, WithT const & with )
-{
-    return std::regex_replace( std::basic_string<CharT>(text), re, with );
-}
-
-// replace_all_re()
-
-#define string_MK_REPLACE_ALL_RE(T) /*TODO: MK()*/
-
-string_nodiscard inline std::basic_string<CharT>
-replace_all_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> what, std17::basic_string_view<CharT> with )
-{
-    return std::regex_replace( std::basic_string<CharT>(text), std::regex(what.begin(), what.end()), std::basic_string<CharT>(with) );
-}
-
-#else  // regex
-# define string_MK_REPLACE_ALL_REGEX(T) /*empty*/
-# define string_MK_REPLACE_ALL_RE(T) /*empty*/
-#endif // regex
-
 // replace_first()
 
 #define string_MK_REPLACE_FIRST(CharT)                  \
@@ -1463,31 +1084,6 @@ replace_all_re( std17::basic_string_view<CharT> text, std17::basic_string_view<C
             : detail::nullstr(CharT{});                 \
     }
 
-// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// #define string_MK_REPLACE_FIRST_REGEX(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::basic_string<CharT>
-// replace_first( std17::basic_string_view<CharT> text, std::regex const & re, std17::basic_string_view<CharT> with )
-// {
-//     return std::regex_replace( std::basic_string<CharT>(text), re, std::basic_string<CharT>(with), std::regex_constants::format_first_only );
-// }
-
-// // replace_first_re()
-
-// #define string_MK_REPLACE_FIRST_RE(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::basic_string<CharT>
-// replace_first_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> what, std17::basic_string_view<CharT> with )
-// {
-//     return replace_first( text, std::regex(what.begin(), what.end()), with );
-// }
-
-// #else  // regex
-// # define string_MK_REPLACE_FIRST_REGEX(T)   /*empty*/
-// # define string_MK_REPLACE_FIRST_RE(T)      /*empty*/
-// #endif // regex
-
 // replace_last()
 
 #define string_MK_REPLACE_LAST(CharT)                   \
@@ -1505,31 +1101,6 @@ replace_all_re( std17::basic_string_view<CharT> text, std17::basic_string_view<C
             ? result.replace( pos, what.length(), std::basic_string<CharT>(with) )  \
             : detail::nullstr(CharT{});                 \
     }
-
-// #if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-// #define string_MK_REPLACE_LAST_REGEX(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::basic_string<CharT>
-// replace_last( std17::basic_string_view<CharT> text, std::regex const & re, std17::basic_string_view<CharT> with )
-// {
-//     return "[replace_last: TODO]";
-// }
-
-// // replace_last_re()
-
-// #define string_MK_REPLACE_LAST_RE(T) /*TODO: MK()*/
-
-// string_nodiscard inline std::basic_string<CharT>
-// replace_last_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> what, std17::basic_string_view<CharT> with )
-// {
-//     return replace_last( text, std::regex(what.begin(), what.end()), with );
-// }
-
-// #else  // regex
-// # define string_MK_REPLACE_LAST_REGEX(T)    /*empty*/
-// # define string_MK_REPLACE_LAST_RE(T)       /*empty*/
-// #endif // regex
 
 //
 // Joining, splitting:
@@ -1563,47 +1134,6 @@ replace_all_re( std17::basic_string_view<CharT> text, std17::basic_string_view<C
     {                                                                   \
         return std::basic_string<CharT>( text ).substr( pos, count );   \
     }
-
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-namespace string {
-namespace detail {
-
-string_nodiscard inline std::basic_string<CharT>
-substring( std17::basic_string_view<CharT> text, std::regex const & re )
-{
-    std::match_results< std17::basic_string_view<CharT>::const_iterator > result;
-
-    return std::regex_search( text.begin(), text.end(), result, re )
-        ? to_string( text.substr( result.position(), result.length() ) )
-        : std::basic_string<CharT>{};
-}
-
-} // namespace detail
-} // namespace string
-
-#define string_MK_SUBSTRING_REGEX(T) /*TODO: MK()*/
-
-string_nodiscard inline std::basic_string<CharT>
-substring( std17::basic_string_view<CharT> text, std::regex const & re )
-{
-    return detail::substring( text, re );
-}
-
-// substring_re()
-
-#define string_MK_SUBSTRING_RE(T) /*TODO: MK()*/
-
-string_nodiscard inline std::basic_string<CharT>
-substring_re( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> re )
-{
-    return substring( text, std::regex(re.begin(), re.end()) );
-}
-
-#else  // regex
-# define string_MK_SUBSTRING_REGEX(T)   /*empty*/
-# define string_MK_SUBSTRING_RE(T)      /*empty*/
-#endif // regex
 
 // join()
 
