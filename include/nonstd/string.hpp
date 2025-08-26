@@ -644,6 +644,27 @@ string_nodiscard string_constexpr wchar_t const * nullstr( wchar_t ) noexcept
 }
 #endif
 
+#if string_CONFIG_PROVIDE_CHAR8_T
+string_nodiscard string_constexpr char8_t const * nullstr( char8_t ) noexcept
+{
+    return u8"";
+}
+#endif
+
+#if string_CONFIG_PROVIDE_CHAR16_T
+string_nodiscard string_constexpr char16_t const * nullstr( char16_t ) noexcept
+{
+    return u"";
+}
+#endif
+
+#if string_CONFIG_PROVIDE_CHAR32_T
+string_nodiscard string_constexpr char32_t const * nullstr( char32_t ) noexcept
+{
+    return U"";
+}
+#endif
+
 // TODO: nullstr() for other character types
 
 #if string_HAVE_STRING_VIEW
@@ -1109,55 +1130,55 @@ replace_all( std17::basic_string_view<CharT> text, std17::basic_string_view<Char
 // append()
 
 #if string_CPP17_OR_GREATER
-# define string_MK_APPEND(CharT)                                        \
-    template< typename TailT >                                          \
-    string_nodiscard std::basic_string<CharT>                           \
-    append( std17::basic_string_view<CharT> text, TailT const & tail )  \
-    {                                                                   \
-        return std::basic_string<CharT>( text ).append( tail );         \
+# define string_MK_APPEND(CharT)                                            \
+    template< typename TailT >                                              \
+    string_nodiscard std::basic_string<CharT>                               \
+    append( std17::basic_string_view<CharT> text, TailT const & tail )      \
+    {                                                                       \
+        return std::basic_string<CharT>( text ).append( tail );             \
     }
 #else
-# define string_MK_APPEND(CharT)                                        \
-    template< typename TailT >                                          \
-    string_nodiscard std::basic_string<CharT>                           \
-    append( std17::basic_string_view<CharT> text, TailT const & tail )  \
-    {                                                                   \
+# define string_MK_APPEND(CharT)                                            \
+    template< typename TailT >                                              \
+    string_nodiscard std::basic_string<CharT>                               \
+    append( std17::basic_string_view<CharT> text, TailT const & tail )      \
+    {                                                                       \
         return std::basic_string<CharT>( text ) + std::basic_string<CharT>(tail); \
     }
 # endif
 
 // substring()
 
-#define string_MK_SUBSTRING(CharT)                                      \
-    string_nodiscard inline std::basic_string<CharT>                    \
+#define string_MK_SUBSTRING(CharT)                                          \
+    string_nodiscard inline std::basic_string<CharT>                        \
     substring( std17::basic_string_view<CharT> text, std::size_t pos = 0, std::size_t count = detail::npos )    \
-    {                                                                   \
-        return std::basic_string<CharT>( text ).substr( pos, count );   \
+    {                                                                       \
+        return std::basic_string<CharT>( text ).substr( pos, count );       \
     }
 
 // join()
 
-#define string_MK_JOIN(CharT)                                           \
-    template< typename Coll >                                           \
-    string_nodiscard std::basic_string<CharT>                           \
-    join( Coll const & coll, std::basic_string<CharT> const & sep )     \
-    {                                                                   \
-        std::basic_string<CharT> result{};                              \
-        typename Coll::const_iterator const coll_begin = coll.cbegin(); \
-        typename Coll::const_iterator const coll_end   = coll.cend();   \
-        typename Coll::const_iterator pos = coll_begin;                 \
-                                                                        \
-        if ( pos != coll_end )                                          \
-        {                                                               \
-            result = append( result, *pos++ );                          \
-        }                                                               \
-                                                                        \
-        for ( ; pos != coll_end; ++pos )                                \
-        {                                                               \
-            result = append( append( result,  sep ), *pos );            \
-        }                                                               \
-                                                                        \
-        return result;                                                  \
+#define string_MK_JOIN(CharT)                                               \
+    template< typename Coll >                                               \
+    string_nodiscard std::basic_string<CharT>                               \
+    join( Coll const & coll, std17::basic_string_view<CharT> const & sep )  \
+    {                                                                       \
+        std::basic_string<CharT> result{};                                  \
+        typename Coll::const_iterator const coll_begin = coll.cbegin();     \
+        typename Coll::const_iterator const coll_end   = coll.cend();       \
+        typename Coll::const_iterator pos = coll_begin;                     \
+                                                                            \
+        if ( pos != coll_end )                                              \
+        {                                                                   \
+            result = append( result, *pos++ );                              \
+        }                                                                   \
+                                                                            \
+        for ( ; pos != coll_end; ++pos )                                    \
+        {                                                                   \
+            result = append( append( result,  sep ), *pos );                \
+        }                                                                   \
+                                                                            \
+        return result;                                                      \
     }
 
 // TODO: split
