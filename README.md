@@ -92,55 +92,53 @@ Creating *string bare* I've had a look at the [C++ standard](https://eel.is/c++d
 <a id="syn-doc"></a>
 ### Documentation of *string bare*
 
-The following table presents simplified, short prototypes of the functions in _string-bare_.
+The following table presents types, values and simplified, short prototypes of the functions in _string-bare_'s `nonstd` namespace.
 
-| Kind          | Type or function                                                                   | Notes                                                                                              |
-| ------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| **Type**      | **literal_delimiter**                                                              | a single string                                                                                    |
-| &nbsp;        | **any_of_delimiter**                                                               | any of given characters                                                                            |
-| &nbsp;        | **fixed_delimiter**                                                                | fixed length                                                                                       |
-| &nbsp;        | **limit_delimiter**                                                                | apply given delimiter a limited number of times (not implemented)                                  |
-| &nbsp;        | **regex_delimiter**                                                                | regular expression                                                                                 |
-| &nbsp;        | **char_delimiter**                                                                 | character position                                                                                 |
-| &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
-| **Utilities** | char_t **nullchr**()                                                               | null char of template character type                                                               |
-| &nbsp;        | char_t \* **nullstr**()                                                            | empty character string of template character type                                                  |
-| &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
-| **Observers** | size_t **length**(string_view sv)                                                  | length of string                                                                                   |
-| &nbsp;        | size_t **size**(string_view sv)                                                    | length of string                                                                                   |
-| &nbsp;        | bool **is_empty**(string_view sv)                                                  | true if string is empty                                                                            |
-| &nbsp;        | bool **contains**(string_view sv, string_view what)                                | true if string contains given string                                                               |
-| &nbsp;        | bool **starts_with**(string_view sv, string_view what)                             | true if string starts with given string                                                            |
-| &nbsp;        | bool **ends_with**(string_view sv, string_view what)                               | true if string ends with given string                                                              |
-| &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
-| **Searching** | size_t **find_first**(string_view sv, string_view what)                            | position of first occurrence of given string, or npos [Note 1](#note-1)                            |
-| &nbsp;        | size_t **find_first_of**(string_view sv, string_view set)                          | position of first occurrence of character in set, or npos                                          |
-| &nbsp;        | size_t **find_first_not_of**(string_view sv, string_view set)                      | position of first occurrence of character not in set, or npos                                      |
-| &nbsp;        | size_t **find_last**(string_view sv, string_view what)                             | position of last occurrence of given string, or npos                                               |
-| &nbsp;        | size_t **find_last_of**(string_view sv, string_view set)                           | position of last occurrence of character in set, or npos                                           |
-| &nbsp;        | size_t **find_last_not_of**(string_view sv, string_view set)                       | position of last occurrence of character not in set, or npos                                       |
-| &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
-| **Modifiers** | char_t **to_lowercase**(char_t chr)                                                | character transformed to lowercase                                                                 |
-| &nbsp;        | char_t **to_uppercase**(char_t chr)                                                | character transformed to uppercase                                                                 |
-| &nbsp;        | string **to_lowercase**(string_view sv)                                            | string transformed to lowercase                                                                    |
-| &nbsp;        | string **to_uppercase**(string_view sv)                                            | string transformed to uppercase                                                                    |
-| &nbsp;        | string **substring**(string_view sv, size_t pos \[, size_t count\]);               | substring starting at given position of given length, default up to end                            |
-| &nbsp;        | string **strip**(string_view sv, string_view set)                                  | string with characters given in set stripped from left and right                                   |
-| &nbsp;        | string **strip_left**(string_view sv, string_view set)                             | string with characters given in set stripped from left                                             |
-| &nbsp;        | string **strip_right**(string_view sv, string_view set)                            | string with characters given in set stripped from right                                            |
-| &nbsp;        | string **replace_all**(string_view sv, string_view what, string_view with)         | string with all occurrences of 'what' replaced with 'with'                                         |
-| &nbsp;        | string **replace_first**(string_view sv, string_view what, string_view with)       | string with first occurrence of 'what' replaced with 'with'                                        |
-| &nbsp;        | string **replace_last**(string_view sv, string_view what, string_view with)        | string with last occurrence of 'what' replaced with 'with'                                         |
-| &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
-| **Combining** | string **append**(string_view head, string_view tail)                              | string with tail appended to head                                                                 |
-| &nbsp;        | string **join**(collection\<string_view\> vec, string_view sep)                    | string with elements of collection joined with given separator string                              |
-| &nbsp;        | vector\<string_view\> **split**(string_view sv, string_view set)                   | vector of string_view with elements of string separated by characters from given set               |
-| &nbsp;        | tuple\<string_view, string_view\> **split_left**(string_view sv, Delimiter delim)  | tuple with head and tail string_view on given string as split at left by given delimiter          |
-| &nbsp;        | tuple\<string_view, string_view\> **split_right**(string_view sv, Delimiter delim) | tuple with head and tail string_view on given string as split at right by given delimiter         |
-| &nbsp;        | tuple\<string_view, string_view\> **split_left**(string_view sv, string_view set)  | tuple with head and tail string_view on given string as split at left by characters in given set  |
-| &nbsp;        | tuple\<string_view, string_view\> **split_right**(string_view sv, string_view set) | tuple with head and tail string_view on given string as split at right by characters in given set |
-
-<a id="note-1"></a>Note 1: npos: `nonstd::string::std17::string_view::npos`; TODO: provide `nonstd::string::npos`.
+| Kind           | Type or function                                                                   | Notes                                                                                             |
+| -------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| **Type**       | **literal_delimiter**                                                              | a string, `literal_delimiter("exact_text")`                                                       |
+| &nbsp;         | **any_of_delimiter**                                                               | any of given characters, `any_of_delimiter("+-")`                                                 |
+| &nbsp;         | **fixed_delimiter**                                                                | fixed length, `fixed_delimiter(length)`                                                           |
+| &nbsp;         | **limit_delimiter**                                                                | apply given delimiter a limited number of times (not implemented)                                 |
+| &nbsp;         | **regex_delimiter**                                                                | regular expression, `regex_delimiter("regexp")`                                                   |
+| &nbsp;         | **char_delimiter**                                                                 | a character, `char_delimiter('&')`                                                                |
+| &nbsp;         | &nbsp;                                                                             | &nbsp;                                                                                            |
+| **Value**      | size_t **string::npos**                                                            | not-found position value, in nonstd::string namespace                                             |
+| &nbsp;         | &nbsp;                                                                             | &nbsp;                                                                                            |
+| **Observers**  | size_t **length**(string_view sv)                                                  | length of string                                                                                  |
+| &nbsp;         | size_t **size**(string_view sv)                                                    | length of string                                                                                  |
+| &nbsp;         | bool **is_empty**(string_view sv)                                                  | true if string is empty                                                                           |
+| &nbsp;         | bool **contains**(string_view sv, string_view what)                                | true if string contains given string                                                              |
+| &nbsp;         | bool **starts_with**(string_view sv, string_view what)                             | true if string starts with given string                                                           |
+| &nbsp;         | bool **ends_with**(string_view sv, string_view what)                               | true if string ends with given string                                                             |
+| &nbsp;         | &nbsp;                                                                             | &nbsp;                                                                                            |
+| **Searching**  | size_t **find_first**(string_view sv, string_view what)                            | position of first occurrence of given string, or npos                                             |
+| &nbsp;         | size_t **find_first_of**(string_view sv, string_view set)                          | position of first occurrence of character in set, or npos                                         |
+| &nbsp;         | size_t **find_first_not_of**(string_view sv, string_view set)                      | position of first occurrence of character not in set, or npos                                     |
+| &nbsp;         | size_t **find_last**(string_view sv, string_view what)                             | position of last occurrence of given string, or npos                                              |
+| &nbsp;         | size_t **find_last_of**(string_view sv, string_view set)                           | position of last occurrence of character in set, or npos                                          |
+| &nbsp;         | size_t **find_last_not_of**(string_view sv, string_view set)                       | position of last occurrence of character not in set, or npos                                      |
+| &nbsp;         | &nbsp;                                                                             | &nbsp;                                                                                            |
+| **Modifiers**  | char_t **to_lowercase**(char_t chr)                                                | character transformed to lowercase                                                                |
+| &nbsp;         | char_t **to_uppercase**(char_t chr)                                                | character transformed to uppercase                                                                |
+| &nbsp;         | string **to_lowercase**(string_view sv)                                            | string transformed to lowercase                                                                   |
+| &nbsp;         | string **to_uppercase**(string_view sv)                                            | string transformed to uppercase                                                                   |
+| &nbsp;         | string **substring**(string_view sv, size_t pos \[, size_t count\]);               | substring starting at given position of given length, default up to end                           |
+| &nbsp;         | string **strip**(string_view sv, string_view set)                                  | string with characters given in set stripped from left and right                                  |
+| &nbsp;         | string **strip_left**(string_view sv, string_view set)                             | string with characters given in set stripped from left                                            |
+| &nbsp;         | string **strip_right**(string_view sv, string_view set)                            | string with characters given in set stripped from right                                           |
+| &nbsp;         | string **replace_all**(string_view sv, string_view what, string_view with)         | string with all occurrences of 'what' replaced with 'with'                                        |
+| &nbsp;         | string **replace_first**(string_view sv, string_view what, string_view with)       | string with first occurrence of 'what' replaced with 'with'                                       |
+| &nbsp;         | string **replace_last**(string_view sv, string_view what, string_view with)        | string with last occurrence of 'what' replaced with 'with'                                        |
+| &nbsp;         | &nbsp;                                                                             | &nbsp;                                                                                            |
+| **Combining**  | string **append**(string_view head, string_view tail)                              | string with tail appended to head                                                                 |
+| &nbsp;         | string **join**(collection\<string_view\> vec, string_view sep)                    | string with elements of collection joined with given separator string                             |
+| &nbsp;         | &nbsp;                                                                             | &nbsp;                                                                                            |
+| **Separating** | vector\<string_view\> **split**(string_view sv, string_view set)                   | vector of string_view with elements of string separated by characters from given set              |
+| &nbsp;         | tuple\<string_view, string_view\> **split_left**(string_view sv, Delimiter delim)  | tuple with head and tail string_view on given string as split at left by given delimiter          |
+| &nbsp;         | tuple\<string_view, string_view\> **split_right**(string_view sv, Delimiter delim) | tuple with head and tail string_view on given string as split at right by given delimiter         |
+| &nbsp;         | tuple\<string_view, string_view\> **split_left**(string_view sv, string_view set)  | tuple with head and tail string_view on given string as split at left by characters in given set  |
+| &nbsp;         | tuple\<string_view, string_view\> **split_right**(string_view sv, string_view set) | tuple with head and tail string_view on given string as split at right by characters in given set |
 
 ### Configuration
 

@@ -47,7 +47,7 @@ inline nonstd::std17::string_view text_view()
     return ::nonstd::string::std17::string_view( text().c_str(), text().length() );
 }
 
-const auto sv_npos = ::nonstd::string::detail::npos;
+const auto sv_npos = ::nonstd::string::npos;
 
 namespace std {
 

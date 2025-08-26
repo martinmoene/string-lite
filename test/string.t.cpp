@@ -45,7 +45,6 @@ struct stringy : std::string
 namespace std17 {
 
     using ::nonstd::string::std17::string_view;
-    inline typename string_view::size_type sv_npos() { return string_view::npos; }
 }
 
 // Tests:

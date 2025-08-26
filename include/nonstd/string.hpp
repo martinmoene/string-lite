@@ -279,8 +279,6 @@ namespace nonstd {
 
 namespace string {
 
-namespace detail {
-
 // npos
 
 #if string_CPP17_OR_GREATER
@@ -290,6 +288,8 @@ namespace detail {
 #else
     enum { npos = std::size_t(-1) };
 #endif
+
+namespace detail {
 
 template< typename T >
 string_constexpr std::size_t to_size_t(T value) string_noexcept
@@ -360,11 +360,11 @@ public:
     // Constants:
 
 #if string_CPP17_OR_GREATER
-    static string_constexpr std::size_t npos = detail::npos;
+    static string_constexpr std::size_t npos = string::npos;
 #elif string_CPP11_OR_GREATER
-    enum : std::size_t { npos = detail::npos };
+    enum : std::size_t { npos = string::npos };
 #else
-    enum { npos = detail::npos };
+    enum { npos = string::npos };
 #endif
 
     // 24.4.2.1 Construction and assignment:
@@ -665,8 +665,6 @@ string_nodiscard string_constexpr char32_t const * nullstr( char32_t ) noexcept
 }
 #endif
 
-// TODO: nullstr() for other character types
-
 #if string_HAVE_STRING_VIEW
     #define MK_DETAIL_TO_STRING_SV(T)                           \
     string_nodiscard inline std::basic_string<T>                \
@@ -707,6 +705,7 @@ string_nodiscard string_constexpr char32_t const * nullstr( char32_t ) noexcept
 // enable use of string-specific namespaces detail and stdxx:
 
 using namespace string;
+
 //
 // Observers
 //
@@ -864,7 +863,7 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
     template< typename SeekT >          \
     string_nodiscard bool contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
     {                                   \
-        return detail::npos != find_first(text, seek);  \
+        return string::npos != find_first(text, seek);  \
     }
 #endif
 
@@ -1151,7 +1150,7 @@ replace_all( std17::basic_string_view<CharT> text, std17::basic_string_view<Char
 
 #define string_MK_SUBSTRING(CharT)                                          \
     string_nodiscard inline std::basic_string<CharT>                        \
-    substring( std17::basic_string_view<CharT> text, std::size_t pos = 0, std::size_t count = detail::npos )    \
+    substring( std17::basic_string_view<CharT> text, std::size_t pos = 0, std::size_t count = string::npos )    \
     {                                                                       \
         return std::basic_string<CharT>( text ).substr( pos, count );       \
     }
