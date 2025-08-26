@@ -132,13 +132,13 @@ The following table presents simplified, short prototypes of the functions in _s
 | &nbsp;        | string **replace_first**(string_view sv, string_view what, string_view with)       | string with first occurrence of 'what' replaced with 'with'                                        |
 | &nbsp;        | string **replace_last**(string_view sv, string_view what, string_view with)        | string with last occurrence of 'what' replaced with 'with'                                         |
 | &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
-| **Combining** | string **append**(string_view front, string_view tail)                             | string with tail appended to front                                                                 |
+| **Combining** | string **append**(string_view head, string_view tail)                              | string with tail appended to head                                                                 |
 | &nbsp;        | string **join**(collection\<string_view\> vec, string_view sep)                    | string with elements of collection joined with given separator string                              |
 | &nbsp;        | vector\<string_view\> **split**(string_view sv, string_view set)                   | vector of string_view with elements of string separated by characters from given set               |
-| &nbsp;        | tuple\<string_view, string_view\> **split_left**(string_view sv, Delimiter delim)  | tuple with front and tail string_view on given string as split at left by given delimiter          |
-| &nbsp;        | tuple\<string_view, string_view\> **split_right**(string_view sv, Delimiter delim) | tuple with front and tail string_view on given string as split at right by given delimiter         |
-| &nbsp;        | tuple\<string_view, string_view\> **split_left**(string_view sv, string_view set)  | tuple with front and tail string_view on given string as split at left by characters in given set  |
-| &nbsp;        | tuple\<string_view, string_view\> **split_right**(string_view sv, string_view set) | tuple with front and tail string_view on given string as split at right by characters in given set |
+| &nbsp;        | tuple\<string_view, string_view\> **split_left**(string_view sv, Delimiter delim)  | tuple with head and tail string_view on given string as split at left by given delimiter          |
+| &nbsp;        | tuple\<string_view, string_view\> **split_right**(string_view sv, Delimiter delim) | tuple with head and tail string_view on given string as split at right by given delimiter         |
+| &nbsp;        | tuple\<string_view, string_view\> **split_left**(string_view sv, string_view set)  | tuple with head and tail string_view on given string as split at left by characters in given set  |
+| &nbsp;        | tuple\<string_view, string_view\> **split_right**(string_view sv, string_view set) | tuple with head and tail string_view on given string as split at right by characters in given set |
 
 <a id="note-1"></a>Note 1: npos: `nonstd::string::std17::string_view::npos`; TODO: provide `nonstd::string::npos`.
 
