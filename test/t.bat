@@ -21,7 +21,7 @@ set unit_config=^
     -Dstring_CONFIG_PROVIDE_WCHAR_T=1 ^
     -Dstring_CONFIG_PROVIDE_CHAR8_T=1 ^
     -Dstring_CONFIG_PROVIDE_CHAR16_T=0 ^
-    -Dstring_CONFIG_PROVIDE_CHAR32_T=0
+    -Dstring_CONFIG_PROVIDE_CHAR32_T=1
 
 set msvc_defines=^
     -D_CRT_SECURE_NO_WARNINGS ^

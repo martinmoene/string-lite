@@ -1774,32 +1774,121 @@ string_MK_SPLIT_LEFT_STRING( char8_t )
 
 #if string_CONFIG_PROVIDE_CHAR16_T
 
-string_MK_LENGTH  ( char16_t )
-string_MK_SIZE    ( char16_t )
-string_MK_IS_EMPTY( char16_t )
-// string_MK_TO_CASE( char16_t, lowercase )    // doesn't work
-// string_MK_TO_CASE( char16_t, uppercase  )   // doesn't work
+string_MK_IS_EMPTY         ( char16_t )
+string_MK_LENGTH           ( char16_t )
+string_MK_SIZE             ( char16_t )
+string_MK_APPEND           ( char16_t )
+string_MK_CONTAINS         ( char16_t )      // includes char search type
+string_MK_STARTS_WITH      ( char16_t )
+string_MK_STARTS_WITH_CHAR ( char16_t )
+string_MK_ENDS_WITH        ( char16_t )
+string_MK_ENDS_WITH_CHAR   ( char16_t )
+string_MK_FIND_FIRST       ( char16_t )
+string_MK_FIND_FIRST_CHAR  ( char16_t )
+string_MK_FIND_LAST        ( char16_t )
+string_MK_FIND_LAST_CHAR   ( char16_t )
+string_MK_FIND_FIRST_OF    ( char16_t )
+string_MK_FIND_LAST_OF     ( char16_t )
+string_MK_FIND_FIRST_NOT_OF( char16_t )
+string_MK_FIND_LAST_NOT_OF ( char16_t )
+string_MK_REPLACE_ALL      ( char16_t )
+string_MK_REPLACE_FIRST    ( char16_t )
+string_MK_REPLACE_LAST     ( char16_t )
+string_MK_STRIP_LEFT       ( char16_t )
+string_MK_STRIP_RIGHT      ( char16_t )
+string_MK_STRIP            ( char16_t )
+string_MK_SUBSTRING        ( char16_t )
+string_MK_TO_CASE_CHAR     ( char16_t, lowercase )
+string_MK_TO_CASE_CHAR     ( char16_t, uppercase )
+string_MK_TO_CASE_STRING   ( char16_t, lowercase )
+string_MK_TO_CASE_STRING   ( char16_t, uppercase )
+string_MK_JOIN             ( char16_t )
+string_MK_SPLIT_DELIM      ( char16_t )
+string_MK_SPLIT_STRING     ( char16_t )
+string_MK_SPLIT_LEFT_DELIM ( char16_t )
+string_MK_SPLIT_LEFT_STRING( char16_t )
+// string_MK_SPLIT_RIGHT_DELIM ( char16_t )
+// string_MK_SPLIT_RIGHT_STRING( char16_t )
 // ...
-// #undef string_MK_...
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR32_T
 
-string_MK_LENGTH  ( char32_t )
-string_MK_SIZE    ( char32_t )
-string_MK_IS_EMPTY( char32_t )
-// string_MK_TO_CASE( char32_t, lowercase )    // doesn't work
-// string_MK_TO_CASE( char32_t, uppercase  )   // doesn't work
+string_MK_IS_EMPTY         ( char32_t )
+string_MK_LENGTH           ( char32_t )
+string_MK_SIZE             ( char32_t )
+string_MK_APPEND           ( char32_t )
+string_MK_CONTAINS         ( char32_t )      // includes char search type
+string_MK_STARTS_WITH      ( char32_t )
+string_MK_STARTS_WITH_CHAR ( char32_t )
+string_MK_ENDS_WITH        ( char32_t )
+string_MK_ENDS_WITH_CHAR   ( char32_t )
+string_MK_FIND_FIRST       ( char32_t )
+string_MK_FIND_FIRST_CHAR  ( char32_t )
+string_MK_FIND_LAST        ( char32_t )
+string_MK_FIND_LAST_CHAR   ( char32_t )
+string_MK_FIND_FIRST_OF    ( char32_t )
+string_MK_FIND_LAST_OF     ( char32_t )
+string_MK_FIND_FIRST_NOT_OF( char32_t )
+string_MK_FIND_LAST_NOT_OF ( char32_t )
+string_MK_REPLACE_ALL      ( char32_t )
+string_MK_REPLACE_FIRST    ( char32_t )
+string_MK_REPLACE_LAST     ( char32_t )
+string_MK_STRIP_LEFT       ( char32_t )
+string_MK_STRIP_RIGHT      ( char32_t )
+string_MK_STRIP            ( char32_t )
+string_MK_SUBSTRING        ( char32_t )
+string_MK_TO_CASE_CHAR     ( char32_t, lowercase )
+string_MK_TO_CASE_CHAR     ( char32_t, uppercase )
+string_MK_TO_CASE_STRING   ( char32_t, lowercase )
+string_MK_TO_CASE_STRING   ( char32_t, uppercase )
+string_MK_JOIN             ( char32_t )
+string_MK_SPLIT_DELIM      ( char32_t )
+string_MK_SPLIT_STRING     ( char32_t )
+string_MK_SPLIT_LEFT_DELIM ( char32_t )
+string_MK_SPLIT_LEFT_STRING( char32_t )
+// string_MK_SPLIT_RIGHT_DELIM ( char32_t )
+// string_MK_SPLIT_RIGHT_STRING( char32_t )
 // ...
-// #undef string_MK_...
 #endif
 
-// TODO: #undef string_MK_*
+// #undef string_MK_*
 
-#undef string_MK_LENGTH
-#undef string_MK_SIZE
 #undef string_MK_IS_EMPTY
-#undef string_MK_TO_CASE
+#undef string_MK_LENGTH  
+#undef string_MK_SIZE    
+#undef string_MK_APPEND  
+#undef string_MK_CONTAINS
+#undef string_MK_STARTS_WITH      
+#undef string_MK_STARTS_WITH_CHAR 
+#undef string_MK_ENDS_WITH        
+#undef string_MK_ENDS_WITH_CHAR   
+#undef string_MK_FIND_FIRST       
+#undef string_MK_FIND_FIRST_CHAR  
+#undef string_MK_FIND_LAST        
+#undef string_MK_FIND_LAST_CHAR   
+#undef string_MK_FIND_FIRST_OF    
+#undef string_MK_FIND_LAST_OF     
+#undef string_MK_FIND_FIRST_NOT_OF
+#undef string_MK_FIND_LAST_NOT_OF 
+#undef string_MK_REPLACE_ALL      
+#undef string_MK_REPLACE_FIRST    
+#undef string_MK_REPLACE_LAST     
+#undef string_MK_STRIP_LEFT       
+#undef string_MK_STRIP_RIGHT      
+#undef string_MK_STRIP            
+#undef string_MK_SUBSTRING        
+#undef string_MK_TO_CASE_CHAR     
+#undef string_MK_TO_CASE_CHAR     
+#undef string_MK_TO_CASE_STRING   
+#undef string_MK_TO_CASE_STRING   
+#undef string_MK_JOIN             
+#undef string_MK_SPLIT_DELIM      
+#undef string_MK_SPLIT_STRING     
+#undef string_MK_SPLIT_LEFT_DELIM 
+#undef string_MK_SPLIT_LEFT_STRING
+// #undef string_MK_SPLIT_RIGHT_DELIM 
+// #undef string_MK_SPLIT_RIGHT_STRING
 
 } // namespace nonstd
 
