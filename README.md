@@ -150,8 +150,6 @@ If the compiler supports [`__has_include()`](https://en.cppreference.com/w/cpp/p
 
 #### Provided character types
 
-To be implemented:
-
 -D<b>string_CONFIG_PROVIDE_XXX_T</b>=1  
 Define the character type to provide the string algorithms for.
 
@@ -165,6 +163,8 @@ Define the character type to provide the string algorithms for.
 
 #### Provide `std::regex` functions
 
+TODO: regex function not yet available.
+
 -D<b>string_CONFIG_PROVIDE_REGEX</b>=1  
 Define this to 0 if you want to compile without regular expressions. Default is `1`. Note that including regular expressions incurs significant compilation overhead.
 
@@ -175,7 +175,7 @@ Define this macro to override the auto-detection of the supported C++ standard, 
 
 #### Disable exceptions
 
-TODO:
+TODO: compilation without exceptions not yet available.
 
 -D<b>string_CONFIG_NO_EXCEPTIONS</b>=0  
 Define this to 1 if you want to compile without exceptions. If not defined, the header tries and detect if exceptions have been disabled (e.g. via `-fno-exceptions`). Default is undefined.
