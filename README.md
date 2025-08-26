@@ -4,7 +4,9 @@
 
 Another attempt at a hopefully generally useful C++ string algorithm library.
 
-For now, have a look at section [Functions](#functions) and section [*string-bare* test specification](#a2) for the functions envisioned / implemented (at the moment). The in-place modification class of functions is decidedly absent.
+I'm still pondering to add functions that take a regular expression, as `std::regex`and as string (using `*_re()` function names), and the API to use for that.
+
+For now, have a look at section [Documentation of *string bare*](#syn-doc) and section [*string-bare* test specification](#a2) for the functions envisioned / implemented (at the moment). The in-place modification class of functions is decidedly absent.
 
 Initially writing code for `char` type strings, followed by generalising and enabling selecting `char`, `wchar_t`, `char8_t`, `char16_t`, `char32_t` insofar feasible and sensible.
 
@@ -83,78 +85,62 @@ Creating *string bare* I've had a look at the [C++ standard](https://eel.is/c++d
 
 ## Synopsis
 
-TBD
+**Contents**  
+[Documentation of *string bare*](#documentation-of-string-bare)  
+[Configuration](#configuration)  
 
-### Functions
+<a id="syn-doc"></a>
+### Documentation of *string bare*
 
-<!-- string-main.t.exe -l @ | cut --delimiter=: -f 1 |sort |uniq |clip -->
-<!-- Note, in the following names like SeekT indicate template parameters. -->
+The following table presents simplified, short prototypes of the functions in _string-bare_.
 
-Current functions in the library:
+| Kind          | Type or function                                                                   | Notes                                                                                              |
+| ------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| **Type**      | **literal_delimiter**                                                              | a single string                                                                                    |
+| &nbsp;        | **any_of_delimiter**                                                               | any of given characters                                                                            |
+| &nbsp;        | **fixed_delimiter**                                                                | fixed length                                                                                       |
+| &nbsp;        | **limit_delimiter**                                                                | apply given delimiter a limited number of times (not implemented)                                  |
+| &nbsp;        | **regex_delimiter**                                                                | regular expression                                                                                 |
+| &nbsp;        | **char_delimiter**                                                                 | character position                                                                                 |
+| &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
+| **Utilities** | char_t **nullchr**()                                                               | null char of template character type                                                               |
+| &nbsp;        | char_t \* **nullstr**()                                                            | empty character string of template character type                                                  |
+| &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
+| **Observers** | size_t **length**(string_view sv)                                                  | length of string                                                                                   |
+| &nbsp;        | size_t **size**(string_view sv)                                                    | length of string                                                                                   |
+| &nbsp;        | bool **is_empty**(string_view sv)                                                  | true if string is empty                                                                            |
+| &nbsp;        | bool **contains**(string_view sv, string_view what)                                | true if string contains given string                                                               |
+| &nbsp;        | bool **starts_with**(string_view sv, string_view what)                             | true if string starts with given string                                                            |
+| &nbsp;        | bool **ends_with**(string_view sv, string_view what)                               | true if string ends with given string                                                              |
+| &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
+| **Searching** | size_t **find_first**(string_view sv, string_view what)                            | position of first occurrence of given string, or npos [Note 1](#note-1)                            |
+| &nbsp;        | size_t **find_first_of**(string_view sv, string_view set)                          | position of first occurrence of character in set, or npos                                          |
+| &nbsp;        | size_t **find_first_not_of**(string_view sv, string_view set)                      | position of first occurrence of character not in set, or npos                                      |
+| &nbsp;        | size_t **find_last**(string_view sv, string_view what)                             | position of last occurrence of given string, or npos                                               |
+| &nbsp;        | size_t **find_last_of**(string_view sv, string_view set)                           | position of last occurrence of character in set, or npos                                           |
+| &nbsp;        | size_t **find_last_not_of**(string_view sv, string_view set)                       | position of last occurrence of character not in set, or npos                                       |
+| &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
+| **Modifiers** | char_t **to_lowercase**(char_t chr)                                                | character transformed to lowercase                                                                 |
+| &nbsp;        | char_t **to_uppercase**(char_t chr)                                                | character transformed to uppercase                                                                 |
+| &nbsp;        | string **to_lowercase**(string_view sv)                                            | string transformed to lowercase                                                                    |
+| &nbsp;        | string **to_uppercase**(string_view sv)                                            | string transformed to uppercase                                                                    |
+| &nbsp;        | string **substring**(string_view sv, size_t pos \[, size_t count\]);               | substring starting at given position of given length, default up to end                            |
+| &nbsp;        | string **strip**(string_view sv, string_view set)                                  | string with characters given in set stripped from left and right                                   |
+| &nbsp;        | string **strip_left**(string_view sv, string_view set)                             | string with characters given in set stripped from left                                             |
+| &nbsp;        | string **strip_right**(string_view sv, string_view set)                            | string with characters given in set stripped from right                                            |
+| &nbsp;        | string **replace_all**(string_view sv, string_view what, string_view with)         | string with all occurrences of 'what' replaced with 'with'                                         |
+| &nbsp;        | string **replace_first**(string_view sv, string_view what, string_view with)       | string with first occurrence of 'what' replaced with 'with'                                        |
+| &nbsp;        | string **replace_last**(string_view sv, string_view what, string_view with)        | string with last occurrence of 'what' replaced with 'with'                                         |
+| &nbsp;        | &nbsp;                                                                             | &nbsp;                                                                                             |
+| **Combining** | string **append**(string_view front, string_view tail)                             | string with tail appended to front                                                                 |
+| &nbsp;        | string **join**(collection\<string_view\> vec, string_view sep)                    | string with elements of collection joined with given separator string                              |
+| &nbsp;        | vector\<string_view\> **split**(string_view sv, string_view set)                   | vector of string_view with elements of string separated by characters from given set               |
+| &nbsp;        | tuple\<string_view, string_view\> **split_left**(string_view sv, Delimiter delim)  | tuple with front and tail string_view on given string as split at left by given delimiter          |
+| &nbsp;        | tuple\<string_view, string_view\> **split_right**(string_view sv, Delimiter delim) | tuple with front and tail string_view on given string as split at right by given delimiter         |
+| &nbsp;        | tuple\<string_view, string_view\> **split_left**(string_view sv, string_view set)  | tuple with front and tail string_view on given string as split at left by characters in given set  |
+| &nbsp;        | tuple\<string_view, string_view\> **split_right**(string_view sv, string_view set) | tuple with front and tail string_view on given string as split at right by characters in given set |
 
-```
-length()
-size()
-
-is_empty()
-
-contains()
-contains_re()
-
-starts_with()
-starts_with_re()
-
-ends_with()
-ends_with_re()
-
-find_first()
-find_first_re()
-
-find_first_of()
-find_first_of_re()
-
-find_first_not_of()
-find_first_not_of_re()
-
-find_last()
-find_last_re()
-
-find_last_of()
-find_last_of_re()
-
-find_last_not_of()
-find_last_not_of_re()
-
-to_lowercase()
-to_uppercase()
-
-append()
-
-substring()
-
-strip()
-
-strip_left()
-strip_left_re()
-
-strip_right()
-strip_right_re()
-
-replace_all()
-replace_all_re()
-
-replace_first()
-replace_first_re()
-
-replace_last()
-replace_last_re()
-
-join()
-split()
-
-split_left()
-split_right()
-```
+<a id="note-1"></a>Note 1: npos: `nonstd::string::std17::string_view::npos`; TODO: provide `nonstd::string::npos`.
 
 ### Configuration
 
@@ -211,6 +197,9 @@ In the test runner, the version of *string-bare* is available via tag `[.version
 <a id="a2"></a>
 ### A.2 *string-bare* test specification
 
+<!-- string-main.t.exe -l @ | cut --delimiter=: -f 1 |sort |uniq |clip -->
+<!-- string-main.t.exe -l |grep -v _re |grep -v regex |clip -->
+
 <details>
 <summary>click to expand</summary>
 <p>
@@ -230,12 +219,6 @@ contains: true if string contains sub string - string-char*
 contains: true if string contains sub string - string-string
 contains: true if string contains sub string - string-string_view
 contains: true if string contains sub string - string_view-string_view
-contains: true if string contains regular expression - string-regex
-contains_re: true if string contains regular expression - char*-char*
-contains_re: true if string contains regular expression - string-char*
-contains_re: true if string contains regular expression - string-string
-contains_re: true if string contains regular expression - string-string_view
-contains_re: true if string contains regular expression - string_view-string_view
 starts_with: true if string starts with sub string - char*-char
 starts_with: true if string starts with sub string - string-char
 starts_with: true if string starts with sub string - string_view-char
@@ -244,12 +227,6 @@ starts_with: true if string starts with sub string - string-char*
 starts_with: true if string starts with sub string - string-string
 starts_with: true if string starts with sub string - string-string_view
 starts_with: true if string starts with sub string - string_view-string_view
-starts_with: true if string starts with regular expression - string-regex
-starts_with_re: true if string starts with regular expression - char*-char*
-starts_with_re: true if string starts with regular expression - string-char*
-starts_with_re: true if string starts with regular expression - string-string
-starts_with_re: true if string starts with regular expression - string-string_view
-starts_with_re: true if string starts with regular expression - string-string_view
 ends_with: true if string ends with sub string - char*-char
 ends_with: true if string ends with sub string - string-char
 ends_with: true if string ends with sub string - string_view-char
@@ -258,12 +235,6 @@ ends_with: true if string ends with sub string - char*-char*
 ends_with: true if string ends with sub string - string-string
 ends_with: true if string ends with sub string - string-string_view
 ends_with: true if string ends with sub string - string_view-string_view
-ends_with: true if string ends with regular expression - string-regex
-ends_with_re: true if string ends with regular expression - char*-char*
-ends_with_re: true if string ends with regular expression - string-char*
-ends_with_re: true if string ends with regular expression - string-string
-ends_with_re: true if string ends with regular expression - string-string_view
-ends_with_re: true if string ends with regular expression - string_view-string_view
 find_first: position of sub string in string - char*-char
 find_first: position of sub string in string - string-char
 find_first: position of sub string in string - string_view-char
@@ -272,12 +243,6 @@ find_first: position of sub string in string - string-char*
 find_first: position of sub string in string - string-string
 find_first: position of sub string in string - string-string_view
 find_first: position of sub string in string - string_view-string_view
-find_first: position of regex in string: string-regex
-find_first_re: position of regex in string: char*-char*
-find_first_re: position of regex in string: string-char*
-find_first_re: position of regex in string: string-string
-find_first_re: position of regex in string: string-string_view
-find_first_re: position of regex in string: string_view-string_view
 find_last: position of sub string in string - char*-char
 find_last: position of sub string in string - string-char
 find_last: position of sub string in string - string_view-char
@@ -286,56 +251,26 @@ find_last: position of sub string in string - string-char*
 find_last: position of sub string in string - string-string
 find_last: position of sub string in string - string-string_view
 find_last: position of sub string in string - string_view-string_view
-find_last: position of regex in string: string-regex
-find_last_re: position of regex in string: char*-char*
-find_last_re: position of regex in string: string-char*
-find_last_re: position of regex in string: string-string
-find_last_re: position of regex in string: string-string_view
-find_last_re: position of regex in string: string_view-string_view
 find_first_of: position of character in set in string - char*-char*
 find_first_of: position of character in set in string - string-char*
 find_first_of: position of character in set in string - string-string
 find_first_of: position of character in set in string - string-string_view
 find_first_of: position of character in set in string - string_view-string_view
-find_first_of: position of character in set in string: string-regex
-find_first_of_re: position of character in set in string: char*-char*
-find_first_of_re: position of character in set in string: string-char*
-find_first_of_re: position of character in set in string: string-string
-find_first_of_re: position of character in set in string: string-string_view
-find_first_of_re: position of character in set in string: string_view-string_view
 find_last_of: position of character in set in string - char*-char*
 find_last_of: position of character in set in string - string-char*
 find_last_of: position of character in set in string - string-string
 find_last_of: position of character in set in string - string-string_view
 find_last_of: position of character in set in string - string_view-string_view
-find_last_of: position of character in set in string: string-regex
-find_last_of_re: position of character in set in string: char*-char*
-find_last_of_re: position of character in set in string: string-char*
-find_last_of_re: position of character in set in string: string-string
-find_last_of_re: position of character in set in string: string-string_view
-find_last_of_re: position of character in set in string: string_view-string_view
 find_first_not_of: position of character in set in string - char*-char*
 find_first_not_of: position of character in set in string - string-char*
 find_first_not_of: position of character in set in string - string-string
 find_first_not_of: position of character in set in string - string-string_view
 find_first_not_of: position of character in set in string - string_view-string_view
-find_first_not_of: position of character in set in string: optionally use find_first_of([^...]): string-regex
-find_first_not_of_re: position of character in set in string: optionally use find_first_of_re([^...]): char*-char*
-find_first_not_of_re: position of character in set in string: optionally use find_first_of_re([^...]): string-char*
-find_first_not_of_re: position of character in set in string: optionally use find_first_of_re([^...]): string-string
-find_first_not_of_re: position of character in set in string: optionally use find_first_of_re([^...]): string-string_view
-find_first_not_of_re: position of character in set in string: optionally use find_first_of_re([^...]): string_view-string_view
 find_last_not_of: position of character in set in string - char*-char*
 find_last_not_of: position of character in set in string - string-char*
 find_last_not_of: position of character in set in string - string-string
 find_last_not_of: position of character in set in string - string-string_view
 find_last_not_of: position of character in set in string - string_view-string_view
-find_last_not_of: position of character in set in string: optionally use find_last_of([^...]): string-regex[.TODO]
-find_last_not_of_re: position of character in set in string: optionally find_last_of_re([^...]): char*-char*[.TODO]
-find_last_not_of_re: position of character in set in string: optionally find_last_of_re([^...]): string-char*[.TODO]
-find_last_not_of_re: position of character in set in string: optionally find_last_of_re([^...]): string-string[.TODO]
-find_last_not_of_re: position of character in set in string: optionally find_last_of_re([^...]): string-string_view[.TODO]
-find_last_not_of_re: position of character in set in string: optionally find_last_of_re([^...]): string_view-string_view[.TODO]
 to_lowercase: Return char in lowercase - char
 to_lowercase: Return string in lowercase - char*
 to_lowercase: Return string in lowercase - string
@@ -352,80 +287,37 @@ append: Return string with second string append to first string - string_view-st
 substring: Return substring given position and length - char*-pos
 substring: Return substring given position and length - string-pos
 substring: Return substring given position and length - string_view-pos
-substring: Return substring given regex - string_view-regex
-substring_re: Return substring given regex - char*-char*
-substring_re: Return substring given regex - string-char*
-substring_re: Return substring given regex - string-string
-substring_re: Return substring given regex - string-string_view
-substring_re: Return substring given regex - string_view-string_view
 strip_left: Remove characters in set from left of string [" \t\n"] - char*-char*
 strip_left: Remove characters in set from left of string [" \t\n"] - string-char*
 strip_left: Remove characters in set from left of string [" \t\n"] - string-string
 strip_left: Remove characters in set from left of string [" \t\n"] - string-string_view
 strip_left: Remove characters in set from left of string [" \t\n"] - string_view-string_view
 strip_left: Remove characters in set from left of string [" \t\n"] - other-char*
-strip_left: Remove characters in regex from left of string - string-regex
-strip_left_re: Remove characters in regex from left of string - char*-char*
-strip_left_re: Remove characters in regex from left of string - string-char*
-strip_left_re: Remove characters in regex from left of string - string-string
-strip_left_re: Remove characters in regex from left of string - string-string_view
-strip_left_re: Remove characters in regex from left of string - string_view-string_view
 strip_right: Remove characters in set from right of string [" \t\n"] - char*-char*
 strip_right: Remove characters in set from right of string [" \t\n"] - string-char*
 strip_right: Remove characters in set from right of string [" \t\n"] - string-string
 strip_right: Remove characters in set from right of string [" \t\n"] - string-string_view
 strip_right: Remove characters in set from right of string [" \t\n"] - string_view-string_view
 strip_right: Remove characters in set from right of string [" \t\n"] - other-char*
-strip_right: Remove characters in regex from right of string - string-regex[.TODO]
-strip_right_re: Remove characters in regex from right of string - char*-char*[.TODO]
-strip_right_re: Remove characters in regex from right of string - string-char*[.TODO]
-strip_right_re: Remove characters in regex from right of string - string-string[.TODO]
-strip_right_re: Remove characters in regex from right of string - string-string_view[.TODO]
-strip_right_re: Remove characters in regex from right of string - string_view-string_view[.TODO]
 strip: Remove characters in set from left and right of string [" \t\n"] - char*-char*
 strip: Remove characters in set from left and right of string [" \t\n"] - string-char*
 strip: Remove characters in set from left and right of string [" \t\n"] - string-string
 strip: Remove characters in set from left and right of string [" \t\n"] - string-string_view
 strip: Remove characters in set from left and right of string [" \t\n"] - string_view-string_view
 strip: Remove characters in set from left and right of string [" \t\n"] - other-char*
-strip: Remove characters in regex from left and right of string - string-regex[.TODO]
-strip_re: Remove characters in regex from left and right of string - char*-char*[.TODO]
-strip_re: Remove characters in regex from left and right of string - string-char*[.TODO]
-strip_re: Remove characters in regex from left and right of string - string-string[.TODO]
-strip_re: Remove characters in regex from left and right of string - string-string_view[.TODO]
-strip_re: Remove characters in regex from left and right of string - string_view-string_view[.TODO]
-string_view: ...[.TODO]
 replace_all: Return string with all occurrences of sub string changed - char*-char*
 replace_all: Return string with all occurrences of sub string changed - string-string
 replace_all: Return string with all occurrences of sub string changed - string-string_view
 replace_all: Return string with all occurrences of sub string changed - string_view-string_view
-replace_all: Return string with all occurrences of regex changed - string-regex
-replace_all_re: Return string with all occurrences of regex changed - char*-char*
-replace_all_re: Return string with all occurrences of regex changed - string-char*
-replace_all_re: Return string with all occurrences of regex changed - string-string
-replace_all_re: Return string with all occurrences of regex changed - string-string_view
-replace_all_re: Return string with all occurrences of regex changed - string_view-string_view
 replace_first: Return string with first occurrence of sub string changed - char*-char*
 replace_first: Return string with first occurrence of sub string changed - string-char*
 replace_first: Return string with first occurrence of sub string changed - string-string
 replace_first: Return string with first occurrence of sub string changed - string-string_view
 replace_first: Return string with first occurrence of sub string changed - string_view-string_view
-replace_first: Return string with first occurrence of regex changed - string-regex
-replace_first_re: Return string with first occurrence of regex changed - char*-char*
-replace_first_re: Return string with first occurrence of regex changed - string-char*
-replace_first_re: Return string with first occurrence of regex changed - string-string
-replace_first_re: Return string with first occurrence of regex changed - string-string_view
-replace_first_re: Return string with first occurrence of regex changed - string_view-string_view
 replace_last: Return string with last occurrence of sub string changed - char*-char*
 replace_last: Return string with last occurrence of sub string changed - string-string
 replace_last: Return string with last occurrence of sub string changed - string-string_view
 replace_last: Return string with last occurrence of sub string changed - string_view-string_view
-replace_last: Return string with last occurrence of regex changed - string-regex[.TODO]
-replace_last_re: Return string with last occurrence of regex changed - char*-char*[.TODO]
-replace_last_re: Return string with last occurrence of regex changed - string-char*[.TODO]
-replace_last_re: Return string with last occurrence of regex changed - string-string[.TODO]
-replace_last_re: Return string with last occurrence of regex changed - string-string_view[.TODO]
-replace_last_re: Return string with last occurrence of regex changed - string_view-string_view[.TODO]
 join: Join strings from collection into a string separated by given separator
 split: Split string into vector of string_view given delimiter - literal_delimiter
 split_left: Split string into two-element tuple given delimiter - forward - xxx_delimiter
