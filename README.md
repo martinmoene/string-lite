@@ -109,6 +109,8 @@ The following table presents types, values and simplified, short prototypes of t
 | &nbsp;         | &nbsp;                                                                             | &nbsp;                                                                                            |
 | **Value**      | size_t **string::npos**                                                            | not-found position value, in nonstd::string namespace                                             |
 | &nbsp;         | &nbsp;                                                                             | &nbsp;                                                                                            |
+| **Utilities**  | string **to_string**(string_view sv)                                               | string from local or C++17 std string_view                                                        |
+| &nbsp;         | &nbsp;                                                                             | &nbsp;                                                                                            |
 | **Observers**  | size_t **length**(string_view sv)                                                  | length of string                                                                                  |
 | &nbsp;         | size_t **size**(string_view sv)                                                    | length of string                                                                                  |
 | &nbsp;         | bool **is_empty**(string_view sv)                                                  | true if string is empty                                                                           |
