@@ -281,13 +281,15 @@ namespace string {
 
 // npos
 
-#if string_CPP17_OR_GREATER
-    static string_constexpr std::size_t npos = std::size_t(-1);
+#if string_HAVE_STRING_VIEW
+    static string_constexpr std::size_t npos = std::string_view::npos;
+#elif string_CPP17_OR_GREATER
+    static string_constexpr std::size_t npos = std::string::npos;
 #elif string_CPP11_OR_GREATER
-    enum : std::size_t { npos = std::size_t(-1) };
+    enum : std::size_t { npos = std::string::npos };
 #else
-    enum { npos = std::size_t(-1) };
-#endif
+    enum { npos = std::string::npos };
+#endif  // string_HAVE_STRING_VIEW
 
 namespace detail {
 
