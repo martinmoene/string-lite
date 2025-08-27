@@ -19,10 +19,10 @@
 //   - [ ] other
 // - [ ] support string_view as source?
 // - [ ] constexpr / string_constexpr / string_constexpr14
-// - [ ] nodiscard / string_nodiscard
+// - [x] nodiscard / string_nodiscard
 // - [ ] noexcept / string_noexcept
-// - [ ] MK macros
-// - [ ] create functions via MK macros
+// - [x] MK macros
+// - [x] create functions via MK macros
 
 //
 // Make list of MK() macros:
@@ -1049,7 +1049,7 @@ namespace string {
 namespace detail {
 
 template< typename CharT >
-std::basic_string<CharT>
+string_nodiscard std::basic_string<CharT>
 replace_all( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> what, std17::basic_string_view<CharT> with )
 {
     std::basic_string<CharT> result( text );
@@ -1215,17 +1215,19 @@ public:
         , found_(0)
     {}
 
-    std::size_t length() const
+    string_nodiscard std::size_t length() const
     {
         return delimiter_.length();
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
+    string_nodiscard std17::basic_string_view<CharT>
+    operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, std::size_t pos) const
+    string_nodiscard std17::basic_string_view<CharT>
+    find(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         // out of range, return 'empty' if last match was at end of text, else return 'done':
         if ( pos >= text.length())
@@ -1281,17 +1283,19 @@ public:
     explicit basic_any_of_delimiter(std17::basic_string_view<CharT> sv)
         : delimiters_(detail::to_string(sv)) {}
 
-    std::size_t length() const
+    string_nodiscard std::size_t length() const
     {
         return (std::min)( std::size_t(1), delimiters_.length());
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
+    string_nodiscard std17::basic_string_view<CharT>
+    operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, std::size_t pos) const
+    string_nodiscard std17::basic_string_view<CharT>
+    find(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         // out of range, return 'done':
         if ( pos > text.length())
@@ -1340,17 +1344,19 @@ public:
     explicit basic_fixed_delimiter(std::size_t len)
         : len_(len) {}
 
-    std::size_t length() const
+    string_nodiscard std::size_t length() const
     {
         return 0;
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
+    string_nodiscard std17::basic_string_view<CharT>
+    operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, std::size_t pos) const
+    string_nodiscard std17::basic_string_view<CharT>
+    find(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         // out of range, return 'done':
         if ( pos > text.length())
@@ -1388,17 +1394,19 @@ public:
         , trailing_delimiter_seen(false)
     {}
 
-    std::size_t length() const
+    string_nodiscard std::size_t length() const
     {
         return matched_delimiter_length_;
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
+    string_nodiscard std17::basic_string_view<CharT>
+    operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, std::size_t pos) const
+    string_nodiscard std17::basic_string_view<CharT>
+    find(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         // trailing empty entry:
         // TODO this feels like a hack, don't know any better at this moment
@@ -1462,17 +1470,19 @@ public:
     explicit basic_char_delimiter(CharT c)
         : c_(c) {}
 
-    std::size_t length() const
+    string_nodiscard std::size_t length() const
     {
         return 1;
     }
 
-    std17::basic_string_view<CharT> operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
+    string_nodiscard std17::basic_string_view<CharT>
+    operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         return find(text, pos);
     }
 
-    std17::basic_string_view<CharT> find(std17::basic_string_view<CharT> text, std::size_t pos) const
+    string_nodiscard std17::basic_string_view<CharT>
+    find(std17::basic_string_view<CharT> text, std::size_t pos) const
     {
         std::size_t found = text.find(c_, pos);
 
@@ -1556,7 +1566,7 @@ string_nodiscard inline std::size_t length( Coll const & coll )
 }
 
 template< typename CharT, typename Delimiter >
-std::vector< std17::basic_string_view<CharT> >
+string_nodiscard std::vector< std17::basic_string_view<CharT> >
 split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Nsplit )
 {
     std::vector< std17::basic_string_view<CharT> > result;
@@ -1638,7 +1648,7 @@ split_left(  std17::basic_string_view<CharT> text, std17::basic_string_view<Char
 // Split string at given separator character, starting at right.
 
 string_nodiscard inline auto
-split_right( std17::basic_string_view<CharT> , std17::basic_string_view<CharT>  ) 
+split_right( std17::basic_string_view<CharT> , std17::basic_string_view<CharT>  )
     -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
 // split_right( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
 //  -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
@@ -1856,39 +1866,39 @@ string_MK_SPLIT_LEFT_STRING( char32_t )
 // #undef string_MK_*
 
 #undef string_MK_IS_EMPTY
-#undef string_MK_LENGTH  
-#undef string_MK_SIZE    
-#undef string_MK_APPEND  
+#undef string_MK_LENGTH
+#undef string_MK_SIZE
+#undef string_MK_APPEND
 #undef string_MK_CONTAINS
-#undef string_MK_STARTS_WITH      
-#undef string_MK_STARTS_WITH_CHAR 
-#undef string_MK_ENDS_WITH        
-#undef string_MK_ENDS_WITH_CHAR   
-#undef string_MK_FIND_FIRST       
-#undef string_MK_FIND_FIRST_CHAR  
-#undef string_MK_FIND_LAST        
-#undef string_MK_FIND_LAST_CHAR   
-#undef string_MK_FIND_FIRST_OF    
-#undef string_MK_FIND_LAST_OF     
+#undef string_MK_STARTS_WITH
+#undef string_MK_STARTS_WITH_CHAR
+#undef string_MK_ENDS_WITH
+#undef string_MK_ENDS_WITH_CHAR
+#undef string_MK_FIND_FIRST
+#undef string_MK_FIND_FIRST_CHAR
+#undef string_MK_FIND_LAST
+#undef string_MK_FIND_LAST_CHAR
+#undef string_MK_FIND_FIRST_OF
+#undef string_MK_FIND_LAST_OF
 #undef string_MK_FIND_FIRST_NOT_OF
-#undef string_MK_FIND_LAST_NOT_OF 
-#undef string_MK_REPLACE_ALL      
-#undef string_MK_REPLACE_FIRST    
-#undef string_MK_REPLACE_LAST     
-#undef string_MK_STRIP_LEFT       
-#undef string_MK_STRIP_RIGHT      
-#undef string_MK_STRIP            
-#undef string_MK_SUBSTRING        
-#undef string_MK_TO_CASE_CHAR     
-#undef string_MK_TO_CASE_CHAR     
-#undef string_MK_TO_CASE_STRING   
-#undef string_MK_TO_CASE_STRING   
-#undef string_MK_JOIN             
-#undef string_MK_SPLIT_DELIM      
-#undef string_MK_SPLIT_STRING     
-#undef string_MK_SPLIT_LEFT_DELIM 
+#undef string_MK_FIND_LAST_NOT_OF
+#undef string_MK_REPLACE_ALL
+#undef string_MK_REPLACE_FIRST
+#undef string_MK_REPLACE_LAST
+#undef string_MK_STRIP_LEFT
+#undef string_MK_STRIP_RIGHT
+#undef string_MK_STRIP
+#undef string_MK_SUBSTRING
+#undef string_MK_TO_CASE_CHAR
+#undef string_MK_TO_CASE_CHAR
+#undef string_MK_TO_CASE_STRING
+#undef string_MK_TO_CASE_STRING
+#undef string_MK_JOIN
+#undef string_MK_SPLIT_DELIM
+#undef string_MK_SPLIT_STRING
+#undef string_MK_SPLIT_LEFT_DELIM
 #undef string_MK_SPLIT_LEFT_STRING
-// #undef string_MK_SPLIT_RIGHT_DELIM 
+// #undef string_MK_SPLIT_RIGHT_DELIM
 // #undef string_MK_SPLIT_RIGHT_STRING
 
 } // namespace nonstd
