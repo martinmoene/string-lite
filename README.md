@@ -52,7 +52,7 @@ std::ostream & operator<<(std::ostream & os, std::vector<T> const & coll )
 
 int main()
 {
-    std::cout << nonstd::string::split("Hello, world", ",");
+    std::cout << nonstd::string::split("Hello, world", ", ");
 }
 ```
 
@@ -60,7 +60,7 @@ int main()
 
 ```bash
 prompt> g++ -std=c++11 -Wall -I../include -o 01-basic.exe 01-basic.cpp && 01-basic.exe
-['Hello', ' world', ]
+['Hello', 'world', ]
 ```
 
 ## In a nutshell

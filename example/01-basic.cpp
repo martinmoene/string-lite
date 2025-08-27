@@ -45,7 +45,7 @@ std::ostream & operator<<(std::ostream & os, std::vector<T> const & coll )
 
 int main()
 {
-    std::cout << nonstd::split("Hello, world", ",");
+    std::cout << nonstd::split("Hello, world", ", ");
 }
 
 // cl -nologo -EHsc -I../include 01-basic.cpp && 01-basic.exe
