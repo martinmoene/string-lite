@@ -1,6 +1,6 @@
 # string bare: string facilities for C++11 and later (In Progress)
 
-[![Language](https://img.shields.io/badge/C%2B%2B-11/14/17/20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-BSL-blue.svg)](https://opensource.org/licenses/BSL-1.0) [![Build Status](https://github.com/martinmoene/string-bare/actions/workflows/ci.yml/badge.svg)](https://github.com/martinmoene/string-bare/actions/workflows/ci.yml) [![Version](https://badge.fury.io/gh/martinmoene%2Fstring-bare.svg)](https://github.com/martinmoene/string-bare/releases) [![download](https://img.shields.io/badge/latest-download-blue.svg)](https://github.com/martinmoene/string-bare/blob/master/include/nonstd/string.hpp) <!-- [![Conan](https://img.shields.io/badge/on-conan-blue.svg)](https://conan.io/center/string-bare) [![Try it on wandbox](https://img.shields.io/badge/on-wandbox-blue.svg)](https://wandbox.org/) [![Try it on godbolt online](https://img.shields.io/badge/on-godbolt-blue.svg)](https://godbolt.org/) -->
+[![Language](https://img.shields.io/badge/C%2B%2B-11/14/17/20/23-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-BSL-blue.svg)](https://opensource.org/licenses/BSL-1.0) [![Build Status](https://github.com/martinmoene/string-bare/actions/workflows/ci.yml/badge.svg)](https://github.com/martinmoene/string-bare/actions/workflows/ci.yml) [![Version](https://badge.fury.io/gh/martinmoene%2Fstring-bare.svg)](https://github.com/martinmoene/string-bare/releases) [![download](https://img.shields.io/badge/latest-download-blue.svg)](https://github.com/martinmoene/string-bare/blob/master/include/nonstd/string.hpp) <!-- [![Conan](https://img.shields.io/badge/on-conan-blue.svg)](https://conan.io/center/string-bare) [![Try it on wandbox](https://img.shields.io/badge/on-wandbox-blue.svg)](https://wandbox.org/) [![Try it on godbolt online](https://img.shields.io/badge/on-godbolt-blue.svg)](https://godbolt.org/) -->
 
 Another attempt at a hopefully generally useful C++ string algorithm library.
 
@@ -8,7 +8,11 @@ I'm still pondering to add functions that take a regular expression, as `std::re
 
 For now, have a look at section [Documentation of *string bare*](#syn-doc) and section [*string-bare* test specification](#a2) for the functions envisioned / implemented (at the moment). The in-place modification class of functions is decidedly absent.
 
+In general, functions take `string_view`s and thereby `char const *`, `std::string` and `std::string_view` ([note 1](#note-1)) as arguments en produce (return) a `bool`, `size_t`, `std::string` or a collection of `string_view`s.
+
 Initially writing code for `char` type strings, followed by generalising and enabling selecting `char`, `wchar_t`, `char8_t`, `char16_t`, `char32_t` insofar feasible and sensible.
+
+<a id="note-1"></a>Note 1: to support use of `string_view`s with C++ versions earlier than C++17, `string_view`s may be accessed as `nonstd::string::std17::string_view`, supplying a local `string_view` class or `std::string_view` if present.
 
 **Contents**  
 
@@ -20,7 +24,6 @@ Initially writing code for `char` type strings, followed by generalising and ena
 - [Synopsis](#synopsis)
 - [Notes and references](#notes-and-references)
 - [Appendix](#appendix)
-
 
 ## Example usage
 
