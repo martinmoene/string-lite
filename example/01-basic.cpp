@@ -11,11 +11,12 @@
 template< typename T >
 std::string contents(std::vector<T> const & coll)
 {
-    // using to_string() for nonstd::string::string_view:
+    // using nonstd::to_string() for nonstd::std17::string_view:
+    using nonstd::to_string;
 
     std::stringstream os;
     for ( auto const & elem : coll )
-        os << "'" << std::string(elem) << "', ";
+        os << "'" << to_string(elem) << "', ";
     return os.str();
 }
 
@@ -24,14 +25,15 @@ std::string contents(std::vector<T> const & coll)
 template< typename T >
 std::string contents(std::vector<T> const & coll)
 {
-    // using to_string() for nonstd::string::string_view:
+    // using nonstd::to_string() for nonstd::std17::string_view:
+    using nonstd::to_string;
 
     typename std::vector<T>::const_iterator pos = coll.begin();
     typename std::vector<T>::const_iterator end = coll.end();
 
     std::stringstream os;
     for ( ; pos != end; ++pos )
-        os << "'" << std::string(*pos) << "', ";
+        os << "'" << to_string(*pos) << "', ";
     return os.str();
 }
 
@@ -53,4 +55,4 @@ int main()
 // g++ -std=c++11 -Wall -I../include -o 01-basic.exe 01-basic.cpp && 01-basic.exe
 
 // Output:
-// ['Hello', ' world', ]
+// ['Hello', 'world', ]

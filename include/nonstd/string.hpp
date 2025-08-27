@@ -1663,6 +1663,10 @@ split_right( std17::basic_string_view<CharT> , std17::basic_string_view<CharT>  
 // Define requested functions:
 //
 
+// Provide to_string() for std17::string_view:
+
+using detail::to_string;
+
 #if string_CONFIG_PROVIDE_CHAR_T
 
 string_MK_IS_EMPTY         ( char )

@@ -39,7 +39,8 @@ Initially writing code for `char` type strings, followed by generalising and ena
 template< typename T >
 std::string contents(std::vector<T> const & coll)
 {
-    // using to_string() for nonstd::string::string_view:
+    // using nonstd::to_string() for nonstd::std17::string_view:
+    using nonstd::to_string;
 
     std::stringstream os;
     for ( auto const & elem : coll )
