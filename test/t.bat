@@ -19,8 +19,8 @@ set unit_config=^
     -Dstring_CONFIG_PROVIDE_REGEX=0 ^
     -Dstring_CONFIG_PROVIDE_CHAR_T=1 ^
     -Dstring_CONFIG_PROVIDE_WCHAR_T=1 ^
-    -Dstring_CONFIG_PROVIDE_CHAR8_T=1 ^
-    -Dstring_CONFIG_PROVIDE_CHAR16_T=0 ^
+    -Dstring_CONFIG_PROVIDE_CHAR8_T=0 ^
+    -Dstring_CONFIG_PROVIDE_CHAR16_T=1 ^
     -Dstring_CONFIG_PROVIDE_CHAR32_T=1
 
 set msvc_defines=^
@@ -29,7 +29,7 @@ set msvc_defines=^
 
 set CppCoreCheckInclude=%VCINSTALLDIR%\Auxiliary\VS\include
 
-cl -nologo -W3 -EHsc %std% %unit_config% %msvc_defines% -I"%CppCoreCheckInclude%" -Ilest -I../../string-view-lite/include -I../include -Ics_string -I. %unit_file%-main.t.cpp %unit_file%.t.cpp && %unit_file%-main.t.exe
+cl -nologo -W3 -EHsc %std% %unit_config% %msvc_defines% -I"%CppCoreCheckInclude%" -Ilest -I../include -I. %unit_file%-main.t.cpp %unit_file%.t.cpp && %unit_file%-main.t.exe
 endlocal & goto :EOF
 
 :: subroutines:
