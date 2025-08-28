@@ -6,33 +6,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// TODO: Plan
-// - [x] use C++20 std::string_view, not C++17 for presence of ctor(char* begin, char* end)
-// - [x] Reconsider above for C++17 string-string_view interoperability ?
-// - [ ] implement functions
-//   - [ ] contains(regex)
-//   - [ ] contains_re()
-//   - [ ] find(regex)
-//   - [ ] find_re()
-//   - [ ] find_of(regex)
-//   - [ ] find_of_re()
-//   - [ ] other
-// - [ ] support string_view as source?
-// - [ ] constexpr / string_constexpr / string_constexpr14
-// - [x] nodiscard / string_nodiscard
-// - [ ] noexcept / string_noexcept
-// - [x] MK macros
-// - [x] create functions via MK macros
-
-//
-// Make list of MK() macros:
-// grep "#define string_MK_" ../include/nonstd/string.hpp |cut -d" " -f 2
-//
-
 #ifndef NONSTD_STRING_BARE_HPP
 #define NONSTD_STRING_BARE_HPP
 
-using CharT = char;
+using CharT = char;     // TODO: remove; temporary while developing routines.
 
 #define string_bare_MAJOR  0
 #define string_bare_MINOR  0
