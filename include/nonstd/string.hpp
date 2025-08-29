@@ -937,7 +937,7 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 namespace string {
 namespace detail {
 
-    // Transform case (character):
+// Transform case (character):
 
 template< typename CharT >
 string_nodiscard CharT to_lowercase( CharT chr )
@@ -967,8 +967,22 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
 } // namespace detail
 } // namespace string
 
-// to_lowercase()
-// to_uppercase()
+// capitalize():
+
+#define string_MK_CAPITALIZE(CharT)                             \
+    string_nodiscard inline std::basic_string<CharT>            \
+    capitalize( std17::basic_string_view<CharT> text )          \
+    {                                                           \
+        if ( text.empty() )                                     \
+            return {};                                          \
+                                                                \
+        std::basic_string<CharT> result{ to_string( text ) };   \
+        result[0] = to_uppercase( result[0] );                  \
+                                                                \
+        return result;                                          \
+    }
+
+// to_lowercase(), to_uppercase():
 
 // template string_nodiscard std::basic_string<CharT> to_lowercase( std17::basic_string_view<CharT> text ) string_noexcept;
 
@@ -1674,6 +1688,7 @@ string_MK_TO_CASE_CHAR     ( char, lowercase )
 string_MK_TO_CASE_CHAR     ( char, uppercase )
 string_MK_TO_CASE_STRING   ( char, lowercase )
 string_MK_TO_CASE_STRING   ( char, uppercase )
+string_MK_CAPITALIZE       ( char )
 string_MK_JOIN             ( char )
 string_MK_SPLIT_DELIM      ( char )
 string_MK_SPLIT_STRING     ( char )
@@ -1714,6 +1729,7 @@ string_MK_TO_CASE_CHAR     ( wchar_t, lowercase )
 string_MK_TO_CASE_CHAR     ( wchar_t, uppercase )
 string_MK_TO_CASE_STRING   ( wchar_t, lowercase )
 string_MK_TO_CASE_STRING   ( wchar_t, uppercase )
+string_MK_CAPITALIZE       ( wchar_t )
 string_MK_JOIN             ( wchar_t )
 string_MK_SPLIT_DELIM      ( wchar_t )
 string_MK_SPLIT_STRING     ( wchar_t )
@@ -1754,6 +1770,7 @@ string_MK_TO_CASE_CHAR     ( char8_t, lowercase )
 string_MK_TO_CASE_CHAR     ( char8_t, uppercase )
 string_MK_TO_CASE_STRING   ( char8_t, lowercase )
 string_MK_TO_CASE_STRING   ( char8_t, uppercase )
+string_MK_CAPITALIZE       ( char8_t )
 string_MK_JOIN             ( char8_t )
 string_MK_SPLIT_DELIM      ( char8_t )
 string_MK_SPLIT_STRING     ( char8_t )
@@ -1794,6 +1811,7 @@ string_MK_TO_CASE_CHAR     ( char16_t, lowercase )
 string_MK_TO_CASE_CHAR     ( char16_t, uppercase )
 string_MK_TO_CASE_STRING   ( char16_t, lowercase )
 string_MK_TO_CASE_STRING   ( char16_t, uppercase )
+string_MK_CAPITALIZE       ( char16_t )
 string_MK_JOIN             ( char16_t )
 string_MK_SPLIT_DELIM      ( char16_t )
 string_MK_SPLIT_STRING     ( char16_t )
@@ -1834,6 +1852,7 @@ string_MK_TO_CASE_CHAR     ( char32_t, lowercase )
 string_MK_TO_CASE_CHAR     ( char32_t, uppercase )
 string_MK_TO_CASE_STRING   ( char32_t, lowercase )
 string_MK_TO_CASE_STRING   ( char32_t, uppercase )
+string_MK_CAPITALIZE       ( char32_t )
 string_MK_JOIN             ( char32_t )
 string_MK_SPLIT_DELIM      ( char32_t )
 string_MK_SPLIT_STRING     ( char32_t )
@@ -1874,6 +1893,7 @@ string_MK_SPLIT_LEFT_STRING( char32_t )
 #undef string_MK_TO_CASE_CHAR
 #undef string_MK_TO_CASE_STRING
 #undef string_MK_TO_CASE_STRING
+#undef string_MK_CAPITALIZE
 #undef string_MK_JOIN
 #undef string_MK_SPLIT_DELIM
 #undef string_MK_SPLIT_STRING

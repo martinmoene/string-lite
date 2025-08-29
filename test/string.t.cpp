@@ -1281,7 +1281,15 @@ CASE( "find_last_not_of: position of character in set in string - string_view-st
 
 // Modifiers:
 
-// to_lowercase(), to_uppercase:
+// capitalize():
+
+CASE( "capitalize: Return string starting with capital - string" )
+{
+    EXPECT( capitalize("hello, world!") == "Hello, world!" );
+    EXPECT( capitalize("Hello, world!") == "Hello, world!" );
+}
+
+// to_lowercase(), to_uppercase():
 
 CASE( "to_lowercase: Return char in lowercase - char" )
 {
