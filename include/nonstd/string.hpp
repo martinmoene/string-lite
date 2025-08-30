@@ -833,18 +833,57 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 #if string_CPP23_OR_GREATER
 # define string_MK_CONTAINS(CharT)      \
     template< typename SeekT >          \
-    string_nodiscard bool contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
+    string_nodiscard bool               \
+    contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
     {                                   \
         return text.contains( seek );   \
     }
 #else
 # define string_MK_CONTAINS(CharT)      \
     template< typename SeekT >          \
-    string_nodiscard bool contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
+    string_nodiscard bool               \
+    contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
     {                                   \
         return string::npos != find_first(text, seek);  \
     }
 #endif
+
+// contains_all_of()
+
+# define string_MK_CONTAINS_ALL_OF(CharT)       \
+    string_nodiscard inline bool                \
+    contains_all_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    {                                           \
+        for ( auto const chr : set )            \
+        {                                       \
+            if ( ! contains( text, chr ) )      \
+                return false;                   \
+        }                                       \
+        return true;                            \
+    }
+
+// contains_any_of()
+
+# define string_MK_CONTAINS_ANY_OF(CharT)       \
+    string_nodiscard inline bool                \
+    contains_any_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    {                                           \
+        for ( auto const chr : set )            \
+        {                                       \
+            if ( contains( text, chr ) )        \
+                return true;                    \
+        }                                       \
+        return false;                           \
+    }
+
+// contains_none_of()
+
+# define string_MK_CONTAINS_NONE_OF(CharT)      \
+    string_nodiscard inline bool                \
+    contains_none_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    {                                           \
+        return ! contains_any_of( text, set );  \
+    }
 
 // starts_with() - C++20
 
@@ -888,6 +927,12 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
     }
 #endif  // string_CPP17_000
 
+// starts_with_all_of()
+
+// starts_with_any_of()
+
+// starts_with_none_of()
+
 // ends_with() - C++20
 
 #if string_CPP20_OR_GREATER
@@ -929,6 +974,12 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
         return ends_with( text, std17::basic_string_view<CharT>( &seek, &seek + 1) );   \
     }
 #endif
+
+// ends_with_all_of()
+
+// ends_with_any_of()
+
+// ends_with_none_of()
 
 //
 // Modifiers:
@@ -1787,6 +1838,9 @@ string_MK_FIND_FIRST_NOT_OF( char )
 string_MK_FIND_LAST_NOT_OF ( char )
 string_MK_APPEND           ( char )
 string_MK_CONTAINS         ( char )      // includes char search type
+string_MK_CONTAINS_ALL_OF  ( char )
+string_MK_CONTAINS_ANY_OF  ( char )
+string_MK_CONTAINS_NONE_OF ( char )
 string_MK_STARTS_WITH      ( char )
 string_MK_STARTS_WITH_CHAR ( char )
 string_MK_ENDS_WITH        ( char )
@@ -1826,6 +1880,9 @@ string_MK_LENGTH           ( wchar_t )
 string_MK_SIZE             ( wchar_t )
 string_MK_APPEND           ( wchar_t )
 string_MK_CONTAINS         ( wchar_t )      // includes wchar_t search type
+string_MK_CONTAINS_ALL_OF  ( wchar_t )
+string_MK_CONTAINS_ANY_OF  ( wchar_t )
+string_MK_CONTAINS_NONE_OF ( wchar_t )
 string_MK_STARTS_WITH      ( wchar_t )
 string_MK_STARTS_WITH_CHAR ( wchar_t )
 string_MK_ENDS_WITH        ( wchar_t )
@@ -1873,6 +1930,9 @@ string_MK_LENGTH           ( char8_t )
 string_MK_SIZE             ( char8_t )
 string_MK_APPEND           ( char8_t )
 string_MK_CONTAINS         ( char8_t )      // includes char search type
+string_MK_CONTAINS_ALL_OF  ( char8_t )
+string_MK_CONTAINS_ANY_OF  ( char8_t )
+string_MK_CONTAINS_NONE_OF ( char8_t )
 string_MK_STARTS_WITH      ( char8_t )
 string_MK_STARTS_WITH_CHAR ( char8_t )
 string_MK_ENDS_WITH        ( char8_t )
@@ -1920,6 +1980,9 @@ string_MK_LENGTH           ( char16_t )
 string_MK_SIZE             ( char16_t )
 string_MK_APPEND           ( char16_t )
 string_MK_CONTAINS         ( char16_t )      // includes char search type
+string_MK_CONTAINS_ALL_OF  ( char16_t )
+string_MK_CONTAINS_ANY_OF  ( char16_t )
+string_MK_CONTAINS_NONE_OF ( char16_t )
 string_MK_STARTS_WITH      ( char16_t )
 string_MK_STARTS_WITH_CHAR ( char16_t )
 string_MK_ENDS_WITH        ( char16_t )
@@ -1967,6 +2030,9 @@ string_MK_LENGTH           ( char32_t )
 string_MK_SIZE             ( char32_t )
 string_MK_APPEND           ( char32_t )
 string_MK_CONTAINS         ( char32_t )      // includes char search type
+string_MK_CONTAINS_ALL_OF  ( char32_t )
+string_MK_CONTAINS_ANY_OF  ( char32_t )
+string_MK_CONTAINS_NONE_OF ( char32_t )
 string_MK_STARTS_WITH      ( char32_t )
 string_MK_STARTS_WITH_CHAR ( char32_t )
 string_MK_ENDS_WITH        ( char32_t )
@@ -2014,6 +2080,9 @@ string_MK_SPLIT_LEFT_STRING( char32_t )
 #undef string_MK_SIZE
 #undef string_MK_APPEND
 #undef string_MK_CONTAINS
+#undef string_MK_CONTAINS_ALL_OF
+#undef string_MK_CONTAINS_ANY_OF
+#undef string_MK_CONTAINS_NONE_OF
 #undef string_MK_STARTS_WITH
 #undef string_MK_STARTS_WITH_CHAR
 #undef string_MK_ENDS_WITH

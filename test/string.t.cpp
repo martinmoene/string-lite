@@ -126,6 +126,48 @@ CASE( "contains: true if string contains substring" )
     EXPECT_NOT( contains(std17::string_view("abc123mno123xyz"), std17::string_view("789")) );
 }
 
+// contains_all_of()
+
+CASE( "contains_all_of: true if string contains all characters of set" )
+{
+    EXPECT(     contains_all_of("abc123mno123xyz", "321cba") );
+    EXPECT_NOT( contains_all_of("abc123mno123xyz", "321cbas7") );
+
+    EXPECT(     contains_all_of(std::string("abc123mno123xyz"), std::string("321cba")) );
+    EXPECT_NOT( contains_all_of(std::string("abc123mno123xyz"), std::string("321cbas7")) );
+
+    EXPECT(     contains_all_of(std17::string_view("abc123mno123xyz"), std17::string_view("321cba")) );
+    EXPECT_NOT( contains_all_of(std17::string_view("abc123mno123xyz"), std17::string_view("321cbas7")) );
+}
+
+// contains_any_of()
+
+CASE( "contains_any_of: true if string contains any character of set" )
+{
+    EXPECT(     contains_any_of("abc123mno123xyz", "a1s7") );
+    EXPECT_NOT( contains_any_of("abc123mno123xyz", "s7") );
+
+    EXPECT(     contains_any_of(std::string("abc123mno123xyz"), std::string("a1s7")) );
+    EXPECT_NOT( contains_any_of(std::string("abc123mno123xyz"), std::string("s7")) );
+
+    EXPECT(     contains_any_of(std17::string_view("abc123mno123xyz"), std17::string_view("a1s7")) );
+    EXPECT_NOT( contains_any_of(std17::string_view("abc123mno123xyz"), std17::string_view("s7")) );
+}
+
+// contains_none_of()
+
+CASE( "contains_none_of: true if string contains no character of set" )
+{
+    EXPECT(     contains_none_of("abc123mno123xyz", "s7") );
+    EXPECT_NOT( contains_none_of("abc123mno123xyz", "a1s7") );
+
+    EXPECT(     contains_none_of(std::string("abc123mno123xyz"), std::string("s7")) );
+    EXPECT_NOT( contains_none_of(std::string("abc123mno123xyz"), std::string("a1s7")) );
+
+    EXPECT(     contains_none_of(std17::string_view("abc123mno123xyz"), std17::string_view("s7")) );
+    EXPECT_NOT( contains_none_of(std17::string_view("abc123mno123xyz"), std17::string_view("a1s7")) );
+}
+
 // starts_with():
 
 CASE( "starts_with: true if string starts with substring" )
@@ -153,6 +195,12 @@ CASE( "starts_with: true if string starts with substring" )
     EXPECT_NOT( starts_with(std17::string_view("abc123mno123xyz"), std17::string_view("b")) );
 }
 
+// starts_with_all_of()
+
+// starts_with_any_of()
+
+// starts_with_none_of()
+
 // ends_with():
 
 CASE( "ends_with: true if string ends with substring" )
@@ -179,6 +227,12 @@ CASE( "ends_with: true if string ends with substring" )
     EXPECT(     ends_with(std17::string_view("abc123mno123xyz"), std17::string_view("z")) );
     EXPECT_NOT( ends_with(std17::string_view("abc123mno123xyz"), std17::string_view("y")) );
 }
+
+// ends_with_all_of()
+
+// ends_with_any_of()
+
+// ends_with_none_of()
 
 // find_first():
 
