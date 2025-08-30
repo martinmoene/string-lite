@@ -211,123 +211,36 @@ In the test runner, the version of *string-bare* is available via tag `[.version
 <p>
 
 ```
-length: length of given string - char *
-length: length of given string - std::string
-size: length of given string - char *
-size: length of given string - std::string
-is_empty: true if string is empty - char *
-is_empty: true if string is empty - string
-contains: true if string contains sub string - char*-char
-contains: true if string contains sub string - string-char
-contains: true if string contains sub string - string_view-char
-contains: true if string contains sub string - char*-char*
-contains: true if string contains sub string - string-char*
-contains: true if string contains sub string - string-string
-contains: true if string contains sub string - string-string_view
-contains: true if string contains sub string - string_view-string_view
-starts_with: true if string starts with sub string - char*-char
-starts_with: true if string starts with sub string - string-char
-starts_with: true if string starts with sub string - string_view-char
-starts_with: true if string starts with sub string - char*-char*
-starts_with: true if string starts with sub string - string-char*
-starts_with: true if string starts with sub string - string-string
-starts_with: true if string starts with sub string - string-string_view
-starts_with: true if string starts with sub string - string_view-string_view
-ends_with: true if string ends with sub string - char*-char
-ends_with: true if string ends with sub string - string-char
-ends_with: true if string ends with sub string - string_view-char
-ends_with: true if string ends with sub string - string-char*
-ends_with: true if string ends with sub string - char*-char*
-ends_with: true if string ends with sub string - string-string
-ends_with: true if string ends with sub string - string-string_view
-ends_with: true if string ends with sub string - string_view-string_view
-find_first: position of sub string in string - char*-char
-find_first: position of sub string in string - string-char
-find_first: position of sub string in string - string_view-char
-find_first: position of sub string in string - char*-char*
-find_first: position of sub string in string - string-char*
-find_first: position of sub string in string - string-string
-find_first: position of sub string in string - string-string_view
-find_first: position of sub string in string - string_view-string_view
-find_last: position of sub string in string - char*-char
-find_last: position of sub string in string - string-char
-find_last: position of sub string in string - string_view-char
-find_last: position of sub string in string - char*-char*
-find_last: position of sub string in string - string-char*
-find_last: position of sub string in string - string-string
-find_last: position of sub string in string - string-string_view
-find_last: position of sub string in string - string_view-string_view
-find_first_of: position of character in set in string - char*-char*
-find_first_of: position of character in set in string - string-char*
-find_first_of: position of character in set in string - string-string
-find_first_of: position of character in set in string - string-string_view
-find_first_of: position of character in set in string - string_view-string_view
-find_last_of: position of character in set in string - char*-char*
-find_last_of: position of character in set in string - string-char*
-find_last_of: position of character in set in string - string-string
-find_last_of: position of character in set in string - string-string_view
-find_last_of: position of character in set in string - string_view-string_view
-find_first_not_of: position of character in set in string - char*-char*
-find_first_not_of: position of character in set in string - string-char*
-find_first_not_of: position of character in set in string - string-string
-find_first_not_of: position of character in set in string - string-string_view
-find_first_not_of: position of character in set in string - string_view-string_view
-find_last_not_of: position of character in set in string - char*-char*
-find_last_not_of: position of character in set in string - string-char*
-find_last_not_of: position of character in set in string - string-string
-find_last_not_of: position of character in set in string - string-string_view
-find_last_not_of: position of character in set in string - string_view-string_view
-to_lowercase: Return char in lowercase - char
-to_lowercase: Return string in lowercase - char*
-to_lowercase: Return string in lowercase - string
-to_lowercase: Return string in lowercase - string_view
-to_uppercase: Return char in uppercase - char
-to_uppercase: Return string in uppercase - char*
-to_uppercase: Return string in uppercase - string
-to_uppercase: Return string in uppercase - string_view
-append: Return string with second string append to first string - char*-char*
-append: Return string with second string append to first string - string-char*
-append: Return string with second string append to first string - string-string
-append: Return string with second string append to first string - string-string_view
-append: Return string with second string append to first string - string_view-string_view
-substring: Return substring given position and length - char*-pos
-substring: Return substring given position and length - string-pos
-substring: Return substring given position and length - string_view-pos
-strip_left: Remove characters in set from left of string [" \t\n"] - char*-char*
-strip_left: Remove characters in set from left of string [" \t\n"] - string-char*
-strip_left: Remove characters in set from left of string [" \t\n"] - string-string
-strip_left: Remove characters in set from left of string [" \t\n"] - string-string_view
-strip_left: Remove characters in set from left of string [" \t\n"] - string_view-string_view
-strip_left: Remove characters in set from left of string [" \t\n"] - other-char*
-strip_right: Remove characters in set from right of string [" \t\n"] - char*-char*
-strip_right: Remove characters in set from right of string [" \t\n"] - string-char*
-strip_right: Remove characters in set from right of string [" \t\n"] - string-string
-strip_right: Remove characters in set from right of string [" \t\n"] - string-string_view
-strip_right: Remove characters in set from right of string [" \t\n"] - string_view-string_view
-strip_right: Remove characters in set from right of string [" \t\n"] - other-char*
-strip: Remove characters in set from left and right of string [" \t\n"] - char*-char*
-strip: Remove characters in set from left and right of string [" \t\n"] - string-char*
-strip: Remove characters in set from left and right of string [" \t\n"] - string-string
-strip: Remove characters in set from left and right of string [" \t\n"] - string-string_view
-strip: Remove characters in set from left and right of string [" \t\n"] - string_view-string_view
-strip: Remove characters in set from left and right of string [" \t\n"] - other-char*
-replace_all: Return string with all occurrences of sub string changed - char*-char*
-replace_all: Return string with all occurrences of sub string changed - string-string
-replace_all: Return string with all occurrences of sub string changed - string-string_view
-replace_all: Return string with all occurrences of sub string changed - string_view-string_view
-replace_first: Return string with first occurrence of sub string changed - char*-char*
-replace_first: Return string with first occurrence of sub string changed - string-char*
-replace_first: Return string with first occurrence of sub string changed - string-string
-replace_first: Return string with first occurrence of sub string changed - string-string_view
-replace_first: Return string with first occurrence of sub string changed - string_view-string_view
-replace_last: Return string with last occurrence of sub string changed - char*-char*
-replace_last: Return string with last occurrence of sub string changed - string-string
-replace_last: Return string with last occurrence of sub string changed - string-string_view
-replace_last: Return string with last occurrence of sub string changed - string_view-string_view
-join: Join strings from collection into a string separated by given separator
-split: Split string into vector of string_view given delimiter - literal_delimiter
-split_left: Split string into two-element tuple given delimiter - forward - xxx_delimiter
-split_right: Split string into two-element tuple given delimiter - reverse - xxx_delimiter
+length: length of given string
+size: length of given string
+is_empty: true if string is empty
+contains: true if string contains substring
+starts_with: true if string starts with substring
+ends_with: true if string ends with substring
+find_first: position of first substring in string
+find_last: position of last substring in string
+find_first_of: position of first character in string in set
+find_last_of: position of last character in string in set
+find_first_not_of: position of first character in string not in set
+find_last_not_of: position of last character in string not in set
+capitalize: string transformed to start with capital
+to_lowercase: char transformed to lowercase
+to_lowercase: string transformed to lowercase
+to_uppercase: char transformed to uppercase
+to_uppercase: string transformed to uppercase
+append: string with second string concatenated to first string
+substring: substring given position and length
+strip_left: string with characters in set removed from left of string [" \t\n"]
+strip_right: string with characters in set removed from right of string [" \t\n"]
+strip: string with characters in set removed from left and right of string [" \t\n"]
+replace: string with substring given by position and length replaced
+replace_all: string with all occurrences of substring replaced
+replace_first: string with first occurrence of substring replaced
+replace_last: string with last occurrence of substring replaced
+join: string with strings from collection joined separated by given separator
+split: split string into vector of string_view given delimiter - literal_delimiter
+split_left: split string into two-element tuple given delimiter - forward - literal_delimiter
+split_right: split string into two-element tuple given delimiter - reverse - literal_delimiter
 tweak header: Reads tweak header if supported [tweak]
 ```
 
