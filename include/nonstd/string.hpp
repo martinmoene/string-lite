@@ -1034,6 +1034,21 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
         return strip_left( strip_right( text, set ), set );         \
     }
 
+// insert()
+
+#define string_MK_INSERT(CharT)                         \
+    string_nodiscard inline std::basic_string<CharT>    \
+    insert(                                             \
+        std17::basic_string_view<CharT> text            \
+        , std::size_t pos                               \
+        , std17::basic_string_view<CharT> what )        \
+        {                                               \
+            return                                      \
+                to_string( text.substr(0, pos ) )       \
+                + to_string( what )                     \
+                + to_string( text.substr(pos) );        \
+        }
+
 // replace_all()
 
 namespace string {
@@ -1693,6 +1708,7 @@ string_MK_STARTS_WITH      ( char )
 string_MK_STARTS_WITH_CHAR ( char )
 string_MK_ENDS_WITH        ( char )
 string_MK_ENDS_WITH_CHAR   ( char )
+string_MK_INSERT           ( char )
 string_MK_REPLACE          ( char )
 string_MK_REPLACE_ALL      ( char )
 string_MK_REPLACE_FIRST    ( char )
@@ -1735,6 +1751,7 @@ string_MK_FIND_FIRST_OF    ( wchar_t )
 string_MK_FIND_LAST_OF     ( wchar_t )
 string_MK_FIND_FIRST_NOT_OF( wchar_t )
 string_MK_FIND_LAST_NOT_OF ( wchar_t )
+string_MK_INSERT           ( wchar_t )
 string_MK_REPLACE          ( wchar_t )
 string_MK_REPLACE_ALL      ( wchar_t )
 string_MK_REPLACE_FIRST    ( wchar_t )
@@ -1777,6 +1794,7 @@ string_MK_FIND_FIRST_OF    ( char8_t )
 string_MK_FIND_LAST_OF     ( char8_t )
 string_MK_FIND_FIRST_NOT_OF( char8_t )
 string_MK_FIND_LAST_NOT_OF ( char8_t )
+string_MK_INSERT           ( char8_t )
 string_MK_REPLACE          ( char8_t )
 string_MK_REPLACE_ALL      ( char8_t )
 string_MK_REPLACE_FIRST    ( char8_t )
@@ -1819,6 +1837,7 @@ string_MK_FIND_FIRST_OF    ( char16_t )
 string_MK_FIND_LAST_OF     ( char16_t )
 string_MK_FIND_FIRST_NOT_OF( char16_t )
 string_MK_FIND_LAST_NOT_OF ( char16_t )
+string_MK_INSERT           ( char16_t )
 string_MK_REPLACE          ( char16_t )
 string_MK_REPLACE_ALL      ( char16_t )
 string_MK_REPLACE_FIRST    ( char16_t )
@@ -1861,6 +1880,7 @@ string_MK_FIND_FIRST_OF    ( char32_t )
 string_MK_FIND_LAST_OF     ( char32_t )
 string_MK_FIND_FIRST_NOT_OF( char32_t )
 string_MK_FIND_LAST_NOT_OF ( char32_t )
+string_MK_INSERT           ( char32_t )
 string_MK_REPLACE          ( char32_t )
 string_MK_REPLACE_ALL      ( char32_t )
 string_MK_REPLACE_FIRST    ( char32_t )
@@ -1903,6 +1923,7 @@ string_MK_SPLIT_LEFT_STRING( char32_t )
 #undef string_MK_FIND_LAST_OF
 #undef string_MK_FIND_FIRST_NOT_OF
 #undef string_MK_FIND_LAST_NOT_OF
+#undef string_MK_INSERT
 #undef string_MK_REPLACE
 #undef string_MK_REPLACE_ALL
 #undef string_MK_REPLACE_FIRST

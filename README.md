@@ -134,7 +134,8 @@ The following table presents types, values and simplified, short prototypes of t
 | &nbsp;         | string **strip**(string_view sv, string_view set)                                  | string with characters given in set stripped from left and right                                  |
 | &nbsp;         | string **strip_left**(string_view sv, string_view set)                             | string with characters given in set stripped from left                                            |
 | &nbsp;         | string **strip_right**(string_view sv, string_view set)                            | string with characters given in set stripped from right                                           |
-| &nbsp;         | string **replace**(string_view sv, size_t pos, size_t length, string_view with)    | string with substring pos to pos+length replaced with 'with'                                      |
+| &nbsp;         | string **insert**(string_view sv, size_t pos string_view what)                     | string with substring 'what' inserted at given position                                           |
+| &nbsp;         | string **replace**(string_view sv, size_t pos, size_t length, string_view with)    | string with substring pos to pos+length replaced with 'what'                                      |
 | &nbsp;         | string **replace_all**(string_view sv, string_view what, string_view with)         | string with all occurrences of 'what' replaced with 'with'                                        |
 | &nbsp;         | string **replace_first**(string_view sv, string_view what, string_view with)       | string with first occurrence of 'what' replaced with 'with'                                       |
 | &nbsp;         | string **replace_last**(string_view sv, string_view what, string_view with)        | string with last occurrence of 'what' replaced with 'with'                                        |
@@ -211,6 +212,7 @@ In the test runner, the version of *string-bare* is available via tag `[.version
 <p>
 
 ```
+string: Setting Windows console to print utf8 characters[unicode][windows]
 length: length of given string
 size: length of given string
 is_empty: true if string is empty
@@ -233,6 +235,7 @@ substring: substring given position and length
 strip_left: string with characters in set removed from left of string [" \t\n"]
 strip_right: string with characters in set removed from right of string [" \t\n"]
 strip: string with characters in set removed from left and right of string [" \t\n"]
+insert: string with substring inserted at given position
 replace: string with substring given by position and length replaced
 replace_all: string with all occurrences of substring replaced
 replace_first: string with first occurrence of substring replaced

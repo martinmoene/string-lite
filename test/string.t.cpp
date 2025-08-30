@@ -411,6 +411,15 @@ CASE( "strip: string with characters in set removed from left and right of strin
     EXPECT( strip(stringy(" #$%&abc #$%&"), " #$%&") == "abc" );
 }
 
+// insert():
+
+CASE( "insert: string with substring inserted at given position" )
+{
+    EXPECT( insert( "abc123mno123xyz", 3, "789") == "abc789123mno123xyz" );
+    EXPECT( insert( std::string("abc123mno123xyz"), 3, std::string("789")) == "abc789123mno123xyz" );
+    EXPECT( insert( std17::string_view("abc123mno123xyz"), 3, std17::string_view("789")) == "abc789123mno123xyz" );
+}
+
 // replace():
 
 CASE( "replace: string with substring given by position and length replaced" )
