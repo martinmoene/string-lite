@@ -1073,8 +1073,8 @@ replace_all( std17::basic_string_view<CharT> text, std17::basic_string_view<Char
     string_nodiscard inline std::basic_string<CharT>    \
     replace(                                            \
         std17::basic_string_view<CharT> text            \
-        , size_t pos                                    \
-        , size_t len                                    \
+        , std::size_t pos                               \
+        , std::size_t len                               \
         , std17::basic_string_view<CharT> what )        \
         {                                               \
             return                                      \
