@@ -345,7 +345,7 @@ CASE( "append: string with second string concatenated to first string" )
 
 // substring()
 
-CASE( "substring: substring given position and length" )
+CASE( "substring: substring starting at given position of given length, default up to end" )
 {
     EXPECT( substring("abcxyz", 2, 3) == "cxy" );
     EXPECT( substring("abcxyz", 2   ) == "cxyz" );
@@ -358,6 +358,65 @@ CASE( "substring: substring given position and length" )
     EXPECT( substring(std17::string_view("abcxyz"), 2, 3) == "cxy" );
     EXPECT( substring(std17::string_view("abcxyz"), 2   ) == "cxyz" );
     EXPECT( substring(std17::string_view("abcxyz")      ) == "abcxyz" );
+}
+
+// erase():
+
+CASE( "erase: string with substring at given position of given length removed - default up to end" )
+{
+    EXPECT( erase("abcxyz", 3, 2) == "abcz" );
+    EXPECT( erase("abcxyz", 3   ) == "abc"  );
+
+    EXPECT( erase(std::string("abcxyz"), 3, 2) == "abcz" );
+    EXPECT( erase(std::string("abcxyz"), 3   ) == "abc"  );
+
+    EXPECT( erase(std17::string_view("abcxyz"), 3, 2) == "abcz" );
+    EXPECT( erase(std17::string_view("abcxyz"), 3   ) == "abc"  );
+}
+
+// insert():
+
+CASE( "insert: string with substring inserted at given position" )
+{
+    EXPECT( insert( "abc123mno123xyz", 3, "789") == "abc789123mno123xyz" );
+    EXPECT( insert( std::string("abc123mno123xyz"), 3, std::string("789")) == "abc789123mno123xyz" );
+    EXPECT( insert( std17::string_view("abc123mno123xyz"), 3, std17::string_view("789")) == "abc789123mno123xyz" );
+}
+
+// replace():
+
+CASE( "replace: string with substring given by position and length replaced" )
+{
+    EXPECT( replace( "abc123mno123xyz", 3, 6, "789") == "abc789123xyz" );
+    EXPECT( replace( std::string("abc123mno123xyz"), 3, 6, std::string("789")) == "abc789123xyz" );
+    EXPECT( replace( std17::string_view("abc123mno123xyz"), 3, 6, std17::string_view("789")) == "abc789123xyz" );
+}
+
+// replace_all():
+
+CASE( "replace_all: string with all occurrences of substring replaced" )
+{
+    EXPECT( replace_all( "abc123mno123xyz", "123", "789") == "abc789mno789xyz" );
+    EXPECT( replace_all( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == "abc789mno789xyz" );
+    EXPECT( replace_all( std17::string_view("abc123mno123xyz"), std17::string_view("123"), std17::string_view("789")) == "abc789mno789xyz" );
+}
+
+// replace_first():
+
+CASE( "replace_first: string with first occurrence of substring replaced" )
+{
+    EXPECT( replace_first( "abc123mno123xyz", "123", "789") == "abc789mno123xyz" );
+    EXPECT( replace_first( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == "abc789mno123xyz" );
+    EXPECT( replace_first( std17::string_view("abc123mno123xyz"), std17::string_view("123"), std17::string_view("789")) == "abc789mno123xyz" );
+}
+
+// replace_last():
+
+CASE( "replace_last: string with last occurrence of substring replaced" )
+{
+    EXPECT( replace_last( "abc123mno123xyz", "123", "789") == "abc123mno789xyz" );
+    EXPECT( replace_last( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == "abc123mno789xyz" );
+    EXPECT( replace_last( std17::string_view("abc123mno123xyz"), std17::string_view("123"), std17::string_view("789")) == "abc123mno789xyz" );
 }
 
 // strip_left()
@@ -409,51 +468,6 @@ CASE( "strip: string with characters in set removed from left and right of strin
 
     EXPECT( strip(stringy(" \t\nabc \t\n"), " \t\n") == "abc" );
     EXPECT( strip(stringy(" #$%&abc #$%&"), " #$%&") == "abc" );
-}
-
-// insert():
-
-CASE( "insert: string with substring inserted at given position" )
-{
-    EXPECT( insert( "abc123mno123xyz", 3, "789") == "abc789123mno123xyz" );
-    EXPECT( insert( std::string("abc123mno123xyz"), 3, std::string("789")) == "abc789123mno123xyz" );
-    EXPECT( insert( std17::string_view("abc123mno123xyz"), 3, std17::string_view("789")) == "abc789123mno123xyz" );
-}
-
-// replace():
-
-CASE( "replace: string with substring given by position and length replaced" )
-{
-    EXPECT( replace( "abc123mno123xyz", 3, 6, "789") == "abc789123xyz" );
-    EXPECT( replace( std::string("abc123mno123xyz"), 3, 6, std::string("789")) == "abc789123xyz" );
-    EXPECT( replace( std17::string_view("abc123mno123xyz"), 3, 6, std17::string_view("789")) == "abc789123xyz" );
-}
-
-// replace_all():
-
-CASE( "replace_all: string with all occurrences of substring replaced" )
-{
-    EXPECT( replace_all( "abc123mno123xyz", "123", "789") == "abc789mno789xyz" );
-    EXPECT( replace_all( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == "abc789mno789xyz" );
-    EXPECT( replace_all( std17::string_view("abc123mno123xyz"), std17::string_view("123"), std17::string_view("789")) == "abc789mno789xyz" );
-}
-
-// replace_first():
-
-CASE( "replace_first: string with first occurrence of substring replaced" )
-{
-    EXPECT( replace_first( "abc123mno123xyz", "123", "789") == "abc789mno123xyz" );
-    EXPECT( replace_first( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == "abc789mno123xyz" );
-    EXPECT( replace_first( std17::string_view("abc123mno123xyz"), std17::string_view("123"), std17::string_view("789")) == "abc789mno123xyz" );
-}
-
-// replace_last():
-
-CASE( "replace_last: string with last occurrence of substring replaced" )
-{
-    EXPECT( replace_last( "abc123mno123xyz", "123", "789") == "abc123mno789xyz" );
-    EXPECT( replace_last( std::string("abc123mno123xyz"), std::string("123"), std::string("789") ) == "abc123mno789xyz" );
-    EXPECT( replace_last( std17::string_view("abc123mno123xyz"), std17::string_view("123"), std17::string_view("789")) == "abc123mno789xyz" );
 }
 
 //
