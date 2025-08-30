@@ -129,11 +129,12 @@ The following table presents types, values and simplified, short prototypes of t
 | &nbsp;         | char_t **to_uppercase**(char_t chr)                                                | character transformed to uppercase                                                                |
 | &nbsp;         | string **to_lowercase**(string_view sv)                                            | string transformed to lowercase                                                                   |
 | &nbsp;         | string **to_uppercase**(string_view sv)                                            | string transformed to uppercase                                                                   |
-| &nbsp;         | string **capitalize**(string_view sv)                                                  | string transformed to start with capital                                                          |
+| &nbsp;         | string **capitalize**(string_view sv)                                              | string transformed to start with capital                                                          |
 | &nbsp;         | string **substring**(string_view sv, size_t pos \[, size_t count\]);               | substring starting at given position of given length, default up to end                           |
 | &nbsp;         | string **strip**(string_view sv, string_view set)                                  | string with characters given in set stripped from left and right                                  |
 | &nbsp;         | string **strip_left**(string_view sv, string_view set)                             | string with characters given in set stripped from left                                            |
 | &nbsp;         | string **strip_right**(string_view sv, string_view set)                            | string with characters given in set stripped from right                                           |
+| &nbsp;         | string **replace**(string_view sv, size_t pos, size_t length, string_view with)    | string with substring pos to pos+length replaced with 'with'                                      |
 | &nbsp;         | string **replace_all**(string_view sv, string_view what, string_view with)         | string with all occurrences of 'what' replaced with 'with'                                        |
 | &nbsp;         | string **replace_first**(string_view sv, string_view what, string_view with)       | string with first occurrence of 'what' replaced with 'with'                                       |
 | &nbsp;         | string **replace_last**(string_view sv, string_view what, string_view with)        | string with last occurrence of 'what' replaced with 'with'                                        |

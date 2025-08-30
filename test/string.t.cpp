@@ -1851,6 +1851,15 @@ CASE( "string_view: ..." "[.TODO]" )
 
 #if 1
 
+// replace():
+
+CASE( "replace: Return string with substring given by position and length replaced" )
+{
+    EXPECT( replace( "abc123mno123xyz", 3, 6, "789") == "abc789123xyz" );
+    EXPECT( replace( std::string("abc123mno123xyz"), 3, 6, std::string("789")) == "abc789123xyz" );
+    EXPECT( replace( std17::string_view("abc123mno123xyz"), 3, 6, std17::string_view("789")) == "abc789123xyz" );
+}
+
 // replace_all():
 
 CASE( "replace_all: Return string with all occurrences of sub string changed - char*-char*" )
@@ -2168,7 +2177,7 @@ CASE( "replace_last: Return string with last occurrence of sub string changed - 
 // #endif
 // }
 
-#endif
+#endif  // #if 1
 
 //
 // Join, split:

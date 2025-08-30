@@ -1067,6 +1067,22 @@ replace_all( std17::basic_string_view<CharT> text, std17::basic_string_view<Char
 } // detail
 } // namespace string
 
+// replace()
+
+#define string_MK_REPLACE(CharT)                        \
+    string_nodiscard inline std::basic_string<CharT>    \
+    replace(                                            \
+        std17::basic_string_view<CharT> text            \
+        , size_t pos                                    \
+        , size_t len                                    \
+        , std17::basic_string_view<CharT> what )        \
+        {                                               \
+            return                                      \
+                to_string( text.substr(0, pos ) )       \
+                + to_string( what )                     \
+                + to_string( text.substr(pos + len) );  \
+        }
+
 // replace_all()
 
 #define string_MK_REPLACE_ALL(CharT)                    \
@@ -1677,6 +1693,7 @@ string_MK_STARTS_WITH      ( char )
 string_MK_STARTS_WITH_CHAR ( char )
 string_MK_ENDS_WITH        ( char )
 string_MK_ENDS_WITH_CHAR   ( char )
+string_MK_REPLACE          ( char )
 string_MK_REPLACE_ALL      ( char )
 string_MK_REPLACE_FIRST    ( char )
 string_MK_REPLACE_LAST     ( char )
@@ -1718,6 +1735,7 @@ string_MK_FIND_FIRST_OF    ( wchar_t )
 string_MK_FIND_LAST_OF     ( wchar_t )
 string_MK_FIND_FIRST_NOT_OF( wchar_t )
 string_MK_FIND_LAST_NOT_OF ( wchar_t )
+string_MK_REPLACE          ( wchar_t )
 string_MK_REPLACE_ALL      ( wchar_t )
 string_MK_REPLACE_FIRST    ( wchar_t )
 string_MK_REPLACE_LAST     ( wchar_t )
@@ -1759,6 +1777,7 @@ string_MK_FIND_FIRST_OF    ( char8_t )
 string_MK_FIND_LAST_OF     ( char8_t )
 string_MK_FIND_FIRST_NOT_OF( char8_t )
 string_MK_FIND_LAST_NOT_OF ( char8_t )
+string_MK_REPLACE          ( char8_t )
 string_MK_REPLACE_ALL      ( char8_t )
 string_MK_REPLACE_FIRST    ( char8_t )
 string_MK_REPLACE_LAST     ( char8_t )
@@ -1800,6 +1819,7 @@ string_MK_FIND_FIRST_OF    ( char16_t )
 string_MK_FIND_LAST_OF     ( char16_t )
 string_MK_FIND_FIRST_NOT_OF( char16_t )
 string_MK_FIND_LAST_NOT_OF ( char16_t )
+string_MK_REPLACE          ( char16_t )
 string_MK_REPLACE_ALL      ( char16_t )
 string_MK_REPLACE_FIRST    ( char16_t )
 string_MK_REPLACE_LAST     ( char16_t )
@@ -1841,6 +1861,7 @@ string_MK_FIND_FIRST_OF    ( char32_t )
 string_MK_FIND_LAST_OF     ( char32_t )
 string_MK_FIND_FIRST_NOT_OF( char32_t )
 string_MK_FIND_LAST_NOT_OF ( char32_t )
+string_MK_REPLACE          ( char32_t )
 string_MK_REPLACE_ALL      ( char32_t )
 string_MK_REPLACE_FIRST    ( char32_t )
 string_MK_REPLACE_LAST     ( char32_t )
@@ -1882,6 +1903,7 @@ string_MK_SPLIT_LEFT_STRING( char32_t )
 #undef string_MK_FIND_LAST_OF
 #undef string_MK_FIND_FIRST_NOT_OF
 #undef string_MK_FIND_LAST_NOT_OF
+#undef string_MK_REPLACE
 #undef string_MK_REPLACE_ALL
 #undef string_MK_REPLACE_FIRST
 #undef string_MK_REPLACE_LAST
