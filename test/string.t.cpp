@@ -374,6 +374,15 @@ CASE( "erase: string with substring at given position of given length removed - 
     EXPECT( erase(std17::string_view("abcxyz"), 3   ) == "abc"  );
 }
 
+// erase_all():
+
+CASE( "erase_all: string with all occurrences of substring removed" )
+{
+    EXPECT( erase_all("abcxyzabcxyzabc", "xyz") == "abcabcabc" );
+    EXPECT( erase_all(std::string("abcxyzabcxyzabc"), std::string("xyz")) == "abcabcabc" );
+    EXPECT( erase_all(std17::string_view("abcxyzabcxyzabc"), std17::string_view("xyz")) == "abcabcabc" );
+}
+
 // insert():
 
 CASE( "insert: string with substring inserted at given position" )

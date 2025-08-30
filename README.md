@@ -132,6 +132,7 @@ The following table presents types, values and simplified, short prototypes of t
 | &nbsp;         | string **capitalize**(string_view sv)                                              | string transformed to start with capital                                                          |
 | &nbsp;         | string **substring**(string_view sv, size_t pos \[, size_t count\]);               | substring starting at given position of given length, default up to end                           |
 | &nbsp;         | string **erase**(string_view sv, size_t pos \[, size_t count\])                    | string with substring at given position of given length removed, default up to end                |
+| &nbsp;         | string **erase_all**(string_view sv, string_view what)                             | string with all occurrences of 'what' removed                                                     |
 | &nbsp;         | string **insert**(string_view sv, size_t pos, string_view what)                    | string with substring 'what' inserted at given position                                           |
 | &nbsp;         | string **replace**(string_view sv, size_t pos, size_t length, string_view with)    | string with substring pos to pos+length replaced with 'with'                                      |
 | &nbsp;         | string **replace_all**(string_view sv, string_view what, string_view with)         | string with all occurrences of 'what' replaced with 'with'                                        |
@@ -233,6 +234,7 @@ to_uppercase: string transformed to uppercase
 append: string with second string concatenated to first string
 substring: substring starting at given position of given length, default up to end
 erase: string with substring at given position of given length removed - default up to end
+erase_all: string with all occurrences of substring removed
 insert: string with substring inserted at given position
 replace: string with substring given by position and length replaced
 replace_all: string with all occurrences of substring replaced
