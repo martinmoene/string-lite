@@ -1084,7 +1084,38 @@ erase_all( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT>
     }
 
 // erase_first()
+
+#define string_MK_ERASE_FIRST(CharT)                    \
+    string_nodiscard inline std::basic_string<CharT>    \
+    erase_first(                                        \
+        std17::basic_string_view<CharT> text            \
+        , std17::basic_string_view<CharT> what )        \
+    {                                                   \
+        std::basic_string<CharT> result( text );        \
+                                                        \
+        const auto pos = find_first( result, what );    \
+                                                        \
+        return pos != std::basic_string<CharT>::npos    \
+            ? result.erase( pos, what.length() )        \
+            : result;                                   \
+    }
+
 // erase_last()
+
+#define string_MK_ERASE_LAST(CharT)                     \
+    string_nodiscard inline std::basic_string<CharT>    \
+    erase_last(                                         \
+        std17::basic_string_view<CharT> text            \
+        , std17::basic_string_view<CharT> what )        \
+    {                                                   \
+        std::basic_string<CharT> result( text );        \
+                                                        \
+        const auto pos = find_last( result, what );     \
+                                                        \
+        return pos != std::basic_string<CharT>::npos    \
+            ? result.erase( pos, what.length() )        \
+            : result;                                   \
+    }
 
 // insert()
 
@@ -1762,6 +1793,8 @@ string_MK_ENDS_WITH        ( char )
 string_MK_ENDS_WITH_CHAR   ( char )
 string_MK_ERASE            ( char )
 string_MK_ERASE_ALL        ( char )
+string_MK_ERASE_FIRST      ( char )
+string_MK_ERASE_LAST       ( char )
 string_MK_INSERT           ( char )
 string_MK_REPLACE          ( char )
 string_MK_REPLACE_ALL      ( char )
@@ -1807,6 +1840,8 @@ string_MK_FIND_FIRST_NOT_OF( wchar_t )
 string_MK_FIND_LAST_NOT_OF ( wchar_t )
 string_MK_ERASE            ( wchar_t )
 string_MK_ERASE_ALL        ( wchar_t )
+string_MK_ERASE_FIRST      ( wchar_t )
+string_MK_ERASE_LAST       ( wchar_t )
 string_MK_INSERT           ( wchar_t )
 string_MK_REPLACE          ( wchar_t )
 string_MK_REPLACE_ALL      ( wchar_t )
@@ -1852,6 +1887,8 @@ string_MK_FIND_FIRST_NOT_OF( char8_t )
 string_MK_FIND_LAST_NOT_OF ( char8_t )
 string_MK_ERASE            ( char8_t )
 string_MK_ERASE_ALL        ( char8_t )
+string_MK_ERASE_FIRST      ( char8_t )
+string_MK_ERASE_LAST       ( char8_t )
 string_MK_INSERT           ( char8_t )
 string_MK_REPLACE          ( char8_t )
 string_MK_REPLACE_ALL      ( char8_t )
@@ -1897,6 +1934,8 @@ string_MK_FIND_FIRST_NOT_OF( char16_t )
 string_MK_FIND_LAST_NOT_OF ( char16_t )
 string_MK_ERASE            ( char16_t )
 string_MK_ERASE_ALL        ( char16_t )
+string_MK_ERASE_FIRST      ( char16_t )
+string_MK_ERASE_LAST       ( char16_t )
 string_MK_INSERT           ( char16_t )
 string_MK_REPLACE          ( char16_t )
 string_MK_REPLACE_ALL      ( char16_t )
@@ -1942,6 +1981,8 @@ string_MK_FIND_FIRST_NOT_OF( char32_t )
 string_MK_FIND_LAST_NOT_OF ( char32_t )
 string_MK_ERASE            ( char32_t )
 string_MK_ERASE_ALL        ( char32_t )
+string_MK_ERASE_FIRST      ( char32_t )
+string_MK_ERASE_LAST       ( char32_t )
 string_MK_INSERT           ( char32_t )
 string_MK_REPLACE          ( char32_t )
 string_MK_REPLACE_ALL      ( char32_t )
@@ -1987,6 +2028,8 @@ string_MK_SPLIT_LEFT_STRING( char32_t )
 #undef string_MK_FIND_LAST_NOT_OF
 #undef string_MK_ERASE
 #undef string_MK_ERASE_ALL
+#undef string_MK_ERASE_FIRST
+#undef string_MK_ERASE_LAST
 #undef string_MK_INSERT
 #undef string_MK_REPLACE
 #undef string_MK_REPLACE_ALL

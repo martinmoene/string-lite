@@ -381,6 +381,30 @@ CASE( "erase_all: string with all occurrences of substring removed" )
     EXPECT( erase_all("abcxyzabcxyzabc", "xyz") == "abcabcabc" );
     EXPECT( erase_all(std::string("abcxyzabcxyzabc"), std::string("xyz")) == "abcabcabc" );
     EXPECT( erase_all(std17::string_view("abcxyzabcxyzabc"), std17::string_view("xyz")) == "abcabcabc" );
+
+    EXPECT( erase_all("abcxyzabcxyzabc", "123") == "abcxyzabcxyzabc" );
+}
+
+// erase_first():
+
+CASE( "erase_first: string with first occurrence of substring removed" )
+{
+    EXPECT( erase_first("abcxyzabcxyzabc", "xyz") == "abcabcxyzabc" );
+    EXPECT( erase_first(std::string("abcxyzabcxyzabc"), std::string("xyz")) == "abcabcxyzabc" );
+    EXPECT( erase_first(std17::string_view("abcxyzabcxyzabc"), std17::string_view("xyz")) == "abcabcxyzabc" );
+
+    EXPECT( erase_first("abcxyzabcxyzabc", "123") == "abcxyzabcxyzabc" );
+}
+
+// erase_last():
+
+CASE( "erase_last: string with last occurrence of substring removed" )
+{
+    EXPECT( erase_last("abcxyzabcxyzabc", "xyz") == "abcxyzabcabc" );
+    EXPECT( erase_last(std::string("abcxyzabcxyzabc"), std::string("xyz")) == "abcxyzabcabc" );
+    EXPECT( erase_last(std17::string_view("abcxyzabcxyzabc"), std17::string_view("xyz")) == "abcxyzabcabc" );
+
+    EXPECT( erase_last("abcxyzabcxyzabc", "123") == "abcxyzabcxyzabc" );
 }
 
 // insert():
