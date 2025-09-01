@@ -197,9 +197,45 @@ CASE( "starts_with: true if string starts with substring" )
 
 // starts_with_all_of()
 
+CASE( "starts_with_all_of: true if string starts with all characters of set" )
+{
+    EXPECT(     starts_with_all_of("abc123mno123xyz", "321cba") );
+    EXPECT_NOT( starts_with_all_of("abc123mno123xyz", "321cbz") );
+
+    EXPECT(     starts_with_all_of(std::string("abc123mno123xyz"), std::string("321cba")) );
+    EXPECT_NOT( starts_with_all_of(std::string("abc123mno123xyz"), std::string("321cbz")) );
+
+    EXPECT(     starts_with_all_of(std17::string_view("abc123mno123xyz"), std17::string_view("321cba")) );
+    EXPECT_NOT( starts_with_all_of(std17::string_view("abc123mno123xyz"), std17::string_view("321cbz")) );
+}
+
 // starts_with_any_of()
 
+CASE( "starts_with_any_of: true if string starts with any character of set" )
+{
+    EXPECT(     starts_with_any_of("abc123mno123xyz", "321cba") );
+    EXPECT_NOT( starts_with_any_of("abc123mno123xyz", "789xyz") );
+
+    EXPECT(     starts_with_any_of(std::string("abc123mno123xyz"), std::string("321cba")) );
+    EXPECT_NOT( starts_with_any_of(std::string("abc123mno123xyz"), std::string("789xyz")) );
+
+    EXPECT(     starts_with_any_of(std17::string_view("abc123mno123xyz"), std17::string_view("321cba")) );
+    EXPECT_NOT( starts_with_any_of(std17::string_view("abc123mno123xyz"), std17::string_view("789xyz")) );
+}
+
 // starts_with_none_of()
+
+CASE( "starts_with_none_of: true if string starts with no character of set" )
+{
+    EXPECT(     starts_with_none_of("abc123mno123xyz", "789xyz") );
+    EXPECT_NOT( starts_with_none_of("abc123mno123xyz", "321cba") );
+
+    EXPECT(     starts_with_none_of(std::string("abc123mno123xyz"), std::string("789xyz")) );
+    EXPECT_NOT( starts_with_none_of(std::string("abc123mno123xyz"), std::string("321cba")) );
+
+    EXPECT(     starts_with_none_of(std17::string_view("abc123mno123xyz"), std17::string_view("789xyz")) );
+    EXPECT_NOT( starts_with_none_of(std17::string_view("abc123mno123xyz"), std17::string_view("321cba")) );
+}
 
 // ends_with():
 

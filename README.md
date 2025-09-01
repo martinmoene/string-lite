@@ -121,6 +121,9 @@ The following table presents types, values and simplified, short prototypes of t
 | &nbsp;            | bool **contains_none_of**(string_view sv, string_view set)                         | true if string contains no character of set                                                       |
 | &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
 | &emsp;starts_with | bool **starts_with**(string_view sv, string_view what)                             | true if string starts with given string                                                           |
+| &nbsp;            | bool **starts_with_all_of**(string_view sv, string_view set)                       | true if string starts with all characters of set                                                  |
+| &nbsp;            | bool **starts_with_any_of**(string_view sv, string_view set)                       | true if string starts with any character of set                                                   |
+| &nbsp;            | bool **starts_with_none_of**(string_view sv, string_view set)                      | true if string starts with no character of set                                                    |
 | &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
 | &emsp;ends_with   | bool **ends_with**(string_view sv, string_view what)                               | true if string ends with given string                                                             |
 | &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
