@@ -1013,9 +1013,46 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 
 // ends_with_all_of()
 
+# define string_MK_ENDS_WITH_ALL_OF(CharT)          \
+    string_nodiscard inline bool                    \
+    ends_with_all_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    {                                               \
+        if ( text.empty() )                         \
+            return false;                           \
+                                                    \
+        std::basic_string<CharT> result;            \
+                                                    \
+        for ( auto it = text.crbegin(); it != text.crend(); ++it )  \
+        {                                           \
+            auto const chr = *it;                   \
+            if ( !contains( set, chr ) )            \
+                break;                              \
+            if ( !contains( result, chr ) )         \
+                result.append( 1, chr );            \
+        }                                           \
+        return contains_all_of( result, set );      \
+    }
+
 // ends_with_any_of()
 
+# define string_MK_ENDS_WITH_ANY_OF(CharT)          \
+    string_nodiscard inline bool                    \
+    ends_with_any_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    {                                               \
+        if ( text.empty() )                         \
+            return false;                           \
+                                                    \
+        return contains( set, *text.crbegin() );    \
+    }
+
 // ends_with_none_of()
+
+# define string_MK_ENDS_WITH_NONE_OF(CharT)         \
+    string_nodiscard inline bool                    \
+    ends_with_none_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    {                                               \
+        return !ends_with_any_of( text, set );      \
+    }
 
 //
 // Modifiers:
@@ -1879,11 +1916,14 @@ string_MK_CONTAINS_ANY_OF    ( char )
 string_MK_CONTAINS_NONE_OF   ( char )
 string_MK_STARTS_WITH        ( char )
 string_MK_STARTS_WITH_CHAR   ( char )
+string_MK_STARTS_WITH_ALL_OF ( char )
 string_MK_STARTS_WITH_ANY_OF ( char )
 string_MK_STARTS_WITH_NONE_OF( char )
-string_MK_STARTS_WITH_ALL_OF ( char )
 string_MK_ENDS_WITH          ( char )
 string_MK_ENDS_WITH_CHAR     ( char )
+string_MK_ENDS_WITH_ALL_OF   ( char )
+string_MK_ENDS_WITH_ANY_OF   ( char )
+string_MK_ENDS_WITH_NONE_OF  ( char )
 string_MK_ERASE              ( char )
 string_MK_ERASE_ALL          ( char )
 string_MK_ERASE_FIRST        ( char )
@@ -1924,11 +1964,14 @@ string_MK_CONTAINS_ANY_OF    ( wchar_t )
 string_MK_CONTAINS_NONE_OF   ( wchar_t )
 string_MK_STARTS_WITH        ( wchar_t )
 string_MK_STARTS_WITH_CHAR   ( wchar_t )
+string_MK_STARTS_WITH_ALL_OF ( wchar_t )
 string_MK_STARTS_WITH_ANY_OF ( wchar_t )
 string_MK_STARTS_WITH_NONE_OF( wchar_t )
-string_MK_STARTS_WITH_ALL_OF ( wchar_t )
 string_MK_ENDS_WITH          ( wchar_t )
 string_MK_ENDS_WITH_CHAR     ( wchar_t )
+string_MK_ENDS_WITH_ALL_OF   ( wchar_t )
+string_MK_ENDS_WITH_ANY_OF   ( wchar_t )
+string_MK_ENDS_WITH_NONE_OF  ( wchar_t )
 string_MK_FIND_FIRST         ( wchar_t )
 string_MK_FIND_FIRST_CHAR    ( wchar_t )
 string_MK_FIND_LAST          ( wchar_t )
@@ -1977,11 +2020,14 @@ string_MK_CONTAINS_ANY_OF    ( char8_t )
 string_MK_CONTAINS_NONE_OF   ( char8_t )
 string_MK_STARTS_WITH        ( char8_t )
 string_MK_STARTS_WITH_CHAR   ( char8_t )
+string_MK_STARTS_WITH_ALL_OF ( char8_t )
 string_MK_STARTS_WITH_ANY_OF ( char8_t )
 string_MK_STARTS_WITH_NONE_OF( char8_t )
-string_MK_STARTS_WITH_ALL_OF ( char8_t )
 string_MK_ENDS_WITH          ( char8_t )
 string_MK_ENDS_WITH_CHAR     ( char8_t )
+string_MK_ENDS_WITH_ALL_OF   ( char8_t )
+string_MK_ENDS_WITH_ANY_OF   ( char8_t )
+string_MK_ENDS_WITH_NONE_OF  ( char8_t )
 string_MK_FIND_FIRST         ( char8_t )
 string_MK_FIND_FIRST_CHAR    ( char8_t )
 string_MK_FIND_LAST          ( char8_t )
@@ -2030,11 +2076,14 @@ string_MK_CONTAINS_ANY_OF    ( char16_t )
 string_MK_CONTAINS_NONE_OF   ( char16_t )
 string_MK_STARTS_WITH        ( char16_t )
 string_MK_STARTS_WITH_CHAR   ( char16_t )
+string_MK_STARTS_WITH_ALL_OF ( char16_t )
 string_MK_STARTS_WITH_ANY_OF ( char16_t )
 string_MK_STARTS_WITH_NONE_OF( char16_t )
-string_MK_STARTS_WITH_ALL_OF ( char16_t )
 string_MK_ENDS_WITH          ( char16_t )
 string_MK_ENDS_WITH_CHAR     ( char16_t )
+string_MK_ENDS_WITH_ALL_OF   ( char16_t )
+string_MK_ENDS_WITH_ANY_OF   ( char16_t )
+string_MK_ENDS_WITH_NONE_OF  ( char16_t )
 string_MK_FIND_FIRST         ( char16_t )
 string_MK_FIND_FIRST_CHAR    ( char16_t )
 string_MK_FIND_LAST          ( char16_t )
@@ -2083,11 +2132,14 @@ string_MK_CONTAINS_ANY_OF    ( char32_t )
 string_MK_CONTAINS_NONE_OF   ( char32_t )
 string_MK_STARTS_WITH        ( char32_t )
 string_MK_STARTS_WITH_CHAR   ( char32_t )
+string_MK_STARTS_WITH_ALL_OF ( char32_t )
 string_MK_STARTS_WITH_ANY_OF ( char32_t )
 string_MK_STARTS_WITH_NONE_OF( char32_t )
-string_MK_STARTS_WITH_ALL_OF ( char32_t )
 string_MK_ENDS_WITH          ( char32_t )
 string_MK_ENDS_WITH_CHAR     ( char32_t )
+string_MK_ENDS_WITH_ALL_OF   ( char32_t )
+string_MK_ENDS_WITH_ANY_OF   ( char32_t )
+string_MK_ENDS_WITH_NONE_OF  ( char32_t )
 string_MK_FIND_FIRST         ( char32_t )
 string_MK_FIND_FIRST_CHAR    ( char32_t )
 string_MK_FIND_LAST          ( char32_t )
@@ -2136,11 +2188,14 @@ string_MK_SPLIT_LEFT_STRING  ( char32_t )
 #undef string_MK_CONTAINS_NONE_OF
 #undef string_MK_STARTS_WITH
 #undef string_MK_STARTS_WITH_CHAR
+#undef string_MK_STARTS_WITH_ALL_OF
 #undef string_MK_STARTS_WITH_ANY_OF
 #undef string_MK_STARTS_WITH_NONE_OF
-#undef string_MK_STARTS_WITH_ALL_OF
 #undef string_MK_ENDS_WITH
 #undef string_MK_ENDS_WITH_CHAR
+#undef string_MK_ENDS_WITH_ALL_OF
+#undef string_MK_ENDS_WITH_ANY_OF
+#undef string_MK_ENDS_WITH_NONE_OF
 #undef string_MK_FIND_FIRST
 #undef string_MK_FIND_FIRST_CHAR
 #undef string_MK_FIND_LAST

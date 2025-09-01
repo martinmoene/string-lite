@@ -266,9 +266,45 @@ CASE( "ends_with: true if string ends with substring" )
 
 // ends_with_all_of()
 
+CASE( "ends_with_all_of: true if string ends with all characters of set" )
+{
+    EXPECT(     ends_with_all_of("abc123mno123xyz", "321zyx") );
+    EXPECT_NOT( ends_with_all_of("abc123mno123xyz", "321zya") );
+
+    EXPECT(     ends_with_all_of(std::string("abc123mno123xyz"), std::string("321zyx")) );
+    EXPECT_NOT( ends_with_all_of(std::string("abc123mno123xyz"), std::string("321zya")) );
+
+    EXPECT(     ends_with_all_of(std17::string_view("abc123mno123xyz"), std17::string_view("321zyx")) );
+    EXPECT_NOT( ends_with_all_of(std17::string_view("abc123mno123xyz"), std17::string_view("321zya")) );
+}
+
 // ends_with_any_of()
 
+CASE( "ends_with_any_of: true if string ends with any character of set" )
+{
+    EXPECT(     ends_with_any_of("abc123mno123xyz", "321zyx") );
+    EXPECT_NOT( ends_with_any_of("abc123mno123xyz", "789cba") );
+
+    EXPECT(     ends_with_any_of(std::string("abc123mno123xyz"), std::string("321zyx")) );
+    EXPECT_NOT( ends_with_any_of(std::string("abc123mno123xyz"), std::string("789cba")) );
+
+    EXPECT(     ends_with_any_of(std17::string_view("abc123mno123xyz"), std17::string_view("321zyx")) );
+    EXPECT_NOT( ends_with_any_of(std17::string_view("abc123mno123xyz"), std17::string_view("789cba")) );
+}
+
 // ends_with_none_of()
+
+CASE( "ends_with_none_of: true if string ends with no character of set" )
+{
+    EXPECT(     ends_with_none_of("abc123mno123xyz", "321cba") );
+    EXPECT_NOT( ends_with_none_of("abc123mno123xyz", "321cbz") );
+
+    EXPECT(     ends_with_none_of(std::string("abc123mno123xyz"), std::string("321cba")) );
+    EXPECT_NOT( ends_with_none_of(std::string("abc123mno123xyz"), std::string("321cbz")) );
+
+    EXPECT(     ends_with_none_of(std17::string_view("abc123mno123xyz"), std17::string_view("321cba")) );
+    EXPECT_NOT( ends_with_none_of(std17::string_view("abc123mno123xyz"), std17::string_view("321cbz")) );
+}
 
 // find_first():
 

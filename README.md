@@ -126,6 +126,9 @@ The following table presents types, values and simplified, short prototypes of t
 | &nbsp;            | bool **starts_with_none_of**(string_view sv, string_view set)                      | true if string starts with no character of set                                                    |
 | &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
 | &emsp;ends_with   | bool **ends_with**(string_view sv, string_view what)                               | true if string ends with given string                                                             |
+| &nbsp;            | bool **ends_with_all_of**(string_view sv, string_view set)                         | true if string ends with all characters of set                                                  |
+| &nbsp;            | bool **ends_with_any_of**(string_view sv, string_view set)                         | true if string ends with any character of set                                                   |
+| &nbsp;            | bool **ends_with_none_of**(string_view sv, string_view set)                        | true if string ends with no character of set                                                    |
 | &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
 | **Searching**     | size_t **find_first**(string_view sv, string_view what)                            | position of first occurrence of given string, or npos                                             |
 | &nbsp;            | size_t **find_first_of**(string_view sv, string_view set)                          | position of first occurrence of character in set, or npos                                         |
@@ -239,7 +242,13 @@ contains_all_of: true if string contains all characters of set
 contains_any_of: true if string contains any character of set
 contains_none_of: true if string contains no character of set
 starts_with: true if string starts with substring
+starts_with_all_of: true if string starts with all characters of set
+starts_with_any_of: true if string starts with any character of set
+starts_with_none_of: true if string starts with no character of set
 ends_with: true if string ends with substring
+ends_with_all_of: true if string ends with all characters of set
+ends_with_any_of: true if string ends with any character of set
+ends_with_none_of: true if string ends with no character of set
 find_first: position of first substring in string
 find_last: position of last substring in string
 find_first_of: position of first character in string in set
