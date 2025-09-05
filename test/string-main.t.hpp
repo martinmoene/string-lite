@@ -84,16 +84,6 @@ namespace nonstd {
 namespace string {
 namespace std17 {
 
-inline bool operator==( string_view const & a, std::string const & b )
-{
-    return std::string(a.begin(), a.end()) == b;
-}
-
-inline bool operator==( std::string const & a, string_view const & b )
-{
-    return b == a;
-}
-
 inline bool operator==( std::vector<string_view> const & a, std::vector<std::string> const & b )
 {
     return std::equal( a.begin(), a.end(), b.begin() );

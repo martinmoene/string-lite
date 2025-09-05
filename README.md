@@ -111,6 +111,14 @@ The following table presents types, values and simplified, short prototypes of t
 | &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
 | **Utilities**     | string **to_string**(string_view sv)                                               | string from local or C++17 std string_view                                                        |
 | &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
+| **Comparison**    | int **compare**(string_view lhs, string_view rhs)                                  | negative, zero or positive for lsh is less than, equal to or greater than rhs                     |
+| &nbsp;            | bool **operator==**(string_view lhs, string_view rhs)                              | true if lhs string is equal to rhs string                                                         |
+| &nbsp;            | bool **operator!=**(string_view lhs, string_view rhs)                              | true if lhs string is not equal to rhs string                                                     |
+| &nbsp;            | bool **operator<**(string_view lhs, string_view rhs)                               | true if lhs string is less than rhs string                                                        |
+| &nbsp;            | bool **operator<=**(string_view lhs, string_view rhs)                              | true if lhs string is less than or equal to rhs string                                            |
+| &nbsp;            | bool **operator>=**(string_view lhs, string_view rhs)                              | true if lhs string is greater than or equal to rhs string                                         |
+| &nbsp;            | bool **operator>**(string_view lhs, string_view rhs)                               | true if lhs string is greater than or equal to rhs string                                         |
+| &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
 | **Observers**     | size_t **length**(string_view sv)                                                  | length of string                                                                                  |
 | &nbsp;            | size_t **size**(string_view sv)                                                    | length of string                                                                                  |
 | &nbsp;            | bool **is_empty**(string_view sv)                                                  | true if string is empty                                                                           |
@@ -126,9 +134,9 @@ The following table presents types, values and simplified, short prototypes of t
 | &nbsp;            | bool **starts_with_none_of**(string_view sv, string_view set)                      | true if string starts with no character of set                                                    |
 | &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
 | &emsp;ends_with   | bool **ends_with**(string_view sv, string_view what)                               | true if string ends with given string                                                             |
-| &nbsp;            | bool **ends_with_all_of**(string_view sv, string_view set)                         | true if string ends with all characters of set                                                  |
-| &nbsp;            | bool **ends_with_any_of**(string_view sv, string_view set)                         | true if string ends with any character of set                                                   |
-| &nbsp;            | bool **ends_with_none_of**(string_view sv, string_view set)                        | true if string ends with no character of set                                                    |
+| &nbsp;            | bool **ends_with_all_of**(string_view sv, string_view set)                         | true if string ends with all characters of set                                                    |
+| &nbsp;            | bool **ends_with_any_of**(string_view sv, string_view set)                         | true if string ends with any character of set                                                     |
+| &nbsp;            | bool **ends_with_none_of**(string_view sv, string_view set)                        | true if string ends with no character of set                                                      |
 | &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
 | **Searching**     | size_t **find_first**(string_view sv, string_view what)                            | position of first occurrence of given string, or npos                                             |
 | &nbsp;            | size_t **find_first_of**(string_view sv, string_view set)                          | position of first occurrence of character in set, or npos                                         |
@@ -277,7 +285,14 @@ strip: string with characters in set removed from left and right of string [" \t
 join: string with strings from collection joined separated by given separator
 split: split string into vector of string_view given delimiter - literal_delimiter
 split_left: split string into two-element tuple given delimiter - forward - literal_delimiter
-split_right: split string into two-element tuple given delimiter - reverse - literal_delimiter
+split_right: split string into two-element tuple given delimiter - reverse - literal_delimiter[TODO]
+compare: negative, zero or positive for lsh is less than, equal to or greater than rhs
+operator==(): true if lhs string is equal to rhs string
+operator!=(): true if lhs string is not equal to rhs string
+operator<(): true if lhs string is less than rhs string
+operator<=(): true if lhs string is less than or equal to rhs string
+operator>=(): true if lhs string is greater than or equal to rhs string
+operator>(): true if lhs string is greater than or equal to rhs string
 tweak header: Reads tweak header if supported [tweak]
 ```
 

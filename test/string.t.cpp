@@ -322,7 +322,7 @@ CASE( "find_first: position of first substring in string" )
     EXPECT( sv_npos == find_first(std17::string_view("abc123mno123xyz"), '7') );
 
     // find_first string:
-    
+
     EXPECT(       3 == find_first("abc123mno123xyz", "123") );
     EXPECT( sv_npos == find_first("abc123mno123xyz", "789") );
 
@@ -374,7 +374,7 @@ CASE( "find_first_of: position of first character in string in set" )
     EXPECT( sv_npos == find_first_of(std17::string_view("abc123mno123xyz"), std17::string_view("789") ) );
 }
 
-// TODO: find_last_of()
+// find_last_of()
 
 CASE( "find_last_of: position of last character in string in set" )
 {
@@ -388,7 +388,7 @@ CASE( "find_last_of: position of last character in string in set" )
     EXPECT( sv_npos == find_last_of(std17::string_view("abc123mno123xyz"), std17::string_view("789") ) );
 }
 
-// TODO: find_first_not_of()
+// find_first_not_of()
 
 CASE( "find_first_not_of: position of first character in string not in set" )
 {
@@ -762,7 +762,7 @@ CASE( "split: split string into single characters given empty delimiter" )
 
 #endif // Test Activation
 
-// TODO: split_left
+// split_left()
 
 CASE( "split_left: split string into two-element tuple given delimiter - forward - literal_delimiter" )
 {
@@ -775,9 +775,9 @@ CASE( "split_left: split string into two-element tuple given delimiter - forward
     EXPECT( split_left("abc;def;ghi", ";"                   ) == (std::tuple<std17::string_view, std17::string_view>("abc", "def;ghi")) );
 }
 
-// TODO: split_right
+// TODO: split_right()
 
-CASE( "split_right: split string into two-element tuple given delimiter - reverse - literal_delimiter" )
+CASE( "split_right: split string into two-element tuple given delimiter - reverse - literal_delimiter" "[TODO]" )
 {
     std17::string_view a, b;
     std::tie(a, b) = split_right("abc;def;ghi", ";");
@@ -787,6 +787,92 @@ CASE( "split_right: split string into two-element tuple given delimiter - revers
     // EXPECT( split_right("abc;def;ghi", literal_delimiter(";")) == (std::tuple<std17::string_view, std17::string_view>("abc;def", "ghi")) );
     // EXPECT( split_right("abc;def;ghi", ";"                   ) == (std::tuple<std17::string_view, std17::string_view>("abc;def", "ghi")) );
 }
+
+// compare()
+
+CASE( "compare: negative, zero or positive for lsh is less than, equal to or greater than rhs" )
+{
+    EXPECT( compare("aaa", "abc") <  0 );
+    EXPECT( compare("aaa", "abc") <= 0 );
+    EXPECT( compare("abc", "abc") <= 0 );
+    EXPECT( compare("abc", "abc") == 0 );
+    EXPECT( compare("abc", "aaa") >= 0 );
+    EXPECT( compare("abc", "aaa") >  0 );
+
+    EXPECT( compare(std::string("aaa"), std::string("abc")) <  0 );
+    EXPECT( compare(std::string("aaa"), std::string("abc")) <= 0 );
+    EXPECT( compare(std::string("abc"), std::string("abc")) <= 0 );
+    EXPECT( compare(std::string("abc"), std::string("abc")) == 0 );
+    EXPECT( compare(std::string("abc"), std::string("aaa")) >= 0 );
+    EXPECT( compare(std::string("abc"), std::string("aaa")) >  0 );
+
+    EXPECT( compare(std17::string_view("aaa"), std17::string_view("abc")) <  0 );
+    EXPECT( compare(std17::string_view("aaa"), std17::string_view("abc")) <= 0 );
+    EXPECT( compare(std17::string_view("abc"), std17::string_view("abc")) <= 0 );
+    EXPECT( compare(std17::string_view("abc"), std17::string_view("abc")) == 0 );
+    EXPECT( compare(std17::string_view("abc"), std17::string_view("aaa")) >= 0 );
+    EXPECT( compare(std17::string_view("abc"), std17::string_view("aaa")) >  0 );
+}
+
+// TODO: operator==(), etc.
+
+// Note: cannot compare char const *, comparison of non-user-defined type(s)
+
+CASE( "operator==(): true if lhs string is equal to rhs string" )
+{
+    EXPECT( std::string("abc") == std::string("abc") );
+    EXPECT( std17::string_view("abc") == std17::string_view("abc") );
+
+    EXPECT_NOT( std::string("aaa") == std::string("abc") );
+    EXPECT_NOT( std17::string_view("aaa") == std17::string_view("abc") );
+}
+
+CASE( "operator!=(): true if lhs string is not equal to rhs string" )
+{
+    EXPECT( std::string("aaa") != std::string("abc") );
+    EXPECT( std17::string_view("aaa") != std17::string_view("abc") );
+
+    EXPECT_NOT( std::string("abc") != std::string("abc") );
+    EXPECT_NOT( std17::string_view("abc") != std17::string_view("abc") );
+}
+
+CASE( "operator<(): true if lhs string is less than rhs string" )
+{
+    EXPECT( std::string("aaa") < std::string("abc") );
+    EXPECT( std17::string_view("aaa") < std17::string_view("abc") );
+
+    EXPECT_NOT( std::string("abc") < std::string("abc") );
+    EXPECT_NOT( std17::string_view("abc") < std17::string_view("abc") );
+}
+
+CASE( "operator<=(): true if lhs string is less than or equal to rhs string" )
+{
+    EXPECT( std::string("abc") <= std::string("abc") );
+    EXPECT( std17::string_view("abc") <= std17::string_view("abc") );
+
+    EXPECT_NOT( std::string("abc") <= std::string("aaa") );
+    EXPECT_NOT( std17::string_view("abc") <= std17::string_view("aaa") );
+}
+
+CASE( "operator>=(): true if lhs string is greater than or equal to rhs string" )
+{
+    EXPECT( std::string("abc") >= std::string("abc") );
+    EXPECT( std17::string_view("abc") >= std17::string_view("abc") );
+
+    EXPECT_NOT( std::string("aaa") == std::string("abc") );
+    EXPECT_NOT( std17::string_view("aaa") == std17::string_view("abc") );
+}
+
+CASE( "operator>(): true if lhs string is greater than or equal to rhs string" )
+{
+    EXPECT( std::string("abc") > std::string("aaa") );
+    EXPECT( std17::string_view("abc") > std17::string_view("aaa") );
+
+    EXPECT_NOT( std::string("abc") > std::string("abc") );
+    EXPECT_NOT( std17::string_view("abc") > std17::string_view("abc") );
+}
+
+// tweak header
 
 CASE( "tweak header: Reads tweak header if supported " "[tweak]" )
 {

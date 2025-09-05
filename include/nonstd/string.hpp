@@ -9,8 +9,6 @@
 #ifndef NONSTD_STRING_BARE_HPP
 #define NONSTD_STRING_BARE_HPP
 
-using CharT = char;     // TODO: remove; temporary while developing routines.
-
 #define string_bare_MAJOR  0
 #define string_bare_MINOR  0
 #define string_bare_PATCH  0
@@ -308,7 +306,7 @@ using std::basic_string_view;
 
 #else // string_HAVE_STRING_VIEW
 
-// TODO: Local basic_string_view.
+// Local basic_string_view.
 
 template
 <
@@ -549,7 +547,42 @@ template< class CharT, class Traits >
 string_nodiscard string_constexpr bool
 operator==( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs ) string_noexcept
 {
-    return 0 == lhs.compare( rhs );
+    return lhs.compare( rhs ) == 0;
+}
+
+template< class CharT, class Traits >
+string_nodiscard string_constexpr bool
+operator!=( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )
+{
+    return lhs.compare( rhs ) != 0;
+}
+
+template< class CharT, class Traits >
+string_nodiscard string_constexpr bool
+operator<( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )
+{
+    return lhs.compare( rhs ) < 0;
+}
+
+template< class CharT, class Traits >
+string_nodiscard string_constexpr bool
+operator<=( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )
+{
+    return lhs.compare( rhs ) <= 0;
+}
+
+template< class CharT, class Traits >
+string_nodiscard string_constexpr bool
+operator>( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )
+{
+    return lhs.compare( rhs ) > 0;
+}
+
+template< class CharT, class Traits >
+string_nodiscard string_constexpr bool
+operator>=( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )
+{
+    return compare( lhs, rhs ) >= 0;
 }
 
 #if string_CONFIG_PROVIDE_CHAR_T
@@ -831,19 +864,19 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 // contains() - C++23
 
 #if string_CPP23_OR_GREATER
-# define string_MK_CONTAINS(CharT)      \
-    template< typename SeekT >          \
-    string_nodiscard bool               \
+# define string_MK_CONTAINS(CharT)              \
+    template< typename SeekT >                  \
+    string_nodiscard bool                       \
     contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
-    {                                   \
-        return text.contains( seek );   \
+{                                               \
+        return text.contains( seek );           \
     }
 #else
-# define string_MK_CONTAINS(CharT)      \
-    template< typename SeekT >          \
-    string_nodiscard bool               \
+# define string_MK_CONTAINS(CharT)              \
+    template< typename SeekT >                  \
+    string_nodiscard bool                       \
     contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
-    {                                   \
+    {                                           \
         return string::npos != find_first(text, seek);  \
     }
 #endif
@@ -972,41 +1005,41 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 // ends_with() - C++20
 
 #if string_CPP20_OR_GREATER
-# define string_MK_ENDS_WITH(CharT)         \
-    template< typename SeekT >              \
-    string_nodiscard bool                   \
+# define string_MK_ENDS_WITH(CharT)                 \
+    template< typename SeekT >                      \
+    string_nodiscard bool                           \
     ends_with( std17::basic_string_view<CharT> text, SeekT const & seek )   \
-    {                                       \
-        return text.ends_with( seek );      \
+    {                                               \
+        return text.ends_with( seek );              \
     }
 #else
-# define string_MK_ENDS_WITH(CharT)         \
-    template< typename SeekT >              \
-    string_nodiscard bool                   \
+# define string_MK_ENDS_WITH(CharT)                 \
+    template< typename SeekT >                      \
+    string_nodiscard bool                           \
     ends_with( std17::basic_string_view<CharT> text, SeekT const & seek )   \
-    {                                       \
+    {                                               \
         const std17::basic_string_view<CharT> look( seek ); \
-                                            \
-        if ( size( look ) > size( text ) )  \
-        {                                   \
-            return false;                   \
-    }                                       \
+                                                    \
+        if ( size( look ) > size( text ) )          \
+        {                                           \
+            return false;                           \
+    }                                               \
         return std::equal( look.rbegin(), look.rend(), text.rbegin() ); \
     }
 #endif
 
 #if string_CPP17_000
-# define string_MK_ENDS_WITH_CHAR(CharT)    \
-    string_nodiscard inline bool            \
+# define string_MK_ENDS_WITH_CHAR(CharT)            \
+    string_nodiscard inline bool                    \
     ends_with( std17::basic_string_view<CharT> text, CharT seek )   \
-    {                                       \
+    {                                               \
         return ends_with( text, std::basic_string<CharT>( &seek, &seek + 1) );  \
     }
 #else
-# define string_MK_ENDS_WITH_CHAR(CharT)    \
-    string_nodiscard inline bool            \
+# define string_MK_ENDS_WITH_CHAR(CharT)            \
+    string_nodiscard inline bool                    \
     ends_with( std17::basic_string_view<CharT> text, CharT seek )   \
-    {                                       \
+    {                                               \
         return ends_with( text, std17::basic_string_view<CharT>( &seek, &seek + 1) );   \
     }
 #endif
@@ -1874,19 +1907,88 @@ split_left(  std17::basic_string_view<CharT> text, std17::basic_string_view<Char
 
 // TODO: split_right -> tuple
 
-// Split string at given separator character, starting at right.
+using CharT = char;     // TODO: remove; temporary while developing routines.
 
-string_nodiscard inline auto
-split_right( std17::basic_string_view<CharT> , std17::basic_string_view<CharT>  )
+#define string_MK_SPLIT_RIGHT_DELIM( CharT )
+
+template< typename Delimiter >
+string_nodiscard auto
+split_right( std17::basic_string_view<CharT> /*text*/, Delimiter /*delimiter*/ )
     -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
-// split_right( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
-//  -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
 {
     return { "TODO", "TODO" };
+
+    // auto const result = split( text, delimiter, 2 );
+    //
+    // return { result[0], result[1] };
+}
+
+// Split string at given separator character, starting at right.
+
+#define string_MK_SPLIT_RIGHT_STRING( CharT )
+
+string_nodiscard inline auto
+split_right( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
+    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
+{
+    return split_right( text, basic_literal_delimiter<CharT>(set) );
     // return split_right( text, basic_reverse_literal_delimiter<CharT>(set) );
 }
 
 #endif // string_CONFIG_PROVIDE_CHAR_T
+
+//
+// Comparision:
+//
+
+#define string_MK_COMPARE( CharT )          \
+    string_nodiscard inline int             \
+    compare( std17::basic_string_view<CharT> lhs, std17::basic_string_view<CharT> rhs )     \
+    {                                       \
+        return lhs.compare( rhs );          \
+    }
+
+#define string_MK_COMPARE_EQ( CharT )       \
+    string_nodiscard inline bool            \
+    operator==( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )  \
+    {                                       \
+        return compare( lhs, rhs ) == 0;    \
+    }
+
+#define string_MK_COMPARE_NE( CharT )       \
+    string_nodiscard inline bool            \
+    operator!=( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )  \
+    {                                       \
+        return compare( lhs, rhs ) != 0;    \
+    }
+
+#define string_MK_COMPARE_LT( CharT )       \
+    string_nodiscard inline bool            \
+    operator<( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )   \
+    {                                       \
+        return compare( lhs, rhs ) < 0;     \
+    }
+
+#define string_MK_COMPARE_LE( CharT )       \
+    string_nodiscard inline bool            \
+    operator<=( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )  \
+    {                                       \
+        return compare( lhs, rhs ) <= 0;    \
+    }
+
+#define string_MK_COMPARE_GE( CharT )       \
+    string_nodiscard inline bool            \
+    operator>=( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )  \
+    {                                       \
+        return compare( lhs, rhs ) >= 0;    \
+    }
+
+#define string_MK_COMPARE_GT( CharT )       \
+    string_nodiscard inline bool            \
+    operator>( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )   \
+    {                                       \
+        return compare( lhs, rhs ) > 0;     \
+    }
 
 //
 // Define requested functions:
@@ -1949,14 +2051,37 @@ string_MK_SPLIT_LEFT_DELIM   ( char )
 string_MK_SPLIT_LEFT_STRING  ( char )
 // string_MK_SPLIT_RIGHT_DELIM ( char )
 // string_MK_SPLIT_RIGHT_STRING( char )
-// ...
-#endif
+
+string_MK_COMPARE            ( char )
+
+// string_view operators:
+
+namespace string { namespace std17 {
+
+string_MK_COMPARE_EQ         ( char )
+string_MK_COMPARE_NE         ( char )
+string_MK_COMPARE_LT         ( char )
+string_MK_COMPARE_LE         ( char )
+string_MK_COMPARE_GE         ( char )
+string_MK_COMPARE_GT         ( char )
+
+}}  // namespace string::std17
+
+#endif // string_CONFIG_PROVIDE_CHAR_T
 
 #if string_CONFIG_PROVIDE_WCHAR_T
 
 string_MK_IS_EMPTY           ( wchar_t )
 string_MK_LENGTH             ( wchar_t )
 string_MK_SIZE               ( wchar_t )
+string_MK_FIND_FIRST         ( wchar_t )
+string_MK_FIND_FIRST_CHAR    ( wchar_t )
+string_MK_FIND_LAST          ( wchar_t )
+string_MK_FIND_LAST_CHAR     ( wchar_t )
+string_MK_FIND_FIRST_OF      ( wchar_t )
+string_MK_FIND_LAST_OF       ( wchar_t )
+string_MK_FIND_FIRST_NOT_OF  ( wchar_t )
+string_MK_FIND_LAST_NOT_OF   ( wchar_t )
 string_MK_APPEND             ( wchar_t )
 string_MK_CONTAINS           ( wchar_t )      // includes wchar_t search type
 string_MK_CONTAINS_ALL_OF    ( wchar_t )
@@ -1972,14 +2097,6 @@ string_MK_ENDS_WITH_CHAR     ( wchar_t )
 string_MK_ENDS_WITH_ALL_OF   ( wchar_t )
 string_MK_ENDS_WITH_ANY_OF   ( wchar_t )
 string_MK_ENDS_WITH_NONE_OF  ( wchar_t )
-string_MK_FIND_FIRST         ( wchar_t )
-string_MK_FIND_FIRST_CHAR    ( wchar_t )
-string_MK_FIND_LAST          ( wchar_t )
-string_MK_FIND_LAST_CHAR     ( wchar_t )
-string_MK_FIND_FIRST_OF      ( wchar_t )
-string_MK_FIND_LAST_OF       ( wchar_t )
-string_MK_FIND_FIRST_NOT_OF  ( wchar_t )
-string_MK_FIND_LAST_NOT_OF   ( wchar_t )
 string_MK_ERASE              ( wchar_t )
 string_MK_ERASE_ALL          ( wchar_t )
 string_MK_ERASE_FIRST        ( wchar_t )
@@ -2006,13 +2123,36 @@ string_MK_SPLIT_LEFT_STRING  ( wchar_t )
 // string_MK_SPLIT_RIGHT_DELIM ( wchar_t )
 // string_MK_SPLIT_RIGHT_STRING( wchar_t )
 // ...
-#endif
+string_MK_COMPARE            ( wchar_t )
+
+// string_view operators:
+
+namespace string { namespace std17 {
+
+string_MK_COMPARE_EQ         ( wchar_t )
+string_MK_COMPARE_NE         ( wchar_t )
+string_MK_COMPARE_LT         ( wchar_t )
+string_MK_COMPARE_LE         ( wchar_t )
+string_MK_COMPARE_GE         ( wchar_t )
+string_MK_COMPARE_GT         ( wchar_t )
+
+}}  // namespace string::std17
+
+#endif // string_CONFIG_PROVIDE_WCHAR_T
 
 #if string_CONFIG_PROVIDE_CHAR8_T && string_HAVE_CHAR8_T
 
 string_MK_IS_EMPTY           ( char8_t )
 string_MK_LENGTH             ( char8_t )
 string_MK_SIZE               ( char8_t )
+string_MK_FIND_FIRST         ( char8_t )
+string_MK_FIND_FIRST_CHAR    ( char8_t )
+string_MK_FIND_LAST          ( char8_t )
+string_MK_FIND_LAST_CHAR     ( char8_t )
+string_MK_FIND_FIRST_OF      ( char8_t )
+string_MK_FIND_LAST_OF       ( char8_t )
+string_MK_FIND_FIRST_NOT_OF  ( char8_t )
+string_MK_FIND_LAST_NOT_OF   ( char8_t )
 string_MK_APPEND             ( char8_t )
 string_MK_CONTAINS           ( char8_t )      // includes char search type
 string_MK_CONTAINS_ALL_OF    ( char8_t )
@@ -2028,14 +2168,6 @@ string_MK_ENDS_WITH_CHAR     ( char8_t )
 string_MK_ENDS_WITH_ALL_OF   ( char8_t )
 string_MK_ENDS_WITH_ANY_OF   ( char8_t )
 string_MK_ENDS_WITH_NONE_OF  ( char8_t )
-string_MK_FIND_FIRST         ( char8_t )
-string_MK_FIND_FIRST_CHAR    ( char8_t )
-string_MK_FIND_LAST          ( char8_t )
-string_MK_FIND_LAST_CHAR     ( char8_t )
-string_MK_FIND_FIRST_OF      ( char8_t )
-string_MK_FIND_LAST_OF       ( char8_t )
-string_MK_FIND_FIRST_NOT_OF  ( char8_t )
-string_MK_FIND_LAST_NOT_OF   ( char8_t )
 string_MK_ERASE              ( char8_t )
 string_MK_ERASE_ALL          ( char8_t )
 string_MK_ERASE_FIRST        ( char8_t )
@@ -2062,13 +2194,36 @@ string_MK_SPLIT_LEFT_STRING  ( char8_t )
 // string_MK_SPLIT_RIGHT_DELIM ( char8_t )
 // string_MK_SPLIT_RIGHT_STRING( char8_t )
 // ...
-#endif
+string_MK_COMPARE            ( char8_t )
+
+// string_view operators:
+
+namespace string { namespace std17 {
+
+string_MK_COMPARE_EQ         ( char8_t )
+string_MK_COMPARE_NE         ( char8_t )
+string_MK_COMPARE_LT         ( char8_t )
+string_MK_COMPARE_LE         ( char8_t )
+string_MK_COMPARE_GE         ( char8_t )
+string_MK_COMPARE_GT         ( char8_t )
+
+}}  // namespace string::std17
+
+#endif // string_CONFIG_PROVIDE_CHAR8_T && string_HAVE_CHAR8_T
 
 #if string_CONFIG_PROVIDE_CHAR16_T
 
 string_MK_IS_EMPTY           ( char16_t )
 string_MK_LENGTH             ( char16_t )
 string_MK_SIZE               ( char16_t )
+string_MK_FIND_FIRST         ( char16_t )
+string_MK_FIND_FIRST_CHAR    ( char16_t )
+string_MK_FIND_LAST          ( char16_t )
+string_MK_FIND_LAST_CHAR     ( char16_t )
+string_MK_FIND_FIRST_OF      ( char16_t )
+string_MK_FIND_LAST_OF       ( char16_t )
+string_MK_FIND_FIRST_NOT_OF  ( char16_t )
+string_MK_FIND_LAST_NOT_OF   ( char16_t )
 string_MK_APPEND             ( char16_t )
 string_MK_CONTAINS           ( char16_t )      // includes char search type
 string_MK_CONTAINS_ALL_OF    ( char16_t )
@@ -2084,14 +2239,6 @@ string_MK_ENDS_WITH_CHAR     ( char16_t )
 string_MK_ENDS_WITH_ALL_OF   ( char16_t )
 string_MK_ENDS_WITH_ANY_OF   ( char16_t )
 string_MK_ENDS_WITH_NONE_OF  ( char16_t )
-string_MK_FIND_FIRST         ( char16_t )
-string_MK_FIND_FIRST_CHAR    ( char16_t )
-string_MK_FIND_LAST          ( char16_t )
-string_MK_FIND_LAST_CHAR     ( char16_t )
-string_MK_FIND_FIRST_OF      ( char16_t )
-string_MK_FIND_LAST_OF       ( char16_t )
-string_MK_FIND_FIRST_NOT_OF  ( char16_t )
-string_MK_FIND_LAST_NOT_OF   ( char16_t )
 string_MK_ERASE              ( char16_t )
 string_MK_ERASE_ALL          ( char16_t )
 string_MK_ERASE_FIRST        ( char16_t )
@@ -2118,13 +2265,36 @@ string_MK_SPLIT_LEFT_STRING  ( char16_t )
 // string_MK_SPLIT_RIGHT_DELIM ( char16_t )
 // string_MK_SPLIT_RIGHT_STRING( char16_t )
 // ...
-#endif
+string_MK_COMPARE            ( char16_t )
+
+// string_view operators:
+
+namespace string { namespace std17 {
+
+string_MK_COMPARE_EQ         ( char16_t )
+string_MK_COMPARE_NE         ( char16_t )
+string_MK_COMPARE_LT         ( char16_t )
+string_MK_COMPARE_LE         ( char16_t )
+string_MK_COMPARE_GE         ( char16_t )
+string_MK_COMPARE_GT         ( char16_t )
+
+}}  // namespace string::std17
+
+#endif // string_CONFIG_PROVIDE_CHAR16_T
 
 #if string_CONFIG_PROVIDE_CHAR32_T
 
 string_MK_IS_EMPTY           ( char32_t )
 string_MK_LENGTH             ( char32_t )
 string_MK_SIZE               ( char32_t )
+string_MK_FIND_FIRST         ( char32_t )
+string_MK_FIND_FIRST_CHAR    ( char32_t )
+string_MK_FIND_LAST          ( char32_t )
+string_MK_FIND_LAST_CHAR     ( char32_t )
+string_MK_FIND_FIRST_OF      ( char32_t )
+string_MK_FIND_LAST_OF       ( char32_t )
+string_MK_FIND_FIRST_NOT_OF  ( char32_t )
+string_MK_FIND_LAST_NOT_OF   ( char32_t )
 string_MK_APPEND             ( char32_t )
 string_MK_CONTAINS           ( char32_t )      // includes char search type
 string_MK_CONTAINS_ALL_OF    ( char32_t )
@@ -2140,14 +2310,6 @@ string_MK_ENDS_WITH_CHAR     ( char32_t )
 string_MK_ENDS_WITH_ALL_OF   ( char32_t )
 string_MK_ENDS_WITH_ANY_OF   ( char32_t )
 string_MK_ENDS_WITH_NONE_OF  ( char32_t )
-string_MK_FIND_FIRST         ( char32_t )
-string_MK_FIND_FIRST_CHAR    ( char32_t )
-string_MK_FIND_LAST          ( char32_t )
-string_MK_FIND_LAST_CHAR     ( char32_t )
-string_MK_FIND_FIRST_OF      ( char32_t )
-string_MK_FIND_LAST_OF       ( char32_t )
-string_MK_FIND_FIRST_NOT_OF  ( char32_t )
-string_MK_FIND_LAST_NOT_OF   ( char32_t )
 string_MK_ERASE              ( char32_t )
 string_MK_ERASE_ALL          ( char32_t )
 string_MK_ERASE_FIRST        ( char32_t )
@@ -2174,7 +2336,22 @@ string_MK_SPLIT_LEFT_STRING  ( char32_t )
 // string_MK_SPLIT_RIGHT_DELIM ( char32_t )
 // string_MK_SPLIT_RIGHT_STRING( char32_t )
 // ...
-#endif
+string_MK_COMPARE            ( char32_t )
+
+// string_view operators:
+
+namespace string { namespace std17 {
+
+string_MK_COMPARE_EQ         ( char32_t )
+string_MK_COMPARE_NE         ( char32_t )
+string_MK_COMPARE_LT         ( char32_t )
+string_MK_COMPARE_LE         ( char32_t )
+string_MK_COMPARE_GE         ( char32_t )
+string_MK_COMPARE_GT         ( char32_t )
+
+}}  // namespace string::std17
+
+#endif // string_CONFIG_PROVIDE_CHAR32_T
 
 // #undef string_MK_*
 
@@ -2229,6 +2406,13 @@ string_MK_SPLIT_LEFT_STRING  ( char32_t )
 #undef string_MK_SPLIT_LEFT_STRING
 // #undef string_MK_SPLIT_RIGHT_DELIM
 // #undef string_MK_SPLIT_RIGHT_STRING
+#undef string_MK_COMPARE
+#undef string_MK_COMPARE_EQ
+#undef string_MK_COMPARE_NE
+#undef string_MK_COMPARE_LT
+#undef string_MK_COMPARE_LE
+#undef string_MK_COMPARE_GE
+#undef string_MK_COMPARE_GT
 
 } // namespace nonstd
 
