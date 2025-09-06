@@ -764,28 +764,28 @@ CASE( "split: split string into single characters given empty delimiter" )
 
 // split_left()
 
-CASE( "split_left: split string into two-element tuple given delimiter - forward - literal_delimiter" )
+CASE( "split_left: split string into two-element tuple given set of delimiter characters - forward" )
 {
-    std17::string_view a, b;
-    std::tie(a, b) = split_left("abc;def;ghi", ";");
+    // std17::string_view a, b;
+    // std::tie(a, b) = split_left("abc;def;ghi", ";");
 
     // std::cout << "[a:" << a << "][b:" << b << "]\n";
 
-    EXPECT( split_left("abc;def;ghi", literal_delimiter(";")) == (std::tuple<std17::string_view, std17::string_view>("abc", "def;ghi")) );
-    EXPECT( split_left("abc;def;ghi", ";"                   ) == (std::tuple<std17::string_view, std17::string_view>("abc", "def;ghi")) );
+    EXPECT( split_left("abc;def;ghi", ";"                   ) == (std::tuple<std17::string_view, std17::string_view>("abc", "def;ghi" )) );
+    EXPECT( split_left("abc;def;ghi", "/"                   ) == (std::tuple<std17::string_view, std17::string_view>("abc;def;ghi", "")) );
 }
 
 // TODO: split_right()
 
-CASE( "split_right: split string into two-element tuple given delimiter - reverse - literal_delimiter" "[TODO]" )
+CASE( "split_right: split string into two-element tuple given set of delimiter characters - reverse" )
 {
-    std17::string_view a, b;
-    std::tie(a, b) = split_right("abc;def;ghi", ";");
+    // std17::string_view a, b;
+    // std::tie(a, b) = split_right("abc;def;ghi", ";");
 
-    std::cout << "[a:" << a << "][b:" << b << "]\n";
+    // std::cout << "[a:" << a << "][b:" << b << "]\n";
 
-    // EXPECT( split_right("abc;def;ghi", literal_delimiter(";")) == (std::tuple<std17::string_view, std17::string_view>("abc;def", "ghi")) );
-    // EXPECT( split_right("abc;def;ghi", ";"                   ) == (std::tuple<std17::string_view, std17::string_view>("abc;def", "ghi")) );
+    EXPECT( split_right("abc;def;ghi", ";"                   ) == (std::tuple<std17::string_view, std17::string_view>("abc;def", "ghi"  )) );
+    EXPECT( split_right("abc;def;ghi", "/"                   ) == (std::tuple<std17::string_view, std17::string_view>( "", "abc;def;ghi")) );
 }
 
 // compare()

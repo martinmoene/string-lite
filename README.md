@@ -174,8 +174,6 @@ The following table presents types, values and simplified, short prototypes of t
 | &nbsp;            | string **join**(collection\<string_view\> vec, string_view sep)                    | string with elements of collection joined with given separator string                             |
 | &nbsp;            | &nbsp;                                                                             | &nbsp;                                                                                            |
 | **Separating**    | vector\<string_view\> **split**(string_view sv, string_view set)                   | vector of string_view with elements of string separated by characters from given set              |
-| &nbsp;            | tuple\<string_view, string_view\> **split_left**(string_view sv, Delimiter delim)  | tuple with head and tail string_view on given string as split at left by given delimiter          |
-| &nbsp;            | tuple\<string_view, string_view\> **split_right**(string_view sv, Delimiter delim) | tuple with head and tail string_view on given string as split at right by given delimiter         |
 | &nbsp;            | tuple\<string_view, string_view\> **split_left**(string_view sv, string_view set)  | tuple with head and tail string_view on given string as split at left by characters in given set  |
 | &nbsp;            | tuple\<string_view, string_view\> **split_right**(string_view sv, string_view set) | tuple with head and tail string_view on given string as split at right by characters in given set |
 
@@ -284,8 +282,8 @@ strip_right: string with characters in set removed from right of string [" \t\n"
 strip: string with characters in set removed from left and right of string [" \t\n"]
 join: string with strings from collection joined separated by given separator
 split: split string into vector of string_view given delimiter - literal_delimiter
-split_left: split string into two-element tuple given delimiter - forward - literal_delimiter
-split_right: split string into two-element tuple given delimiter - reverse - literal_delimiter[TODO]
+split_left: split string into two-element tuple given set of delimiter characters - forward
+split_right: split string into two-element tuple given set of delimiter characters - reverse
 compare: negative, zero or positive for lsh is less than, equal to or greater than rhs
 operator==(): true if lhs string is equal to rhs string
 operator!=(): true if lhs string is not equal to rhs string

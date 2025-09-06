@@ -767,74 +767,74 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 
 // find_first()
 
-#define string_MK_FIND_FIRST(CharT)         \
-    template< typename SeekT >              \
-    string_nodiscard std::size_t            \
+#define string_MK_FIND_FIRST(CharT)             \
+    template< typename SeekT >                  \
+    string_nodiscard std::size_t                \
     find_first( std17::basic_string_view<CharT> text, SeekT const & seek ) string_noexcept \
-    {                                       \
-        return text.find( seek );           \
+    {                                           \
+        return text.find( seek );               \
     }
 
 #if string_CPP17_000
-# define string_MK_FIND_FIRST_CHAR(CharT)   \
-    string_nodiscard inline std::size_t     \
+# define string_MK_FIND_FIRST_CHAR(CharT)       \
+    string_nodiscard inline std::size_t         \
     find_first( std17::basic_string_view<CharT> text, CharT seek ) string_noexcept \
-    {                                       \
+    {                                           \
         return find_first( text, std::basic_string<CharT>( &seek, &seek + 1 ) ); \
     }
 #else
-# define string_MK_FIND_FIRST_CHAR(CharT)   \
-    string_nodiscard inline std::size_t     \
+# define string_MK_FIND_FIRST_CHAR(CharT)       \
+    string_nodiscard inline std::size_t         \
     find_first( std17::basic_string_view<CharT> text, CharT seek ) string_noexcept \
-    {                                       \
+    {                                           \
         return find_first( text, std17::basic_string_view<CharT>( &seek, &seek + 1 ) ); \
     }
 #endif
 
 // find_last()
 
-#define string_MK_FIND_LAST(CharT)          \
-    template< typename SeekT >              \
-    string_nodiscard std::size_t            \
+#define string_MK_FIND_LAST(CharT)              \
+    template< typename SeekT >                  \
+    string_nodiscard std::size_t                \
     find_last( std17::basic_string_view<CharT> text, SeekT const & seek )  \
-    {                                       \
-        return text.rfind( seek );          \
+    {                                           \
+        return text.rfind( seek );              \
     }
 
 #if string_CPP17_000
-# define string_MK_FIND_LAST_CHAR(CharT)    \
-    string_nodiscard inline std::size_t     \
+# define string_MK_FIND_LAST_CHAR(CharT)        \
+    string_nodiscard inline std::size_t         \
     find_last( std17::basic_string_view<CharT> text, CharT seek )    \
-    {                                       \
+    {                                           \
         return find_last( text, std::basic_string<CharT>( &seek, &seek + 1 ) ); \
     }
 #else
-# define string_MK_FIND_LAST_CHAR(CharT)    \
-    string_nodiscard inline std::size_t     \
+# define string_MK_FIND_LAST_CHAR(CharT)        \
+    string_nodiscard inline std::size_t         \
     find_last( std17::basic_string_view<CharT> text, CharT seek )    \
-    {                                       \
+    {                                           \
         return find_last( text, std17::basic_string_view<CharT>( &seek, &seek + 1 ) );  \
     }
 #endif
 
 // find_first_of()
 
-#define string_MK_FIND_FIRST_OF(CharT)      \
-    template< typename SeekT >              \
-    string_nodiscard std::size_t            \
+#define string_MK_FIND_FIRST_OF(CharT)          \
+    template< typename SeekT >                  \
+    string_nodiscard std::size_t                \
     find_first_of( std17::basic_string_view<CharT> text, SeekT const & seek )   \
-    {                                       \
-        return text.find_first_of( seek );  \
+    {                                           \
+        return text.find_first_of( seek );      \
     }
 
 // find_last_of()
 
-#define string_MK_FIND_LAST_OF(CharT)       \
-    template< typename SeekT >              \
-    string_nodiscard std::size_t            \
+#define string_MK_FIND_LAST_OF(CharT)           \
+    template< typename SeekT >                  \
+    string_nodiscard std::size_t                \
     find_last_of( std17::basic_string_view<CharT> text, SeekT const & seek )    \
-    {                                       \
-        return text.find_last_of( seek );   \
+    {                                           \
+        return text.find_last_of( seek );       \
     }
 
 // find_first_not_of()
@@ -1886,54 +1886,27 @@ split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Ns
 
 // split_left -> tuple
 
-#define string_MK_SPLIT_LEFT_DELIM( CharT )                                                 \
-template< typename Delimiter >                                                              \
-string_nodiscard auto                                                                       \
-split_left( std17::basic_string_view<CharT> text, Delimiter delimiter )                     \
-    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>         \
-{                                                                                           \
-    auto const result = split( text, delimiter, 2 );                                        \
-                                                                                            \
-    return { result[0], result[1] };                                                        \
-}
-
-#define string_MK_SPLIT_LEFT_STRING( CharT )                                                \
-string_nodiscard inline auto                                                                \
-split_left(  std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )    \
-    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>         \
-{                                                                                           \
-    return split_left( text, basic_literal_delimiter<CharT>(set) );                         \
-}
-
-// TODO: split_right -> tuple
-
-using CharT = char;     // TODO: remove; temporary while developing routines.
-
-#define string_MK_SPLIT_RIGHT_DELIM( CharT )
-
-template< typename Delimiter >
-string_nodiscard auto
-split_right( std17::basic_string_view<CharT> /*text*/, Delimiter /*delimiter*/ )
-    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
-{
-    return { "TODO", "TODO" };
-
-    // auto const result = split( text, delimiter, 2 );
-    //
-    // return { result[0], result[1] };
+#define string_MK_SPLIT_LEFT( CharT )                                                               \
+string_nodiscard inline auto                                                                        \
+split_left(  std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )            \
+    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>                 \
+{                                                                                                   \
+        auto const pos = find_first_of( text, set );                                                \
+                                                                                                    \
+        return { text.substr( 0, pos ), text.substr( pos + 1 ) };                                   \
 }
 
 // Split string at given separator character, starting at right.
 
-#define string_MK_SPLIT_RIGHT_STRING( CharT )
-
-string_nodiscard inline auto
-split_right( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )
-    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
-{
-    return split_right( text, basic_literal_delimiter<CharT>(set) );
-    // return split_right( text, basic_reverse_literal_delimiter<CharT>(set) );
-}
+#define string_MK_SPLIT_RIGHT( CharT )                                                              \
+    string_nodiscard inline auto                                                                    \
+    split_right( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )        \
+        -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>             \
+    {                                                                                               \
+        auto const pos = find_last_of( text, set );                                                 \
+                                                                                                    \
+        return { text.substr( 0, pos ), text.substr( pos + 1 ) };                                   \
+    }
 
 #endif // string_CONFIG_PROVIDE_CHAR_T
 
@@ -2047,10 +2020,8 @@ string_MK_CAPITALIZE         ( char )
 string_MK_JOIN               ( char )
 string_MK_SPLIT_DELIM        ( char )
 string_MK_SPLIT_STRING       ( char )
-string_MK_SPLIT_LEFT_DELIM   ( char )
-string_MK_SPLIT_LEFT_STRING  ( char )
-// string_MK_SPLIT_RIGHT_DELIM ( char )
-// string_MK_SPLIT_RIGHT_STRING( char )
+string_MK_SPLIT_LEFT         ( char )
+string_MK_SPLIT_RIGHT        ( char )
 
 string_MK_COMPARE            ( char )
 
@@ -2118,10 +2089,8 @@ string_MK_CAPITALIZE         ( wchar_t )
 string_MK_JOIN               ( wchar_t )
 string_MK_SPLIT_DELIM        ( wchar_t )
 string_MK_SPLIT_STRING       ( wchar_t )
-string_MK_SPLIT_LEFT_DELIM   ( wchar_t )
-string_MK_SPLIT_LEFT_STRING  ( wchar_t )
-// string_MK_SPLIT_RIGHT_DELIM ( wchar_t )
-// string_MK_SPLIT_RIGHT_STRING( wchar_t )
+string_MK_SPLIT_LEFT         ( wchar_t )
+string_MK_SPLIT_RIGHT        ( wchar_t )
 // ...
 string_MK_COMPARE            ( wchar_t )
 
@@ -2189,10 +2158,8 @@ string_MK_CAPITALIZE         ( char8_t )
 string_MK_JOIN               ( char8_t )
 string_MK_SPLIT_DELIM        ( char8_t )
 string_MK_SPLIT_STRING       ( char8_t )
-string_MK_SPLIT_LEFT_DELIM   ( char8_t )
-string_MK_SPLIT_LEFT_STRING  ( char8_t )
-// string_MK_SPLIT_RIGHT_DELIM ( char8_t )
-// string_MK_SPLIT_RIGHT_STRING( char8_t )
+string_MK_SPLIT_LEFT         ( char8_t )
+string_MK_SPLIT_RIGHT        ( char8_t )
 // ...
 string_MK_COMPARE            ( char8_t )
 
@@ -2260,10 +2227,8 @@ string_MK_CAPITALIZE         ( char16_t )
 string_MK_JOIN               ( char16_t )
 string_MK_SPLIT_DELIM        ( char16_t )
 string_MK_SPLIT_STRING       ( char16_t )
-string_MK_SPLIT_LEFT_DELIM   ( char16_t )
-string_MK_SPLIT_LEFT_STRING  ( char16_t )
-// string_MK_SPLIT_RIGHT_DELIM ( char16_t )
-// string_MK_SPLIT_RIGHT_STRING( char16_t )
+string_MK_SPLIT_LEFT         ( char16_t )
+string_MK_SPLIT_RIGHT        ( char16_t )
 // ...
 string_MK_COMPARE            ( char16_t )
 
@@ -2331,10 +2296,8 @@ string_MK_CAPITALIZE         ( char32_t )
 string_MK_JOIN               ( char32_t )
 string_MK_SPLIT_DELIM        ( char32_t )
 string_MK_SPLIT_STRING       ( char32_t )
-string_MK_SPLIT_LEFT_DELIM   ( char32_t )
-string_MK_SPLIT_LEFT_STRING  ( char32_t )
-// string_MK_SPLIT_RIGHT_DELIM ( char32_t )
-// string_MK_SPLIT_RIGHT_STRING( char32_t )
+string_MK_SPLIT_LEFT         ( char32_t )
+string_MK_SPLIT_RIGHT        ( char32_t )
 // ...
 string_MK_COMPARE            ( char32_t )
 
@@ -2402,10 +2365,8 @@ string_MK_COMPARE_GT         ( char32_t )
 #undef string_MK_JOIN
 #undef string_MK_SPLIT_DELIM
 #undef string_MK_SPLIT_STRING
-#undef string_MK_SPLIT_LEFT_DELIM
-#undef string_MK_SPLIT_LEFT_STRING
-// #undef string_MK_SPLIT_RIGHT_DELIM
-// #undef string_MK_SPLIT_RIGHT_STRING
+#undef string_MK_SPLIT_LEFT
+#undef string_MK_SPLIT_RIGHT
 #undef string_MK_COMPARE
 #undef string_MK_COMPARE_EQ
 #undef string_MK_COMPARE_NE
