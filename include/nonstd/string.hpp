@@ -1424,7 +1424,7 @@ replace_all( std17::basic_string_view<CharT> text, std17::basic_string_view<Char
 #define string_MK_JOIN(CharT)                                               \
     template< typename Coll >                                               \
     string_nodiscard std::basic_string<CharT>                               \
-    join( Coll const & coll, std17::basic_string_view<CharT> const & sep )  \
+    join( Coll const & coll, std17::basic_string_view<CharT> sep )          \
     {                                                                       \
         std::basic_string<CharT> result{};                                  \
         typename Coll::const_iterator const coll_begin = coll.cbegin();     \
