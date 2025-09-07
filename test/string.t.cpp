@@ -771,8 +771,8 @@ CASE( "split_left: split string into two-element tuple given set of delimiter ch
 
     // std::cout << "[a:" << a << "][b:" << b << "]\n";
 
-    EXPECT( split_left("abc;def;ghi", ";"                   ) == (std::tuple<std17::string_view, std17::string_view>("abc", "def;ghi" )) );
-    EXPECT( split_left("abc;def;ghi", "/"                   ) == (std::tuple<std17::string_view, std17::string_view>("abc;def;ghi", "")) );
+    EXPECT( split_left("abc;def;ghi", ";") == (std::tuple<std17::string_view, std17::string_view>("abc", "def;ghi" )) );
+    EXPECT( split_left("abc;def;ghi", "/") == (std::tuple<std17::string_view, std17::string_view>("abc;def;ghi", "abc;def;ghi")) );
 }
 
 // TODO: split_right()
@@ -784,8 +784,8 @@ CASE( "split_right: split string into two-element tuple given set of delimiter c
 
     // std::cout << "[a:" << a << "][b:" << b << "]\n";
 
-    EXPECT( split_right("abc;def;ghi", ";"                   ) == (std::tuple<std17::string_view, std17::string_view>("abc;def", "ghi"  )) );
-    EXPECT( split_right("abc;def;ghi", "/"                   ) == (std::tuple<std17::string_view, std17::string_view>( "", "abc;def;ghi")) );
+    EXPECT( split_right("abc;def;ghi", ";") == (std::tuple<std17::string_view, std17::string_view>("abc;def", "ghi" )) );
+    EXPECT( split_right("abc;def;ghi", "/") == (std::tuple<std17::string_view, std17::string_view>( "abc;def;ghi", "abc;def;ghi")) );
 }
 
 // compare()

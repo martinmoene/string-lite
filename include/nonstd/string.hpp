@@ -500,7 +500,7 @@ public:
             throw std::out_of_range("string_view::substr()");
         }
 #endif
-        return basic_string_view( data() + pos, (std::min)( n, size() - pos ) );
+        return basic_string_view( data() + pos, n == npos? size() - pos : (std::min)( n, size() - pos ) );
     }
 
     string_nodiscard string_constexpr const_iterator begin()  const string_noexcept { return data_;         }
