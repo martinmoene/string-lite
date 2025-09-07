@@ -220,7 +220,7 @@ Define this to 1 if you want to compile without exceptions. If not defined, the 
 TBD
 
 - [n3593 - std::split(): An algorithm for splitting strings](http://wg21.link/n3593). / https://isocpp.org/files/papers/n3593.html
-- [Martin Broadhurst. How to split a string in C++. 2016](http://www.martinbroadhurst.com/how-to-split-a-string-in-c.html).
+- [Martin Broadhurst. Exploring String Splitting in C++ Programming. 2023](http://www.martinbroadhurst.com/how-to-split-a-string-in-c.html).
 
 ## Appendix
 
