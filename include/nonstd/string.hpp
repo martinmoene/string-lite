@@ -1858,7 +1858,7 @@ split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Ns
 } // namespace detail
 } // namespace string
 
-// split -> vector
+// split() -> vector
 
 #define string_MK_SPLIT_DELIM(CharT)                                                                \
     template< typename Delimiter                                                                    \
@@ -1888,29 +1888,39 @@ split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Ns
 
 #if string_CONFIG_PROVIDE_CHAR_T
 
-// split_left -> tuple
+// split_left() -> tuple
 
 #define string_MK_SPLIT_LEFT( CharT )                                                               \
 string_nodiscard inline auto                                                                        \
-split_left(  std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )            \
+split_left(  std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set, std::size_t count = npos )  \
     -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>                 \
 {                                                                                                   \
-        auto const pos = find_first_of( text, set );                                                \
+        auto const pos = text.find_first_of( set );                                                 \
                                                                                                     \
-        return { text.substr( 0, pos ), text.substr( pos + 1 ) };                                   \
+        if ( pos == npos )                                                                          \
+            return { text, text };                                                                  \
+                                                                                                    \
+        auto const n = (std::min)( count, text.substr( pos ).find_first_not_of( set ) );            \
+                                                                                                    \
+        return { text.substr( 0, pos ), n != npos ? text.substr( pos + n ) : text.substr( 0, 0 ) }; \
 }
 
-// Split string at given separator character, starting at right.
+// split_right() -> tuple
 
 #define string_MK_SPLIT_RIGHT( CharT )                                                              \
-    string_nodiscard inline auto                                                                    \
-    split_right( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )        \
-        -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>             \
-    {                                                                                               \
-        auto const pos = find_last_of( text, set );                                                 \
+string_nodiscard inline auto                                                                        \
+split_right(  std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set, std::size_t count = npos )  \
+    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>                 \
+{                                                                                                   \
+        auto const pos = text.find_last_of( set );                                                  \
                                                                                                     \
-        return { text.substr( 0, pos ), text.substr( pos + 1 ) };                                   \
-    }
+        if ( pos == npos )                                                                          \
+            return { text, text };                                                                  \
+                                                                                                    \
+        auto const n = (std::min)( count, pos - text.substr( 0, pos ).find_last_not_of( set ) );    \
+                                                                                                    \
+        return { text.substr( 0, pos - n + 1 ), text.substr( pos + 1 ) };                           \
+}
 
 #endif // string_CONFIG_PROVIDE_CHAR_T
 

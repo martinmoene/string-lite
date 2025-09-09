@@ -766,26 +766,36 @@ CASE( "split: split string into single characters given empty delimiter" )
 
 CASE( "split_left: split string into two-element tuple given set of delimiter characters - forward" )
 {
-    // std17::string_view a, b;
-    // std::tie(a, b) = split_left("abc;def;ghi", ";");
+    EXPECT( split_left("abc;:-"       , ";:-") == (std::tuple<std17::string_view, std17::string_view>("abc", "")) );
+    EXPECT( split_left("abc;:-def;ghi", ";:-") == (std::tuple<std17::string_view, std17::string_view>("abc", "def;ghi" )) );
+    EXPECT( split_left("abc;:-def;ghi", "/,.") == (std::tuple<std17::string_view, std17::string_view>("abc;:-def;ghi", "abc;:-def;ghi")) );
 
-    // std::cout << "[a:" << a << "][b:" << b << "]\n";
+    EXPECT( split_left("abc;:-"       , ";:-", 2) == (std::tuple<std17::string_view, std17::string_view>("abc", "-")) );
+    EXPECT( split_left("abc;:-"       , ";:-", 1) == (std::tuple<std17::string_view, std17::string_view>("abc", ":-")) );
+    EXPECT( split_left("abc;:-"       , ";:-", 0) == (std::tuple<std17::string_view, std17::string_view>("abc", ";:-")) );
 
-    EXPECT( split_left("abc;def;ghi", ";") == (std::tuple<std17::string_view, std17::string_view>("abc", "def;ghi" )) );
-    EXPECT( split_left("abc;def;ghi", "/") == (std::tuple<std17::string_view, std17::string_view>("abc;def;ghi", "abc;def;ghi")) );
+    EXPECT( split_left("abc123", "1234567890", 0) == (std::tuple<std17::string_view, std17::string_view>("abc", "123")) );
+    EXPECT( split_left("123abc", "1234567890", 0) == (std::tuple<std17::string_view, std17::string_view>("", "123abc")) );
+
+    EXPECT( split_left("class::member", ":") == (std::tuple<std17::string_view, std17::string_view>("class", "member")) );
 }
 
-// TODO: split_right()
+// split_right()
 
 CASE( "split_right: split string into two-element tuple given set of delimiter characters - reverse" )
 {
-    // std17::string_view a, b;
-    // std::tie(a, b) = split_right("abc;def;ghi", ";");
+    EXPECT( split_right(";:-abc"       , ";:-") == (std::tuple<std17::string_view, std17::string_view>("", "abc")) );
+    EXPECT( split_right("abc;def;:-ghi", ";:-") == (std::tuple<std17::string_view, std17::string_view>("abc;def", "ghi" )) );
+    EXPECT( split_right("abc;def;:-ghi", "/,.") == (std::tuple<std17::string_view, std17::string_view>("abc;def;:-ghi", "abc;def;:-ghi")) );
 
-    // std::cout << "[a:" << a << "][b:" << b << "]\n";
+    EXPECT( split_right(";:-abc"       , ";:-", 2) == (std::tuple<std17::string_view, std17::string_view>(";", "abc")) );
+    EXPECT( split_right(";:-abc"       , ";:-", 1) == (std::tuple<std17::string_view, std17::string_view>(";:", "abc")) );
+    EXPECT( split_right(";:-abc"       , ";:-", 0) == (std::tuple<std17::string_view, std17::string_view>(";:-", "abc")) );
 
-    EXPECT( split_right("abc;def;ghi", ";") == (std::tuple<std17::string_view, std17::string_view>("abc;def", "ghi" )) );
-    EXPECT( split_right("abc;def;ghi", "/") == (std::tuple<std17::string_view, std17::string_view>( "abc;def;ghi", "abc;def;ghi")) );
+    EXPECT( split_right("123abc", "1234567890", 0) == (std::tuple<std17::string_view, std17::string_view>("123", "abc")) );
+    EXPECT( split_right("abc123", "1234567890", 0) == (std::tuple<std17::string_view, std17::string_view>("abc123", "")) );
+
+    EXPECT( split_right("class::member", ":") == (std::tuple<std17::string_view, std17::string_view>("class", "member")) );
 }
 
 // compare()
@@ -808,9 +818,11 @@ CASE( "compare: negative, zero or positive for lsh is less than, equal to or gre
     EXPECT( compare(std::string("aaa"), std::string("abc")) <  0 );
     EXPECT( compare(std::string("aaa"), std::string("abc")) <= 0 );
     EXPECT( compare(std::string("abc"), std::string("abc")) <= 0 );
-    EXPECT( compare(std::string("abc"), std::string("abc")) == 0 );
     EXPECT( compare(std::string("abc"), std::string("aaa")) >= 0 );
     EXPECT( compare(std::string("abc"), std::string("aaa")) >  0 );
+
+    EXPECT_NOT( compare(std::string("abc"), std::string("abcd")) == 0 );
+    EXPECT    ( compare(std::string("abc"), std::string("abcd")) != 0 );
 
     EXPECT( compare(std17::string_view("abc"), std17::string_view("abc")) == 0 );
     EXPECT( compare(std17::string_view("aaa"), std17::string_view("abc")) != 0 );
@@ -819,6 +831,9 @@ CASE( "compare: negative, zero or positive for lsh is less than, equal to or gre
     EXPECT( compare(std17::string_view("abc"), std17::string_view("abc")) <= 0 );
     EXPECT( compare(std17::string_view("abc"), std17::string_view("aaa")) >= 0 );
     EXPECT( compare(std17::string_view("abc"), std17::string_view("aaa")) >  0 );
+
+    EXPECT_NOT( compare(std17::string_view("abc"), std17::string_view("abcd")) == 0 );
+    EXPECT    ( compare(std17::string_view("abc"), std17::string_view("abcd")) != 0 );
 }
 
 // TODO: operator==(), etc.
