@@ -480,9 +480,13 @@ public:
             : to_pos( std::find_if( const_reverse_iterator( cbegin() + pos + 1 ), crend(), not_in_view( v ) ) );
     }
 
-    string_nodiscard string_constexpr int compare( basic_string_view v ) const string_noexcept
+    string_nodiscard string_constexpr14 int compare( basic_string_view v ) const string_noexcept
     {
-        return Traits::compare( data(), v.data(), (std::min)(size(), v.size()) );
+        auto const result = Traits::compare( data(), v.data(), (std::min)(size(), v.size()) );
+
+        return result != 0
+            ? result
+            : size() == v.size() ? 0 : size() < v.size() ? -1 : +1;
     }
 
     string_nodiscard string_constexpr bool          empty()  const string_noexcept { return size_ == 0; }

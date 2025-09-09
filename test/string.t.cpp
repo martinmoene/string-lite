@@ -792,13 +792,19 @@ CASE( "split_right: split string into two-element tuple given set of delimiter c
 
 CASE( "compare: negative, zero or positive for lsh is less than, equal to or greater than rhs" )
 {
+    EXPECT( compare("abc", "abc") == 0 );
+    EXPECT( compare("aaa", "abc") != 0 );
     EXPECT( compare("aaa", "abc") <  0 );
     EXPECT( compare("aaa", "abc") <= 0 );
     EXPECT( compare("abc", "abc") <= 0 );
-    EXPECT( compare("abc", "abc") == 0 );
     EXPECT( compare("abc", "aaa") >= 0 );
     EXPECT( compare("abc", "aaa") >  0 );
 
+    EXPECT_NOT( compare("abc", "abcd") == 0 );
+    EXPECT    ( compare("abc", "abcd") != 0 );
+
+    EXPECT( compare(std::string("abc"), std::string("abc")) == 0 );
+    EXPECT( compare(std::string("aaa"), std::string("abc")) != 0 );
     EXPECT( compare(std::string("aaa"), std::string("abc")) <  0 );
     EXPECT( compare(std::string("aaa"), std::string("abc")) <= 0 );
     EXPECT( compare(std::string("abc"), std::string("abc")) <= 0 );
@@ -806,10 +812,11 @@ CASE( "compare: negative, zero or positive for lsh is less than, equal to or gre
     EXPECT( compare(std::string("abc"), std::string("aaa")) >= 0 );
     EXPECT( compare(std::string("abc"), std::string("aaa")) >  0 );
 
+    EXPECT( compare(std17::string_view("abc"), std17::string_view("abc")) == 0 );
+    EXPECT( compare(std17::string_view("aaa"), std17::string_view("abc")) != 0 );
     EXPECT( compare(std17::string_view("aaa"), std17::string_view("abc")) <  0 );
     EXPECT( compare(std17::string_view("aaa"), std17::string_view("abc")) <= 0 );
     EXPECT( compare(std17::string_view("abc"), std17::string_view("abc")) <= 0 );
-    EXPECT( compare(std17::string_view("abc"), std17::string_view("abc")) == 0 );
     EXPECT( compare(std17::string_view("abc"), std17::string_view("aaa")) >= 0 );
     EXPECT( compare(std17::string_view("abc"), std17::string_view("aaa")) >  0 );
 }
