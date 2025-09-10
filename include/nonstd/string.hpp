@@ -651,35 +651,35 @@ string_nodiscard string_constexpr CharT nullchr() noexcept
 // null C-string:
 
 #if string_CONFIG_PROVIDE_CHAR_T
-string_nodiscard string_constexpr char const * nullstr( char ) noexcept
+string_nodiscard inline string_constexpr char const * nullstr( char ) noexcept
 {
     return "";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
-string_nodiscard string_constexpr wchar_t const * nullstr( wchar_t ) noexcept
+string_nodiscard inline string_constexpr wchar_t const * nullstr( wchar_t ) noexcept
 {
     return L"";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR8_T
-string_nodiscard string_constexpr char8_t const * nullstr( char8_t ) noexcept
+string_nodiscard inline string_constexpr char8_t const * nullstr( char8_t ) noexcept
 {
     return u8"";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR16_T
-string_nodiscard string_constexpr char16_t const * nullstr( char16_t ) noexcept
+string_nodiscard inline string_constexpr char16_t const * nullstr( char16_t ) noexcept
 {
     return u"";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR32_T
-string_nodiscard string_constexpr char32_t const * nullstr( char32_t ) noexcept
+string_nodiscard inline string_constexpr char32_t const * nullstr( char32_t ) noexcept
 {
     return U"";
 }
@@ -688,35 +688,35 @@ string_nodiscard string_constexpr char32_t const * nullstr( char32_t ) noexcept
 // default strip set:
 
 #if string_CONFIG_PROVIDE_CHAR_T
-string_nodiscard inline char const * default_strip_set( char )
+string_nodiscard inline string_constexpr char const * default_strip_set( char )
 {
     return " \t\n";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
-string_nodiscard string_constexpr wchar_t const * default_strip_set( wchar_t ) noexcept
+string_nodiscard inline string_constexpr wchar_t const * default_strip_set( wchar_t ) noexcept
 {
     return L" \t\n";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR8_T
-string_nodiscard string_constexpr char8_t const * default_strip_set( char8_t ) noexcept
+string_nodiscard inline string_constexpr char8_t const * default_strip_set( char8_t ) noexcept
 {
     return u8" \t\n";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR16_T
-string_nodiscard string_constexpr char16_t const * default_strip_set( char16_t ) noexcept
+string_nodiscard inline string_constexpr char16_t const * default_strip_set( char16_t ) noexcept
 {
     return u" \t\n";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR32_T
-string_nodiscard string_constexpr char32_t const * default_strip_set( char32_t ) noexcept
+string_nodiscard inline string_constexpr char32_t const * default_strip_set( char32_t ) noexcept
 {
     return U" \t\n";
 }
