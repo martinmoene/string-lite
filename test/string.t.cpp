@@ -582,15 +582,19 @@ CASE( "replace_last: string with last occurrence of substring replaced" )
 
 CASE( "strip_left: string with characters in set removed from left of string [\" \\t\\n\"]" )
 {
+    EXPECT( strip_left(" \t\nabc"         ) == "abc" );
     EXPECT( strip_left(" \t\nabc", " \t\n") == "abc" );
     EXPECT( strip_left(" #$%&abc", " #$%&") == "abc" );
 
+    EXPECT( strip_left(std::string(" \t\nabc")                      ) == "abc" );
     EXPECT( strip_left(std::string(" \t\nabc"), std::string(" \t\n")) == "abc" );
     EXPECT( strip_left(std::string(" #$%&abc"), std::string(" #$%&")) == "abc" );
 
+    EXPECT( strip_left(std17::string_view(" \t\nabc")                             ) == "abc" );
     EXPECT( strip_left(std17::string_view(" \t\nabc"), std17::string_view(" \t\n")) == "abc" );
     EXPECT( strip_left(std17::string_view(" #$%&abc"), std17::string_view(" #$%&")) == "abc" );
 
+    EXPECT( strip_left(stringy(" \t\nabc")         ) == "abc" );
     EXPECT( strip_left(stringy(" \t\nabc"), " \t\n") == "abc" );
     EXPECT( strip_left(stringy(" #$%&abc"), " #$%&") == "abc" );
 }
@@ -599,15 +603,19 @@ CASE( "strip_left: string with characters in set removed from left of string [\"
 
 CASE( "strip_right: string with characters in set removed from right of string [\" \\t\\n\"]" )
 {
+    EXPECT( strip_right(std::string("abc \t\n")         ) == "abc" );
     EXPECT( strip_right(std::string("abc \t\n"), " \t\n") == "abc" );
     EXPECT( strip_right(std::string("abc #$%&"), " #$%&") == "abc" );
 
+    EXPECT( strip_right(std::string("abc \t\n")                      ) == "abc" );
     EXPECT( strip_right(std::string("abc \t\n"), std::string(" \t\n")) == "abc" );
     EXPECT( strip_right(std::string("abc #$%&"), std::string(" #$%&")) == "abc" );
 
+    EXPECT( strip_right(std17::string_view("abc \t\n")                             ) == "abc" );
     EXPECT( strip_right(std17::string_view("abc \t\n"), std17::string_view(" \t\n")) == "abc" );
     EXPECT( strip_right(std17::string_view("abc #$%&"), std17::string_view(" #$%&")) == "abc" );
 
+    EXPECT( strip_right(stringy("abc \t\n")         ) == "abc" );
     EXPECT( strip_right(stringy("abc \t\n"), " \t\n") == "abc" );
     EXPECT( strip_right(stringy("abc #$%&"), " #$%&") == "abc" );
 }
@@ -616,15 +624,19 @@ CASE( "strip_right: string with characters in set removed from right of string [
 
 CASE( "strip: string with characters in set removed from left and right of string [\" \\t\\n\"]" )
 {
+    EXPECT( strip(" \t\nabc \t\n"         ) == "abc" );
     EXPECT( strip(" \t\nabc \t\n", " \t\n") == "abc" );
     EXPECT( strip(" #$%&abc #$%&", " #$%&") == "abc" );
 
+    EXPECT( strip(std::string(" \t\nabc \t\n")                      ) == "abc" );
     EXPECT( strip(std::string(" \t\nabc \t\n"), std::string(" \t\n")) == "abc" );
     EXPECT( strip(std::string(" #$%&abc #$%&"), std::string(" #$%&")) == "abc" );
 
+    EXPECT( strip(std17::string_view(" \t\nabc \t\n")                             ) == "abc" );
     EXPECT( strip(std17::string_view(" \t\nabc \t\n"), std17::string_view(" \t\n")) == "abc" );
     EXPECT( strip(std17::string_view(" #$%&abc #$%&"), std17::string_view(" #$%&")) == "abc" );
 
+    EXPECT( strip(stringy(" \t\nabc \t\n")         ) == "abc" );
     EXPECT( strip(stringy(" \t\nabc \t\n"), " \t\n") == "abc" );
     EXPECT( strip(stringy(" #$%&abc #$%&"), " #$%&") == "abc" );
 }

@@ -640,11 +640,15 @@ namespace detail {
 // Utilities:
 //
 
+// null character:
+
 template< typename CharT >
 string_nodiscard string_constexpr CharT nullchr() noexcept
 {
     return 0;
 }
+
+// null C-string:
 
 #if string_CONFIG_PROVIDE_CHAR_T
 string_nodiscard string_constexpr char const * nullstr( char ) noexcept
@@ -680,6 +684,45 @@ string_nodiscard string_constexpr char32_t const * nullstr( char32_t ) noexcept
     return U"";
 }
 #endif
+
+// default strip set:
+
+#if string_CONFIG_PROVIDE_CHAR_T
+string_nodiscard inline char const * default_strip_set( char )
+{
+    return " \t\n";
+}
+#endif
+
+#if string_CONFIG_PROVIDE_WCHAR_T
+string_nodiscard string_constexpr wchar_t const * default_strip_set( wchar_t ) noexcept
+{
+    return L" \t\n";
+}
+#endif
+
+#if string_CONFIG_PROVIDE_CHAR8_T
+string_nodiscard string_constexpr char8_t const * default_strip_set( char8_t ) noexcept
+{
+    return u8" \t\n";
+}
+#endif
+
+#if string_CONFIG_PROVIDE_CHAR16_T
+string_nodiscard string_constexpr char16_t const * default_strip_set( char16_t ) noexcept
+{
+    return u" \t\n";
+}
+#endif
+
+#if string_CONFIG_PROVIDE_CHAR32_T
+string_nodiscard string_constexpr char32_t const * default_strip_set( char32_t ) noexcept
+{
+    return U" \t\n";
+}
+#endif
+
+// to_string(sv):
 
 #if string_HAVE_STRING_VIEW
     #define MK_DETAIL_TO_STRING_SV(T)                           \
@@ -1143,7 +1186,7 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
         return result;                                          \
     }
 
-// to_lowercase(), to_uppercase():
+// to_lowercase(), to_uppercase()
 
 // template string_nodiscard std::basic_string<CharT> to_lowercase( std17::basic_string_view<CharT> text ) string_noexcept;
 
@@ -1159,18 +1202,13 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
         return detail::to_case( std::basic_string<CharT>(text), detail::to_ ## Function<CharT> );   \
     }
 
-// template< typename StringT >
-// inline StringT const default_strip_set()
-// {
-//     return " \t\n";
-// }
-
 // strip_left()
 
 #define string_MK_STRIP_LEFT(CharT)                                                         \
-    template< typename SetT >                                                               \
-    string_nodiscard std::basic_string<CharT>                                               \
-    strip_left( std17::basic_string_view<CharT> text, SetT const & set )                    \
+    string_nodiscard inline std::basic_string<CharT>                                        \
+    strip_left(                                                                             \
+        std17::basic_string_view<CharT> text                                                \
+        , std17::basic_string_view<CharT> set = detail::default_strip_set(CharT{}) )        \
     {                                                                                       \
         return std::basic_string<CharT>( text ).erase( 0, text.find_first_not_of( set ) );  \
     }
@@ -1178,21 +1216,23 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
 // strip_right()
 
 #define string_MK_STRIP_RIGHT(CharT)                                                        \
-    template< typename SetT >                                                               \
-    string_nodiscard std::basic_string<CharT>                                               \
-    strip_right( std17::basic_string_view<CharT> text, SetT const & set )                   \
+    string_nodiscard inline std::basic_string<CharT>                                        \
+    strip_right(                                                                            \
+        std17::basic_string_view<CharT> text                                                \
+        , std17::basic_string_view<CharT> set = detail::default_strip_set(CharT{}) )        \
     {                                                                                       \
         return std::basic_string<CharT>( text ).erase( text.find_last_not_of( set ) + 1 );  \
     }
 
 // strip()
 
-#define string_MK_STRIP(CharT)                                      \
-    template< typename SetT >                                       \
-    string_nodiscard std::basic_string<CharT>                       \
-    strip( std17::basic_string_view<CharT> text, SetT const & set ) \
-    {                                                               \
-        return strip_left( strip_right( text, set ), set );         \
+#define string_MK_STRIP(CharT)                                                              \
+    string_nodiscard inline std::basic_string<CharT>                                        \
+    strip(                                                                                  \
+        std17::basic_string_view<CharT> text                                                \
+        , std17::basic_string_view<CharT> set = detail::default_strip_set(CharT{}) )        \
+    {                                                                                       \
+        return strip_left( strip_right( text, set ), set );                                 \
     }
 
 // erase_all()
