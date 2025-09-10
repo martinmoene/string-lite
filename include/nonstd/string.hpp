@@ -1932,7 +1932,10 @@ split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Ns
 
 #define string_MK_SPLIT_LEFT( CharT )                                                               \
 string_nodiscard inline auto                                                                        \
-split_left(  std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set, std::size_t count = npos )  \
+split_left(                                                                                         \
+    std17::basic_string_view<CharT> text                                                            \
+    , std17::basic_string_view<CharT> set                                                           \
+    , std::size_t count = std::numeric_limits<std::size_t>::max() )                                 \
     -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>                 \
 {                                                                                                   \
         auto const pos = text.find_first_of( set );                                                 \
@@ -1949,7 +1952,10 @@ split_left(  std17::basic_string_view<CharT> text, std17::basic_string_view<Char
 
 #define string_MK_SPLIT_RIGHT( CharT )                                                              \
 string_nodiscard inline auto                                                                        \
-split_right(  std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set, std::size_t count = npos )  \
+split_right(                                                                                        \
+    std17::basic_string_view<CharT> text                                                            \
+    , std17::basic_string_view<CharT> set                                                           \
+    , std::size_t count = std::numeric_limits<std::size_t>::max() )                                 \
     -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>                 \
 {                                                                                                   \
         auto const pos = text.find_last_of( set );                                                  \
