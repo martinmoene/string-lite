@@ -2039,12 +2039,16 @@ split_right(                                                                    
 // Comparision:
 //
 
+// defined in namespace nonstd
+
 #define string_MK_COMPARE( CharT )          \
     string_nodiscard inline int             \
     compare( std17::basic_string_view<CharT> lhs, std17::basic_string_view<CharT> rhs )     \
     {                                       \
         return lhs.compare( rhs );          \
     }
+
+// defined in namespace nonstd::string::std17
 
 #define string_MK_COMPARE_EQ( CharT )       \
     string_nodiscard inline bool            \
