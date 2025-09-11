@@ -610,7 +610,7 @@ typedef basic_string_view<char32_t>  u32string_view;
 #endif
 
 template< typename CharT >
-string_nodiscard inline std::size_t size( basic_string_view<CharT> const & sv )
+string_nodiscard inline std::size_t size( basic_string_view<CharT> const & sv ) string_noexcept
 {
     return sv.size();
 }
@@ -643,7 +643,7 @@ namespace detail {
 // null character:
 
 template< typename CharT >
-string_nodiscard string_constexpr CharT nullchr() noexcept
+string_nodiscard string_constexpr CharT nullchr() string_noexcept
 {
     return 0;
 }
@@ -651,35 +651,35 @@ string_nodiscard string_constexpr CharT nullchr() noexcept
 // null C-string:
 
 #if string_CONFIG_PROVIDE_CHAR_T
-string_nodiscard inline string_constexpr char const * nullstr( char ) noexcept
+string_nodiscard inline string_constexpr char const * nullstr( char ) string_noexcept
 {
     return "";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
-string_nodiscard inline string_constexpr wchar_t const * nullstr( wchar_t ) noexcept
+string_nodiscard inline string_constexpr wchar_t const * nullstr( wchar_t ) string_noexcept
 {
     return L"";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR8_T
-string_nodiscard inline string_constexpr char8_t const * nullstr( char8_t ) noexcept
+string_nodiscard inline string_constexpr char8_t const * nullstr( char8_t ) string_noexcept
 {
     return u8"";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR16_T
-string_nodiscard inline string_constexpr char16_t const * nullstr( char16_t ) noexcept
+string_nodiscard inline string_constexpr char16_t const * nullstr( char16_t ) string_noexcept
 {
     return u"";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR32_T
-string_nodiscard inline string_constexpr char32_t const * nullstr( char32_t ) noexcept
+string_nodiscard inline string_constexpr char32_t const * nullstr( char32_t ) string_noexcept
 {
     return U"";
 }
@@ -688,35 +688,35 @@ string_nodiscard inline string_constexpr char32_t const * nullstr( char32_t ) no
 // default strip set:
 
 #if string_CONFIG_PROVIDE_CHAR_T
-string_nodiscard inline string_constexpr char const * default_strip_set( char )
+string_nodiscard inline string_constexpr char const * default_strip_set( char ) string_noexcept
 {
     return " \t\n";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_WCHAR_T
-string_nodiscard inline string_constexpr wchar_t const * default_strip_set( wchar_t ) noexcept
+string_nodiscard inline string_constexpr wchar_t const * default_strip_set( wchar_t ) string_noexcept
 {
     return L" \t\n";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR8_T
-string_nodiscard inline string_constexpr char8_t const * default_strip_set( char8_t ) noexcept
+string_nodiscard inline string_constexpr char8_t const * default_strip_set( char8_t ) string_noexcept
 {
     return u8" \t\n";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR16_T
-string_nodiscard inline string_constexpr char16_t const * default_strip_set( char16_t ) noexcept
+string_nodiscard inline string_constexpr char16_t const * default_strip_set( char16_t ) string_noexcept
 {
     return u" \t\n";
 }
 #endif
 
 #if string_CONFIG_PROVIDE_CHAR32_T
-string_nodiscard inline string_constexpr char32_t const * default_strip_set( char32_t ) noexcept
+string_nodiscard inline string_constexpr char32_t const * default_strip_set( char32_t ) string_noexcept
 {
     return U" \t\n";
 }
@@ -804,7 +804,10 @@ namespace string {
 namespace detail {
 
 template< typename CharT, typename SeekT >
-string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, SeekT const & seek, std::size_t pos ) string_noexcept
+string_nodiscard std::size_t
+find_first(
+    std17::basic_string_view<CharT> text
+    , SeekT const & seek, std::size_t pos ) string_noexcept
 {
     return text.find( seek, pos );
 }
@@ -814,94 +817,114 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 
 // find_first()
 
-#define string_MK_FIND_FIRST(CharT)             \
-    template< typename SeekT >                  \
-    string_nodiscard std::size_t                \
-    find_first( std17::basic_string_view<CharT> text, SeekT const & seek ) string_noexcept \
-    {                                           \
-        return text.find( seek );               \
+#define string_MK_FIND_FIRST(CharT)                 \
+    template< typename SeekT >                      \
+    string_nodiscard std::size_t                    \
+    find_first(                                     \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek ) string_noexcept      \
+    {                                               \
+        return text.find( seek );                   \
     }
 
 #if string_CPP17_000
-# define string_MK_FIND_FIRST_CHAR(CharT)       \
-    string_nodiscard inline std::size_t         \
-    find_first( std17::basic_string_view<CharT> text, CharT seek ) string_noexcept \
-    {                                           \
+# define string_MK_FIND_FIRST_CHAR(CharT)           \
+    string_nodiscard inline std::size_t             \
+    find_first(                                     \
+        std17::basic_string_view<CharT> text        \
+        , CharT seek ) string_noexcept              \
+    {                                               \
         return find_first( text, std::basic_string<CharT>( &seek, &seek + 1 ) ); \
     }
 #else
-# define string_MK_FIND_FIRST_CHAR(CharT)       \
-    string_nodiscard inline std::size_t         \
-    find_first( std17::basic_string_view<CharT> text, CharT seek ) string_noexcept \
-    {                                           \
+# define string_MK_FIND_FIRST_CHAR(CharT)           \
+    string_nodiscard inline std::size_t             \
+    find_first(                                     \
+        std17::basic_string_view<CharT> text        \
+        , CharT seek ) string_noexcept              \
+    {                                               \
         return find_first( text, std17::basic_string_view<CharT>( &seek, &seek + 1 ) ); \
     }
 #endif
 
 // find_last()
 
-#define string_MK_FIND_LAST(CharT)              \
-    template< typename SeekT >                  \
-    string_nodiscard std::size_t                \
-    find_last( std17::basic_string_view<CharT> text, SeekT const & seek )  \
-    {                                           \
-        return text.rfind( seek );              \
+#define string_MK_FIND_LAST(CharT)                  \
+    template< typename SeekT >                      \
+    string_nodiscard std::size_t                    \
+    find_last(                                      \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek )                      \
+    {                                               \
+        return text.rfind( seek );                  \
     }
 
 #if string_CPP17_000
-# define string_MK_FIND_LAST_CHAR(CharT)        \
-    string_nodiscard inline std::size_t         \
-    find_last( std17::basic_string_view<CharT> text, CharT seek )    \
-    {                                           \
+# define string_MK_FIND_LAST_CHAR(CharT)            \
+    string_nodiscard inline std::size_t             \
+    find_last(                                      \
+        std17::basic_string_view<CharT> text        \
+        , CharT seek )                              \
+    {                                               \
         return find_last( text, std::basic_string<CharT>( &seek, &seek + 1 ) ); \
     }
 #else
-# define string_MK_FIND_LAST_CHAR(CharT)        \
-    string_nodiscard inline std::size_t         \
-    find_last( std17::basic_string_view<CharT> text, CharT seek )    \
-    {                                           \
+# define string_MK_FIND_LAST_CHAR(CharT)            \
+    string_nodiscard inline std::size_t             \
+    find_last(                                      \
+        std17::basic_string_view<CharT> text        \
+        , CharT seek )                              \
+    {                                               \
         return find_last( text, std17::basic_string_view<CharT>( &seek, &seek + 1 ) );  \
     }
 #endif
 
 // find_first_of()
 
-#define string_MK_FIND_FIRST_OF(CharT)          \
-    template< typename SeekT >                  \
-    string_nodiscard std::size_t                \
-    find_first_of( std17::basic_string_view<CharT> text, SeekT const & seek )   \
-    {                                           \
-        return text.find_first_of( seek );      \
+#define string_MK_FIND_FIRST_OF(CharT)              \
+    template< typename SeekT >                      \
+    string_nodiscard std::size_t                    \
+    find_first_of(                                  \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek )                      \
+    {                                               \
+        return text.find_first_of( seek );          \
     }
 
 // find_last_of()
 
-#define string_MK_FIND_LAST_OF(CharT)           \
-    template< typename SeekT >                  \
-    string_nodiscard std::size_t                \
-    find_last_of( std17::basic_string_view<CharT> text, SeekT const & seek )    \
-    {                                           \
-        return text.find_last_of( seek );       \
+#define string_MK_FIND_LAST_OF(CharT)               \
+    template< typename SeekT >                      \
+    string_nodiscard std::size_t                    \
+    find_last_of(                                   \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek )                      \
+    {                                               \
+        return text.find_last_of( seek );           \
     }
 
 // find_first_not_of()
 
-#define string_MK_FIND_FIRST_NOT_OF(CharT)      \
-    template< typename SeekT >                  \
-    string_nodiscard std::size_t                \
-    find_first_not_of( std17::basic_string_view<CharT> text, SeekT const & seek )   \
-    {                                           \
-        return text.find_first_not_of( seek );  \
+#define string_MK_FIND_FIRST_NOT_OF(CharT)          \
+    template< typename SeekT >                      \
+    string_nodiscard std::size_t                    \
+    find_first_not_of(                              \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek )                      \
+    {                                               \
+        return text.find_first_not_of( seek );      \
     }
 
 // find_last_not_of()
 
-#define string_MK_FIND_LAST_NOT_OF(CharT)       \
-    template< typename SeekT >                  \
-    string_nodiscard std::size_t                \
-    find_last_not_of( std17::basic_string_view<CharT> text, SeekT const & seek )    \
-    {                                           \
-        return text.find_last_not_of( seek );   \
+#define string_MK_FIND_LAST_NOT_OF(CharT)           \
+    template< typename SeekT >                      \
+    string_nodiscard std::size_t                    \
+    find_last_not_of(                               \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek )                      \
+    {                                               \
+        return text.find_last_not_of( seek );       \
     }
 
 // TODO: ??? find_if()
@@ -911,98 +934,116 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 // contains() - C++23
 
 #if string_CPP23_OR_GREATER
-# define string_MK_CONTAINS(CharT)              \
-    template< typename SeekT >                  \
-    string_nodiscard bool                       \
-    contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
-{                                               \
-        return text.contains( seek );           \
+# define string_MK_CONTAINS(CharT)                  \
+    template< typename SeekT >                      \
+    string_nodiscard bool                           \
+    contains(                                       \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek )                      \
+{                                                   \
+        return text.contains( seek );               \
     }
 #else
-# define string_MK_CONTAINS(CharT)              \
-    template< typename SeekT >                  \
-    string_nodiscard bool                       \
-    contains( std17::basic_string_view<CharT> text, SeekT const & seek )  \
-    {                                           \
+# define string_MK_CONTAINS(CharT)                  \
+    template< typename SeekT >                      \
+    string_nodiscard bool                           \
+    contains(                                       \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek )                      \
+    {                                               \
         return string::npos != find_first(text, seek);  \
     }
 #endif
 
 // contains_all_of()
 
-# define string_MK_CONTAINS_ALL_OF(CharT)       \
-    string_nodiscard inline bool                \
-    contains_all_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
-    {                                           \
-        for ( auto const chr : set )            \
-        {                                       \
-            if ( ! contains( text, chr ) )      \
-                return false;                   \
-        }                                       \
-        return true;                            \
+# define string_MK_CONTAINS_ALL_OF(CharT)           \
+    string_nodiscard inline bool                    \
+    contains_all_of(                                \
+        std17::basic_string_view<CharT> text        \
+        , std17::basic_string_view<CharT> set )     \
+    {                                               \
+        for ( auto const chr : set )                \
+        {                                           \
+            if ( ! contains( text, chr ) )          \
+                return false;                       \
+        }                                           \
+        return true;                                \
     }
 
 // contains_any_of()
 
-# define string_MK_CONTAINS_ANY_OF(CharT)       \
-    string_nodiscard inline bool                \
-    contains_any_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
-    {                                           \
-        for ( auto const chr : set )            \
-        {                                       \
-            if ( contains( text, chr ) )        \
-                return true;                    \
-        }                                       \
-        return false;                           \
+# define string_MK_CONTAINS_ANY_OF(CharT)           \
+    string_nodiscard inline bool                    \
+    contains_any_of(                                \
+        std17::basic_string_view<CharT> text        \
+        , std17::basic_string_view<CharT> set )     \
+    {                                               \
+        for ( auto const chr : set )                \
+        {                                           \
+            if ( contains( text, chr ) )            \
+                return true;                        \
+        }                                           \
+        return false;                               \
     }
 
 // contains_none_of()
 
-# define string_MK_CONTAINS_NONE_OF(CharT)      \
-    string_nodiscard inline bool                \
-    contains_none_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
-    {                                           \
-        return ! contains_any_of( text, set );  \
+# define string_MK_CONTAINS_NONE_OF(CharT)          \
+    string_nodiscard inline bool                    \
+    contains_none_of(                               \
+        std17::basic_string_view<CharT> text        \
+        , std17::basic_string_view<CharT> set )     \
+    {                                               \
+        return ! contains_any_of( text, set );      \
     }
 
 // starts_with() - C++20
 
 #if string_CPP20_OR_GREATER
-# define string_MK_STARTS_WITH(CharT)                               \
-    template< typename SeekT >                                      \
-    string_nodiscard bool                                           \
-    starts_with( std17::basic_string_view<CharT> text, SeekT const & seek ) \
-    {                                                               \
-        return text.starts_with( seek );                            \
+# define string_MK_STARTS_WITH(CharT)               \
+    template< typename SeekT >                      \
+    string_nodiscard bool                           \
+    starts_with(                                    \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek )                      \
+    {                                               \
+        return text.starts_with( seek );            \
     }
 #else
-# define string_MK_STARTS_WITH(CharT)                               \
-    template< typename SeekT >                                      \
-    string_nodiscard bool                                           \
-    starts_with( std17::basic_string_view<CharT> text, SeekT const & seek ) \
-    {                                                               \
-        const std17::basic_string_view<CharT> look( seek );         \
-                                                                    \
-        if ( size( look ) > size( text ) )                          \
-        {                                                           \
-            return false;                                           \
-        }                                                           \
-        return std::equal( look.begin(), look.end(), text.begin() );\
+# define string_MK_STARTS_WITH(CharT)               \
+    template< typename SeekT >                      \
+    string_nodiscard bool                           \
+    starts_with(                                    \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek )                      \
+    {                                               \
+        const std17::basic_string_view<CharT> look( seek );     \
+                                                    \
+        if ( size( look ) > size( text ) )          \
+        {                                           \
+            return false;                           \
+        }                                           \
+        return std::equal( look.begin(), look.end(), text.begin() );    \
     }
 #endif  // string_CPP20_OR_GREATER
 
 #if string_CPP17_000
-# define string_MK_STARTS_WITH_CHAR(CharT)                          \
-    string_nodiscard inline bool                                    \
-    starts_with( std17::basic_string_view<CharT> text, CharT seek ) \
-    {                                                               \
+# define string_MK_STARTS_WITH_CHAR(CharT)          \
+    string_nodiscard inline bool                    \
+    starts_with(                                    \
+        std17::basic_string_view<CharT> text        \
+        , CharT seek )                              \
+    {                                               \
         return starts_with( text, std::basic_string<CharT>( &seek, &seek + 1) );    \
     }
 #else
-# define string_MK_STARTS_WITH_CHAR(CharT)                          \
-    string_nodiscard inline bool                                    \
-    starts_with( std17::basic_string_view<CharT> text, CharT seek ) \
-    {                                                               \
+# define string_MK_STARTS_WITH_CHAR(CharT)          \
+    string_nodiscard inline bool                    \
+    starts_with(                                    \
+        std17::basic_string_view<CharT> text        \
+        , CharT seek )                              \
+    {                                               \
         return starts_with( text, std17::basic_string_view<CharT>( &seek, &seek + 1) ); \
     }
 #endif  // string_CPP17_000
@@ -1011,7 +1052,9 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 
 # define string_MK_STARTS_WITH_ALL_OF(CharT)        \
     string_nodiscard inline bool                    \
-    starts_with_all_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    starts_with_all_of(                             \
+        std17::basic_string_view<CharT> text        \
+        , std17::basic_string_view<CharT> set )     \
     {                                               \
         if ( text.empty() )                         \
             return false;                           \
@@ -1032,7 +1075,9 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 
 # define string_MK_STARTS_WITH_ANY_OF(CharT)        \
     string_nodiscard inline bool                    \
-    starts_with_any_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    starts_with_any_of(                             \
+        std17::basic_string_view<CharT> text        \
+        , std17::basic_string_view<CharT> set )     \
     {                                               \
         if ( text.empty() )                         \
             return false;                           \
@@ -1044,7 +1089,9 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 
 # define string_MK_STARTS_WITH_NONE_OF(CharT)       \
     string_nodiscard inline bool                    \
-    starts_with_none_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    starts_with_none_of(                            \
+        std17::basic_string_view<CharT> text        \
+        , std17::basic_string_view<CharT> set )     \
     {                                               \
         return ! starts_with_any_of( text, set );   \
     }
@@ -1063,7 +1110,9 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 # define string_MK_ENDS_WITH(CharT)                 \
     template< typename SeekT >                      \
     string_nodiscard bool                           \
-    ends_with( std17::basic_string_view<CharT> text, SeekT const & seek )   \
+    ends_with(                                      \
+        std17::basic_string_view<CharT> text        \
+        , SeekT const & seek )                      \
     {                                               \
         const std17::basic_string_view<CharT> look( seek ); \
                                                     \
@@ -1078,14 +1127,18 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 #if string_CPP17_000
 # define string_MK_ENDS_WITH_CHAR(CharT)            \
     string_nodiscard inline bool                    \
-    ends_with( std17::basic_string_view<CharT> text, CharT seek )   \
+    ends_with(                                      \
+        std17::basic_string_view<CharT> text        \
+        , CharT seek )                              \
     {                                               \
         return ends_with( text, std::basic_string<CharT>( &seek, &seek + 1) );  \
     }
 #else
 # define string_MK_ENDS_WITH_CHAR(CharT)            \
     string_nodiscard inline bool                    \
-    ends_with( std17::basic_string_view<CharT> text, CharT seek )   \
+    ends_with(                                      \
+        std17::basic_string_view<CharT> text        \
+        , CharT seek )                              \
     {                                               \
         return ends_with( text, std17::basic_string_view<CharT>( &seek, &seek + 1) );   \
     }
@@ -1095,7 +1148,9 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 
 # define string_MK_ENDS_WITH_ALL_OF(CharT)          \
     string_nodiscard inline bool                    \
-    ends_with_all_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    ends_with_all_of(                               \
+        std17::basic_string_view<CharT> text        \
+        , std17::basic_string_view<CharT> set )     \
     {                                               \
         if ( text.empty() )                         \
             return false;                           \
@@ -1117,7 +1172,9 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 
 # define string_MK_ENDS_WITH_ANY_OF(CharT)          \
     string_nodiscard inline bool                    \
-    ends_with_any_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    ends_with_any_of(                               \
+        std17::basic_string_view<CharT> text        \
+        , std17::basic_string_view<CharT> set )     \
     {                                               \
         if ( text.empty() )                         \
             return false;                           \
@@ -1129,7 +1186,9 @@ string_nodiscard std::size_t find_first( std17::basic_string_view<CharT> text, S
 
 # define string_MK_ENDS_WITH_NONE_OF(CharT)         \
     string_nodiscard inline bool                    \
-    ends_with_none_of( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> set )  \
+    ends_with_none_of(                              \
+        std17::basic_string_view<CharT> text        \
+        , std17::basic_string_view<CharT> set )     \
     {                                               \
         return !ends_with_any_of( text, set );      \
     }
@@ -1340,7 +1399,10 @@ namespace detail {
 
 template< typename CharT >
 string_nodiscard std::basic_string<CharT>
-replace_all( std17::basic_string_view<CharT> text, std17::basic_string_view<CharT> what, std17::basic_string_view<CharT> with )
+replace_all(
+    std17::basic_string_view<CharT> text
+    , std17::basic_string_view<CharT> what
+    , std17::basic_string_view<CharT> with )
 {
     std::basic_string<CharT> result( text );
 
@@ -1458,7 +1520,10 @@ replace_all( std17::basic_string_view<CharT> text, std17::basic_string_view<Char
 
 #define string_MK_SUBSTRING(CharT)                                          \
     string_nodiscard inline std::basic_string<CharT>                        \
-    substring( std17::basic_string_view<CharT> text, std::size_t pos = 0, std::size_t count = string::npos )    \
+    substring(                                                              \
+        std17::basic_string_view<CharT> text                                \
+        , std::size_t pos = 0                                               \
+        , std::size_t count = string::npos )                                \
     {                                                                       \
         return std::basic_string<CharT>( text ).substr( pos, count );       \
     }
