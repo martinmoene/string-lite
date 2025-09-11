@@ -556,35 +556,35 @@ operator==( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits>
 
 template< class CharT, class Traits >
 string_nodiscard string_constexpr bool
-operator!=( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs )
+operator!=( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs ) string_noexcept
 {
     return lhs.compare( rhs ) != 0;
 }
 
 template< class CharT, class Traits >
 string_nodiscard string_constexpr bool
-operator<( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs )
+operator<( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs ) string_noexcept
 {
     return lhs.compare( rhs ) < 0;
 }
 
 template< class CharT, class Traits >
 string_nodiscard string_constexpr bool
-operator<=( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs )
+operator<=( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs ) string_noexcept
 {
     return lhs.compare( rhs ) <= 0;
 }
 
 template< class CharT, class Traits >
 string_nodiscard string_constexpr bool
-operator>( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs )
+operator>( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs ) string_noexcept
 {
     return lhs.compare( rhs ) > 0;
 }
 
 template< class CharT, class Traits >
 string_nodiscard string_constexpr bool
-operator>=( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs )
+operator>=( basic_string_view<CharT,Traits> lhs, basic_string_view<CharT,Traits> rhs ) string_noexcept
 {
     return compare( lhs, rhs ) >= 0;
 }
