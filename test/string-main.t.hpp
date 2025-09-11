@@ -86,7 +86,7 @@ namespace std17 {
 
 inline bool operator==( std::vector<string_view> const & a, std::vector<std::string> const & b )
 {
-    return std::equal( a.begin(), a.end(), b.begin() );
+    return std::equal( a.begin(), a.end(), b.begin() ) && a.size() == b.size();
 }
 
 inline bool operator==( std::vector<std::string> const & a, std::vector<string_view> const & b )
