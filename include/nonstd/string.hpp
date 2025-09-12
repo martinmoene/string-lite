@@ -1553,420 +1553,10 @@ replace_all(
         return result;                                                      \
     }
 
-// TODO: split
-
-// split():
-
-// Various kinds of delimiters:
-// - literal_delimiter - a single string delimiter
-// - any_of_delimiter - any of given characters as delimiter
-// - fixed_delimiter - fixed length delimiter
-// - limit_delimiter - not implemented
-// - regex_delimiter - regular expression delimiter
-// - char_delimiter - single-char delimiter
-
-#if 0
-
-template< typename CharT >
-string_nodiscard std17::basic_string_view<CharT>
-basic_delimiter_end(std17::basic_string_view<CharT> sv) string_noexcept
-{
-    return std17::basic_string_view<CharT>{ sv.data() + sv.size(), std::size_t(0) };
-}
-
-// a single string delimiter:
-
-template< typename CharT >
-class basic_literal_delimiter
-{
-    const std::basic_string<CharT> delimiter_;
-    mutable std::size_t found_;
-
-public:
-    explicit basic_literal_delimiter(std17::basic_string_view<CharT> sv)
-        : delimiter_(detail::to_string(sv))
-        , found_(0)
-    {}
-
-    string_nodiscard std::size_t length() const
-    {
-        return delimiter_.length();
-    }
-
-    string_nodiscard std17::basic_string_view<CharT>
-    operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
-    {
-        return find(text, pos);
-    }
-
-    string_nodiscard std17::basic_string_view<CharT>
-    find(std17::basic_string_view<CharT> text, std::size_t pos) const
-    {
-        // out of range, return 'empty' if last match was at end of text, else return 'done':
-        if ( pos >= text.length())
-        {
-            // last delimiter match at end of text?
-            if ( found_ != text.length() - 1 )
-                return basic_delimiter_end(text);
-
-            found_ = 0;
-            return text.substr(text.length() - 1, 0);
-        }
-
-        // a single character at a time:
-        if (0 == delimiter_.length())
-        {
-            return text.substr(pos, 1);
-        }
-
-        found_ = text.find(delimiter_, pos);
-
-        // at a delimiter, or searching past the last delimiter:
-        if (found_ == pos || pos == text.length())
-        {
-            return text.substr(pos, 0);
-        }
-
-        // no delimiter found:
-        if (found_ == std17::basic_string_view<CharT>::npos)
-        {
-            // return remaining text:
-            if (pos < text.length())
-            {
-                return text.substr(pos);
-            }
-
-            // nothing left, return 'done':
-            return basic_delimiter_end(text);
-        }
-
-        // delimited text:
-        return text.substr(pos, found_ - pos);
-    }
-};
-
-// any of given characters as delimiter:
-
-template< typename CharT >
-class basic_any_of_delimiter
-{
-    const std::basic_string<CharT> delimiters_;
-
-public:
-    explicit basic_any_of_delimiter(std17::basic_string_view<CharT> sv)
-        : delimiters_(detail::to_string(sv)) {}
-
-    string_nodiscard std::size_t length() const
-    {
-        return (std::min)( std::size_t(1), delimiters_.length());
-    }
-
-    string_nodiscard std17::basic_string_view<CharT>
-    operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
-    {
-        return find(text, pos);
-    }
-
-    string_nodiscard std17::basic_string_view<CharT>
-    find(std17::basic_string_view<CharT> text, std::size_t pos) const
-    {
-        // out of range, return 'done':
-        if ( pos > text.length())
-            return basic_delimiter_end(text);
-
-        // a single character at a time:
-        if (0 == delimiters_.length())
-        {
-            return text.substr(pos, 1);
-        }
-
-        std::size_t found = text.find_first_of(delimiters_, pos);
-
-        // at a delimiter, or searching past the last delimiter:
-        if (found == pos || (pos == text.length()))
-        {
-            return std17::basic_string_view<CharT>();
-        }
-
-        // no delimiter found:
-        if (found == std17::basic_string_view<CharT>::npos)
-        {
-            // return remaining text:
-            if (pos < text.length())
-            {
-                return text.substr(pos);
-            }
-
-            // nothing left, return 'done':
-            return basic_delimiter_end(text);
-        }
-
-        // delimited text:
-        return text.substr(pos, found - pos);
-    }
-};
-
-// fixed length delimiter:
-
-template< typename CharT >
-class basic_fixed_delimiter
-{
-    std::size_t len_;
-
-public:
-    explicit basic_fixed_delimiter(std::size_t len)
-        : len_(len) {}
-
-    string_nodiscard std::size_t length() const
-    {
-        return 0;
-    }
-
-    string_nodiscard std17::basic_string_view<CharT>
-    operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
-    {
-        return find(text, pos);
-    }
-
-    string_nodiscard std17::basic_string_view<CharT>
-    find(std17::basic_string_view<CharT> text, std::size_t pos) const
-    {
-        // out of range, return 'done':
-        if ( pos > text.length())
-            return basic_delimiter_end(text);
-
-        // current slice:
-        return text.substr(pos, len_);
-    }
-};
-
-// TODO limit_delimiter - Delimiter template would take another Delimiter and a std::size_t limiting
-// the given delimiter to matching a max numbers of times. This is similar to the 3rd argument to
-// perl's split() function.
-
-template< typename CharT, typename DelimiterT >
-class basic_limit_delimiter;
-
-// regular expression delimiter:
-
-#if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-
-template< typename CharT >
-class basic_regex_delimiter
-{
-    std::regex          delimiter_re_;              // regular expression designating delimiters
-    std::size_t         delimiter_len_;             // length of regular expression
-    mutable std::size_t matched_delimiter_length_;  // length of the actually matched delimiter
-    mutable bool        trailing_delimiter_seen;    // whether to provide last empty result
-
-public:
-    explicit basic_regex_delimiter(std17::basic_string_view<CharT> sv)
-        : delimiter_re_(detail::to_string(sv))
-        , delimiter_len_(sv.length())
-        , matched_delimiter_length_(0u)
-        , trailing_delimiter_seen(false)
-    {}
-
-    string_nodiscard std::size_t length() const
-    {
-        return matched_delimiter_length_;
-    }
-
-    string_nodiscard std17::basic_string_view<CharT>
-    operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
-    {
-        return find(text, pos);
-    }
-
-    string_nodiscard std17::basic_string_view<CharT>
-    find(std17::basic_string_view<CharT> text, std::size_t pos) const
-    {
-        // trailing empty entry:
-        // TODO this feels like a hack, don't know any better at this moment
-        if (trailing_delimiter_seen)
-        {
-            trailing_delimiter_seen = false;
-            return std17::basic_string_view<CharT>();
-        }
-
-        // out of range, return 'done':
-        if ( pos > text.length())
-            return basic_delimiter_end(text);
-
-        // a single character at a time:
-        if (0 == delimiter_len_)
-        {
-            return text.substr(pos, 1);
-        }
-
-        std::smatch m;
-        std::basic_string<CharT> s = text.substr(pos);
-
-        const bool found = std::regex_search(s, m, delimiter_re_);
-
-        matched_delimiter_length_ = m.length();
-
-        // no delimiter found:
-        if (!found)
-        {
-            // return remaining text:
-            if (pos < text.length())
-            {
-                return text.substr(pos);
-            }
-
-            // nothing left, return 'done':
-            return basic_delimiter_end(text);
-        }
-
-        // at a trailing delimiter, remember for next round:
-        else if ((std::size_t(m.position()) == s.length() - 1))
-        {
-            trailing_delimiter_seen = true;
-        }
-
-        // delimited text, the match in the input string:
-        return text.substr(pos, m.position());
-    }
-};
-
-#endif // string_HAVE_REGEX
-
-// single-char delimiter:
-
-template< typename CharT >
-class basic_char_delimiter
-{
-    CharT c_;
-
-public:
-    explicit basic_char_delimiter(CharT c)
-        : c_(c) {}
-
-    string_nodiscard std::size_t length() const
-    {
-        return 1;
-    }
-
-    string_nodiscard std17::basic_string_view<CharT>
-    operator()(std17::basic_string_view<CharT> text, std::size_t pos) const
-    {
-        return find(text, pos);
-    }
-
-    string_nodiscard std17::basic_string_view<CharT>
-    find(std17::basic_string_view<CharT> text, std::size_t pos) const
-    {
-        std::size_t found = text.find(c_, pos);
-
-        // nothing left, return 'done':
-        if (found == std17::basic_string_view<CharT>::npos)
-            return basic_delimiter_end(text);
-
-        // the c_ in the input string:
-        return text.substr(found, 1);
-    }
-};
-
- // typedefs:
-
-#if string_CONFIG_PROVIDE_CHAR_T
-typedef basic_literal_delimiter< char  >  literal_delimiter;
-typedef basic_any_of_delimiter<  char  >  any_of_delimiter;
-typedef basic_fixed_delimiter<   char  >  fixed_delimiter;
-typedef basic_char_delimiter<    char  >  char_delimiter;
-// typedef basic_limit_delimiter<   char  >  limit_delimiter;
-# if string_CONFIG_PROVIDE_REGEX
-typedef basic_regex_delimiter<   char  >  regex_delimiter;
-# endif
-#endif
-
-#if string_CONFIG_PROVIDE_WCHAR_T
-typedef basic_literal_delimiter<wchar_t> wliteral_delimiter;
-typedef basic_any_of_delimiter< wchar_t> wany_of_delimiter;
-typedef basic_fixed_delimiter<  wchar_t> wfixed_delimiter;
-typedef basic_char_delimiter<   wchar_t> wchar_t_delimiter;
-// typedef basic_limit_delimiter<  wchar_t> wlimit_delimiter;
-# if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-typedef basic_regex_delimiter<  wchar_t> wregex_delimiter;
-# endif
-#endif
-
-#if string_CONFIG_PROVIDE_CHAR8_T && string_HAVE_CHAR8_T
-typedef basic_literal_delimiter<char8_t> u16literal_delimiter;
-typedef basic_any_of_delimiter< char8_t> u16any_of_delimiter;
-typedef basic_fixed_delimiter<  char8_t> u16fixed_delimiter;
-typedef basic_char_delimiter<   char8_t> u16char_delimiter;
-// typedef basic_limit_delimiter<  char8_t> u16limit_delimiter;
-# if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-typedef basic_regex_delimiter<  char8_t> u16regex_delimiter;
-# endif
-#endif
-
-#if string_CONFIG_PROVIDE_CHAR16_T
-typedef basic_literal_delimiter<char16_t> u16literal_delimiter;
-typedef basic_any_of_delimiter< char16_t> u16any_of_delimiter;
-typedef basic_fixed_delimiter<  char16_t> u16fixed_delimiter;
-typedef basic_char_delimiter<   char16_t> u16char_delimiter;
-// typedef basic_limit_delimiter<  char16_t> u16limit_delimiter;
-# if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-typedef basic_regex_delimiter<  char16_t> u16regex_delimiter;
-# endif
-#endif
-
-#if string_CONFIG_PROVIDE_CHAR32_T
-typedef basic_literal_delimiter<char32_t> u32literal_delimiter;
-typedef basic_any_of_delimiter< char32_t> u32any_of_delimiter;
-typedef basic_fixed_delimiter<  char32_t> u32fixed_delimiter;
-typedef basic_char_delimiter<   char32_t> u32char_delimiter;
-// typedef basic_limit_delimiter<  char32_t> u32limit_delimiter;
-# if string_CONFIG_PROVIDE_REGEX && string_HAVE_REGEX
-typedef basic_regex_delimiter<  char32_t> u32regex_delimiter;
-# endif
-#endif
-
-#endif // 0 Delimiters
-
 // split():
 
 namespace string {
 namespace detail {
-
-// // free function length(), for delimiter:
-
-#if 0
-
-template< typename Coll >
-string_nodiscard inline std::size_t length( Coll const & coll )
-{
-    return coll.length();
-}
-
-template< typename CharT, typename Delimiter >
-string_nodiscard std::vector< std17::basic_string_view<CharT> >
-split_delim( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Nsplit )
-{
-    std::vector< std17::basic_string_view<CharT> > result;
-
-    std::size_t pos = 0;
-    std::size_t cnt = 1; // for Nsplit
-
-    for( std17::basic_string_view<CharT> sv = delimiter(text, pos); sv.cbegin() != text.cend(); sv = delimiter(text, pos), ++cnt )
-    {
-        if ( cnt >= Nsplit )
-        {
-            result.push_back( text.substr(pos) );   // push tail:
-            break;
-        }
-
-        result.push_back(sv);
-        pos = to_size_t(sv.end() - text.begin()) + length(delimiter);
-    }
-
-    return result;
-}
-
-#endif // 0
 
 template< typename CharT >
 string_nodiscard inline auto
@@ -2042,36 +1632,6 @@ split( std17::basic_string_view<CharT> text
 } // namespace string
 
 // split() -> vector
-
-#if 0
-
-#define string_MK_SPLIT_DELIM(CharT)                                                                \
-    template< typename Delimiter                                                                    \
-        , typename std::enable_if<                                                                  \
-            !( std::is_same< Delimiter, CharT const *>::value                                       \
-            || std::is_same< Delimiter, std::basic_string<CharT>>::value                            \
-            || std::is_same< Delimiter, std17::basic_string_view<CharT>>::value ), int >::type = 0  \
-    >                                                                                               \
-    string_nodiscard std::vector< std17::basic_string_view<CharT>>                                  \
-    split(                                                                                          \
-        std17::basic_string_view<CharT> text, Delimiter delimiter                                   \
-        , std::size_t count = std::numeric_limits<std::size_t>::max() )                             \
-    {                                                                                               \
-        return detail::split_delim(text, delimiter, count );                                        \
-    }
-
-
-#define string_MK_SPLIT_STRING(CharT)                                                               \
-    string_nodiscard inline std::vector<std17::basic_string_view<CharT>>                            \
-    split_string(                                                                                   \
-        std17::basic_string_view<CharT> text                                                        \
-        , std17::basic_string_view<CharT> set                                                       \
-        , std::size_t count = std::numeric_limits<std::size_t>::max() )                             \
-    {                                                                                               \
-        return detail::split_delim(text, basic_literal_delimiter<CharT>(set), count );              \
-    }
-
-#endif // 0
 
 #define string_MK_SPLIT(CharT)                                                                      \
     string_nodiscard inline std::vector< std17::basic_string_view<CharT>>                           \
@@ -2225,8 +1785,6 @@ string_MK_TO_CASE_STRING     ( char, lowercase )
 string_MK_TO_CASE_STRING     ( char, uppercase )
 string_MK_CAPITALIZE         ( char )
 string_MK_JOIN               ( char )
-// string_MK_SPLIT_DELIM        ( char )
-// string_MK_SPLIT_STRING       ( char )
 string_MK_SPLIT              ( char )
 string_MK_SPLIT_LEFT         ( char )
 string_MK_SPLIT_RIGHT        ( char )
@@ -2295,8 +1853,6 @@ string_MK_TO_CASE_STRING     ( wchar_t, lowercase )
 string_MK_TO_CASE_STRING     ( wchar_t, uppercase )
 string_MK_CAPITALIZE         ( wchar_t )
 string_MK_JOIN               ( wchar_t )
-// string_MK_SPLIT_DELIM        ( wchar_t )
-// string_MK_SPLIT_STRING       ( wchar_t )
 string_MK_SPLIT              ( wchar_t )
 string_MK_SPLIT_LEFT         ( wchar_t )
 string_MK_SPLIT_RIGHT        ( wchar_t )
@@ -2365,8 +1921,6 @@ string_MK_TO_CASE_STRING     ( char8_t, lowercase )
 string_MK_TO_CASE_STRING     ( char8_t, uppercase )
 string_MK_CAPITALIZE         ( char8_t )
 string_MK_JOIN               ( char8_t )
-// string_MK_SPLIT_DELIM        ( char8_t )
-// string_MK_SPLIT_STRING       ( char8_t )
 string_MK_SPLIT              ( char8_t )
 string_MK_SPLIT_LEFT         ( char8_t )
 string_MK_SPLIT_RIGHT        ( char8_t )
@@ -2435,8 +1989,6 @@ string_MK_TO_CASE_STRING     ( char16_t, lowercase )
 string_MK_TO_CASE_STRING     ( char16_t, uppercase )
 string_MK_CAPITALIZE         ( char16_t )
 string_MK_JOIN               ( char16_t )
-// string_MK_SPLIT_DELIM        ( char16_t )
-// string_MK_SPLIT_STRING       ( char16_t )
 string_MK_SPLIT              ( char16_t )
 string_MK_SPLIT_LEFT         ( char16_t )
 string_MK_SPLIT_RIGHT        ( char16_t )
@@ -2505,8 +2057,6 @@ string_MK_TO_CASE_STRING     ( char32_t, lowercase )
 string_MK_TO_CASE_STRING     ( char32_t, uppercase )
 string_MK_CAPITALIZE         ( char32_t )
 string_MK_JOIN               ( char32_t )
-// string_MK_SPLIT_DELIM        ( char32_t )
-// string_MK_SPLIT_STRING       ( char32_t )
 string_MK_SPLIT              ( char32_t )
 string_MK_SPLIT_LEFT         ( char32_t )
 string_MK_SPLIT_RIGHT        ( char32_t )
@@ -2575,8 +2125,6 @@ string_MK_COMPARE_GT         ( char32_t )
 #undef string_MK_TO_CASE_STRING
 #undef string_MK_CAPITALIZE
 #undef string_MK_JOIN
-#undef string_MK_SPLIT_DELIM
-#undef string_MK_SPLIT_STRING
 #undef string_MK_SPLIT
 #undef string_MK_SPLIT_LEFT
 #undef string_MK_SPLIT_RIGHT

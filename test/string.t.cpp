@@ -655,7 +655,7 @@ make_vec_of_strings( char const * p="abc", char const * q="def", char const * r=
     return result;
 }
 
-// join():
+// join()
 
 CASE( "join: string with strings from collection joined separated by given separator" )
 {
@@ -664,34 +664,7 @@ CASE( "join: string with strings from collection joined separated by given separ
     EXPECT( join( coll, "-") == "abc-def-ghi" );
 }
 
-// split():
-//
-// - literal_delimiter - a single string delimiter
-// - any_of_delimiter - any of given characters as delimiter
-// - fixed_delimiter - fixed length delimiter
-// - limit_delimiter - not implemented
-// - regex_delimiter - regular expression delimiter
-// - char_delimiter - single-char delimiter
-// - above as empty limiters
-
-#if 0
-
-CASE( "split: split string into vector of string_view given delimiter - literal_delimiter" )
-{
-    std::vector<std::string> golden( make_vec_of_strings() );
-
-    // EXPECT( split("abc..def..ghi", "..") == golden );
-    EXPECT( split("abc..def..ghi", literal_delimiter("..")) == golden );
-}
-
-CASE( "split: split string into vector of string_view given delimiter - literal_delimiter" )
-{
-    std::vector<std::string> golden( make_vec_of_strings("", "abc", "def") );
-
-    EXPECT( split_string("-abc-def", "-") == golden );
-}
-
-#endif // 0
+// split()
 
 CASE( "split: split string into vector of string_view given set of delimiter characters" )
 {
@@ -721,91 +694,6 @@ CASE( "split: split string into vector of string_view given set of delimiter cha
         EXPECT( split("abc-123-xyz-789", "-", 3) == golden );
     }
 }
-
-#if 0
-
-CASE( "split: split string into vector of string_view given delimiter - literal_delimiter" )
-{
-    std::vector<std::string> golden( make_vec_of_strings("abc", "", "def") );
-
-    EXPECT( split("abc--def", "-") == golden );
-}
-
-CASE( "split: split string into vector of string_view given delimiter - literal_delimiter" )
-{
-    std::vector<std::string> golden( make_vec_of_strings("abc", "def", "") );
-
-    EXPECT( split("abc-def-", "-") == golden );
-}
-
-// TODO split case
-
-CASE( "split: split string into vector of string_view given delimiter - literal_delimiter" )
-{
-    std::vector<std::string> golden( make_vec_of_strings("", "abc", "") );
-
-    EXPECT( split("-abc-", "-") == golden );
-}
-
-CASE( "split: split string into vector of string_view given delimiter - any_of_delimiter" )
-{
-    std::vector<std::string> golden( make_vec_of_strings() );
-
-    EXPECT( split("abc+def-ghi", any_of_delimiter("+-")) == golden );
-}
-
-CASE( "split: split string into vector of string_view given delimiter - fixed_delimiter" )
-{
-    std::vector<std::string> golden( make_vec_of_strings() );
-
-    EXPECT( split("abcdefghi", fixed_delimiter(3)) == golden );
-}
-
-CASE( "split: split string into vector of string_view given delimiter - limit_delimiter" "[.TODO]" )
-{
-    std::vector<std::string> golden( make_vec_of_strings() );
-}
-
-CASE( "split: split string into vector of string_view given delimiter - regex_delimiter" )
-{
-#if string_CONFIG_PROVIDE_REGEX
-#if string_HAVE_REGEX
-    std::vector<std::string> golden( make_vec_of_strings() );
-
-    EXPECT( split("abc+-def-+ghi", regex_delimiter("[+-]+")) == golden );
-#else
-    EXPECT( !!"split is not available (no regex, string_HAVE_REGEX)." );
-#endif
-#else
-    EXPECT( !!"regex_delimiter is not available (not configured, string_CONFIG_PROVIDE_REGEX)." );
-#endif
-}
-
-CASE( "split: split string into vector of string_view given delimiter - char_delimiter" )
-{
-    std::vector<std::string> golden( make_vec_of_strings("&", "&", "&") );
-
-    EXPECT( split("abc&def&ghi&jkl", char_delimiter('&')) == golden );
-}
-
-CASE( "split: split string into single characters given empty delimiter" )
-{
-    std::vector<std::string> golden( make_vec_of_strings("a", "b", "c") );
-
-    EXPECT( split("abc", "") == golden );
-    EXPECT( split("abc", literal_delimiter("")) == golden );
-    EXPECT( split("abc", any_of_delimiter("")) == golden );
-    EXPECT( split("abc", fixed_delimiter(1)) == golden );
-
-#if string_HAVE_REGEX
-    EXPECT( split("abc", regex_delimiter("")) == golden );
-#endif
-    // Not eligible:
-    // EXPECT( split("abc", limit_delimiter("")) == golden );
-    // EXPECT( split("abc", char_delimiter('x')) == golden );
-}
-
-#endif // Test Activation
 
 // split_left()
 
