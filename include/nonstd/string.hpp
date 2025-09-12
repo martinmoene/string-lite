@@ -1565,6 +1565,8 @@ replace_all(
 // - regex_delimiter - regular expression delimiter
 // - char_delimiter - single-char delimiter
 
+#if 0
+
 template< typename CharT >
 string_nodiscard std17::basic_string_view<CharT>
 basic_delimiter_end(std17::basic_string_view<CharT> sv) string_noexcept
@@ -1923,12 +1925,16 @@ typedef basic_regex_delimiter<  char32_t> u32regex_delimiter;
 # endif
 #endif
 
+#endif // 0 Delimiters
+
 // split():
 
 namespace string {
 namespace detail {
 
-// free function length(), for delimiter:
+// // free function length(), for delimiter:
+
+#if 0
 
 template< typename Coll >
 string_nodiscard inline std::size_t length( Coll const & coll )
@@ -1938,7 +1944,7 @@ string_nodiscard inline std::size_t length( Coll const & coll )
 
 template< typename CharT, typename Delimiter >
 string_nodiscard std::vector< std17::basic_string_view<CharT> >
-split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Nsplit )
+split_delim( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Nsplit )
 {
     std::vector< std17::basic_string_view<CharT> > result;
 
@@ -1960,10 +1966,84 @@ split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Ns
     return result;
 }
 
+#endif // 0
+
+template< typename CharT >
+string_nodiscard inline auto
+split_left(
+    std17::basic_string_view<CharT> text
+    , std17::basic_string_view<CharT> set
+    , std::size_t count = std::numeric_limits<std::size_t>::max() )
+    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
+{
+        auto const pos = text.find_first_of( set );
+
+        if ( pos == npos )
+            return { text, text };
+
+        auto const n = (std::min)( count, text.substr( pos ).find_first_not_of( set ) );
+
+        return { text.substr( 0, pos ), n != npos ? text.substr( pos + n ) : text.substr( text.size(), 0 ) };
+
+        // Note: `text.substr( text.size(), 0 )` indicates empty and end of text, see `lhs.cend() == text.cend()` in detail::split().
+}
+
+template< typename CharT >
+string_nodiscard inline auto
+split_right(
+    std17::basic_string_view<CharT> text
+    , std17::basic_string_view<CharT> set
+    , std::size_t count = std::numeric_limits<std::size_t>::max() )
+    -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>
+{
+        auto const pos = text.find_last_of( set );
+
+        if ( pos == npos )
+            return { text, text };
+
+        auto const n = (std::min)( count, pos - text.substr( 0, pos ).find_last_not_of( set ) );
+
+        return { text.substr( 0, pos - n + 1 ), text.substr( pos + 1 ) };
+}
+
+template< typename CharT >
+string_nodiscard std::vector< std17::basic_string_view<CharT> >
+split( std17::basic_string_view<CharT> text
+    , std17::basic_string_view<CharT> set
+    , std::size_t Nsplit )
+{
+    std::vector< std17::basic_string_view<CharT> > result;
+
+    std17::basic_string_view<CharT> lhs = text;
+    std17::basic_string_view<CharT> rhs;
+
+    for( std::size_t cnt = 1; ; ++cnt )
+    {
+        if ( cnt >= Nsplit )
+        {
+            result.push_back( lhs );   // push tail:
+            break;
+        }
+
+        std::tie(lhs, rhs) = split_left( lhs, set /*, Nset*/ );
+
+        result.push_back( lhs );
+
+        if ( lhs.cend() == text.cend() )
+            break;
+
+        lhs = rhs;
+    }
+
+    return std::move( result );
+}
+
 } // namespace detail
 } // namespace string
 
 // split() -> vector
+
+#if 0
 
 #define string_MK_SPLIT_DELIM(CharT)                                                                \
     template< typename Delimiter                                                                    \
@@ -1977,18 +2057,30 @@ split( std17::basic_string_view<CharT> text, Delimiter delimiter, std::size_t Ns
         std17::basic_string_view<CharT> text, Delimiter delimiter                                   \
         , std::size_t count = std::numeric_limits<std::size_t>::max() )                             \
     {                                                                                               \
-        return detail::split(text, delimiter, count );                                              \
+        return detail::split_delim(text, delimiter, count );                                        \
     }
 
 
 #define string_MK_SPLIT_STRING(CharT)                                                               \
     string_nodiscard inline std::vector<std17::basic_string_view<CharT>>                            \
-    split(                                                                                          \
+    split_string(                                                                                   \
         std17::basic_string_view<CharT> text                                                        \
         , std17::basic_string_view<CharT> set                                                       \
         , std::size_t count = std::numeric_limits<std::size_t>::max() )                             \
     {                                                                                               \
-        return detail::split(text, basic_literal_delimiter<CharT>(set), count );                    \
+        return detail::split_delim(text, basic_literal_delimiter<CharT>(set), count );              \
+    }
+
+#endif // 0
+
+#define string_MK_SPLIT(CharT)                                                                      \
+    string_nodiscard inline std::vector< std17::basic_string_view<CharT>>                           \
+    split(                                                                                          \
+        std17::basic_string_view<CharT> text                                                        \
+        , std17::basic_string_view<CharT> set                                                       \
+        , std::size_t Nsplit = std::numeric_limits<std::size_t>::max() )                            \
+    {                                                                                               \
+        return detail::split(text, set, Nsplit );                                                   \
     }
 
 #if string_CONFIG_PROVIDE_CHAR_T
@@ -2003,14 +2095,7 @@ split_left(                                                                     
     , std::size_t count = std::numeric_limits<std::size_t>::max() )                                 \
     -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>                 \
 {                                                                                                   \
-        auto const pos = text.find_first_of( set );                                                 \
-                                                                                                    \
-        if ( pos == npos )                                                                          \
-            return { text, text };                                                                  \
-                                                                                                    \
-        auto const n = (std::min)( count, text.substr( pos ).find_first_not_of( set ) );            \
-                                                                                                    \
-        return { text.substr( 0, pos ), n != npos ? text.substr( pos + n ) : text.substr( 0, 0 ) }; \
+    return detail::split_left( text, set, count );                                                  \
 }
 
 // split_right() -> tuple
@@ -2023,14 +2108,7 @@ split_right(                                                                    
     , std::size_t count = std::numeric_limits<std::size_t>::max() )                                 \
     -> std::tuple<std17::basic_string_view<CharT>, std17::basic_string_view<CharT>>                 \
 {                                                                                                   \
-        auto const pos = text.find_last_of( set );                                                  \
-                                                                                                    \
-        if ( pos == npos )                                                                          \
-            return { text, text };                                                                  \
-                                                                                                    \
-        auto const n = (std::min)( count, pos - text.substr( 0, pos ).find_last_not_of( set ) );    \
-                                                                                                    \
-        return { text.substr( 0, pos - n + 1 ), text.substr( pos + 1 ) };                           \
+    return detail::split_right( text, set, count );                                                 \
 }
 
 #endif // string_CONFIG_PROVIDE_CHAR_T
@@ -2147,8 +2225,9 @@ string_MK_TO_CASE_STRING     ( char, lowercase )
 string_MK_TO_CASE_STRING     ( char, uppercase )
 string_MK_CAPITALIZE         ( char )
 string_MK_JOIN               ( char )
-string_MK_SPLIT_DELIM        ( char )
-string_MK_SPLIT_STRING       ( char )
+// string_MK_SPLIT_DELIM        ( char )
+// string_MK_SPLIT_STRING       ( char )
+string_MK_SPLIT              ( char )
 string_MK_SPLIT_LEFT         ( char )
 string_MK_SPLIT_RIGHT        ( char )
 
@@ -2216,8 +2295,9 @@ string_MK_TO_CASE_STRING     ( wchar_t, lowercase )
 string_MK_TO_CASE_STRING     ( wchar_t, uppercase )
 string_MK_CAPITALIZE         ( wchar_t )
 string_MK_JOIN               ( wchar_t )
-string_MK_SPLIT_DELIM        ( wchar_t )
-string_MK_SPLIT_STRING       ( wchar_t )
+// string_MK_SPLIT_DELIM        ( wchar_t )
+// string_MK_SPLIT_STRING       ( wchar_t )
+string_MK_SPLIT              ( wchar_t )
 string_MK_SPLIT_LEFT         ( wchar_t )
 string_MK_SPLIT_RIGHT        ( wchar_t )
 // ...
@@ -2285,8 +2365,9 @@ string_MK_TO_CASE_STRING     ( char8_t, lowercase )
 string_MK_TO_CASE_STRING     ( char8_t, uppercase )
 string_MK_CAPITALIZE         ( char8_t )
 string_MK_JOIN               ( char8_t )
-string_MK_SPLIT_DELIM        ( char8_t )
-string_MK_SPLIT_STRING       ( char8_t )
+// string_MK_SPLIT_DELIM        ( char8_t )
+// string_MK_SPLIT_STRING       ( char8_t )
+string_MK_SPLIT              ( char8_t )
 string_MK_SPLIT_LEFT         ( char8_t )
 string_MK_SPLIT_RIGHT        ( char8_t )
 // ...
@@ -2354,8 +2435,9 @@ string_MK_TO_CASE_STRING     ( char16_t, lowercase )
 string_MK_TO_CASE_STRING     ( char16_t, uppercase )
 string_MK_CAPITALIZE         ( char16_t )
 string_MK_JOIN               ( char16_t )
-string_MK_SPLIT_DELIM        ( char16_t )
-string_MK_SPLIT_STRING       ( char16_t )
+// string_MK_SPLIT_DELIM        ( char16_t )
+// string_MK_SPLIT_STRING       ( char16_t )
+string_MK_SPLIT              ( char16_t )
 string_MK_SPLIT_LEFT         ( char16_t )
 string_MK_SPLIT_RIGHT        ( char16_t )
 // ...
@@ -2423,8 +2505,9 @@ string_MK_TO_CASE_STRING     ( char32_t, lowercase )
 string_MK_TO_CASE_STRING     ( char32_t, uppercase )
 string_MK_CAPITALIZE         ( char32_t )
 string_MK_JOIN               ( char32_t )
-string_MK_SPLIT_DELIM        ( char32_t )
-string_MK_SPLIT_STRING       ( char32_t )
+// string_MK_SPLIT_DELIM        ( char32_t )
+// string_MK_SPLIT_STRING       ( char32_t )
+string_MK_SPLIT              ( char32_t )
 string_MK_SPLIT_LEFT         ( char32_t )
 string_MK_SPLIT_RIGHT        ( char32_t )
 // ...
@@ -2494,6 +2577,7 @@ string_MK_COMPARE_GT         ( char32_t )
 #undef string_MK_JOIN
 #undef string_MK_SPLIT_DELIM
 #undef string_MK_SPLIT_STRING
+#undef string_MK_SPLIT
 #undef string_MK_SPLIT_LEFT
 #undef string_MK_SPLIT_RIGHT
 #undef string_MK_COMPARE

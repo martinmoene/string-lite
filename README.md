@@ -100,12 +100,7 @@ The following table presents types, values and simplified, short prototypes of t
 
 | Kind              | Type or function                                                                                      | Notes                                                                                                                 |
 | ----------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| **Type**          | **literal_delimiter**                                                                                 | a string, `literal_delimiter("exact_text")`                                                                           |
-| &nbsp;            | **any_of_delimiter**                                                                                  | any of given characters, `any_of_delimiter("+-")`                                                                     |
-| &nbsp;            | **fixed_delimiter**                                                                                   | fixed length, `fixed_delimiter(length)`                                                                               |
-| &nbsp;            | **limit_delimiter**                                                                                   | apply given delimiter a limited number of times (not implemented)                                                     |
-| &nbsp;            | **regex_delimiter**                                                                                   | regular expression, `regex_delimiter("regexp")`                                                                       |
-| &nbsp;            | **char_delimiter**                                                                                    | a character, `char_delimiter('&')`                                                                                    |
+| **Type**          | None                                                                                                  | &nbsp;                                                                           |
 | &nbsp;            | &nbsp;                                                                                                | &nbsp;                                                                                                                |
 | **Value**         | size_t **string::npos**                                                                               | not-found position value, in nonstd::string namespace                                                                 |
 | &nbsp;            | &nbsp;                                                                                                | &nbsp;                                                                                                                |
@@ -173,7 +168,7 @@ The following table presents types, values and simplified, short prototypes of t
 | **Combining**     | string **append**(string_view head, string_view tail)                                                 | string with tail appended to head                                                                                     |
 | &nbsp;            | string **join**(collection\<string_view\> vec, string_view sep)                                       | string with elements of collection joined with given separator string                                                 |
 | &nbsp;            | &nbsp;                                                                                                | &nbsp;                                                                                                                |
-| **Separating**    | vector\<string_view\> **split**(string_view sv, string_view set)                                      | vector of string_view with elements of string separated by characters from given set                                  |
+| **Separating**    | vector\<string_view\> **split**(string_view sv, string_view set \[, Nsplit\])                         | vector of string_view with elements of string separated by characters from given set                                  |
 | &nbsp;            | tuple\<string_view, string_view\> **split_left**(string_view sv, string_view set \[, size_t count\])  | tuple with head and tail string_view on given string as split at left by characters in given set, default all in set  |
 | &nbsp;            | tuple\<string_view, string_view\> **split_right**(string_view sv, string_view set \[, size_t count\]) | tuple with head and tail string_view on given string as split at right by characters in given set, default all in set |
 
@@ -281,7 +276,7 @@ strip_left: string with characters in set removed from left of string [" \t\n"]
 strip_right: string with characters in set removed from right of string [" \t\n"]
 strip: string with characters in set removed from left and right of string [" \t\n"]
 join: string with strings from collection joined separated by given separator
-split: split string into vector of string_view given delimiter - literal_delimiter
+split: split string into vector of string_view given set of delimiter characters
 split_left: split string into two-element tuple given set of delimiter characters - forward
 split_right: split string into two-element tuple given set of delimiter characters - reverse
 compare: negative, zero or positive for lsh is less than, equal to or greater than rhs

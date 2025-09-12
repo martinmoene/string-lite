@@ -674,22 +674,55 @@ CASE( "join: string with strings from collection joined separated by given separ
 // - char_delimiter - single-char delimiter
 // - above as empty limiters
 
+#if 0
+
 CASE( "split: split string into vector of string_view given delimiter - literal_delimiter" )
 {
     std::vector<std::string> golden( make_vec_of_strings() );
 
-    EXPECT( split("abc..def..ghi", "..") == golden );
+    // EXPECT( split("abc..def..ghi", "..") == golden );
     EXPECT( split("abc..def..ghi", literal_delimiter("..")) == golden );
 }
-
-#if 0
 
 CASE( "split: split string into vector of string_view given delimiter - literal_delimiter" )
 {
     std::vector<std::string> golden( make_vec_of_strings("", "abc", "def") );
 
-    EXPECT( split("-abc-def", "-") == golden );
+    EXPECT( split_string("-abc-def", "-") == golden );
 }
+
+#endif // 0
+
+CASE( "split: split string into vector of string_view given set of delimiter characters" )
+{
+    // single separator, single character set - in between:
+    {
+        std::vector<std::string> golden( make_vec_of_strings("abc", "def", "ghi") );
+        EXPECT( split("abc-def-ghi", "-") == golden );
+    }
+    // single separator, single character set - at start and in between:
+    {
+        std::vector<std::string> golden( make_vec_of_strings("", "abc", "def") );
+        EXPECT( split("-abc-def", "-") == golden );
+    }
+    // single separator, single character set - at start and at end:
+    {
+        std::vector<std::string> golden( make_vec_of_strings("", "abc", "") );
+        EXPECT( split("-abc-", "-") == golden );
+    }
+    // multiple and single separator, multiple characters in set - in between:
+    {
+        std::vector<std::string> golden( make_vec_of_strings("abc", "123", "xyz") );
+        EXPECT( split("abc,;:123;xyz", ":;,") == golden );
+    }
+    // single separator, single character set - max number of split results (3):
+    {
+        std::vector<std::string> golden( make_vec_of_strings("abc", "123", "xyz-789") );
+        EXPECT( split("abc-123-xyz-789", "-", 3) == golden );
+    }
+}
+
+#if 0
 
 CASE( "split: split string into vector of string_view given delimiter - literal_delimiter" )
 {
