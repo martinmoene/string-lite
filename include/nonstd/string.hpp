@@ -854,7 +854,7 @@ find_first(
     string_nodiscard std::size_t                    \
     find_last(                                      \
         std17::basic_string_view<CharT> text        \
-        , SeekT const & seek )                      \
+        , SeekT const & seek ) string_noexcept      \
     {                                               \
         return text.rfind( seek );                  \
     }
@@ -939,7 +939,7 @@ find_first(
     string_nodiscard bool                           \
     contains(                                       \
         std17::basic_string_view<CharT> text        \
-        , SeekT const & seek )                      \
+        , SeekT const & seek ) string_noexcept      \
 {                                                   \
         return text.contains( seek );               \
     }
@@ -949,7 +949,7 @@ find_first(
     string_nodiscard bool                           \
     contains(                                       \
         std17::basic_string_view<CharT> text        \
-        , SeekT const & seek )                      \
+        , SeekT const & seek ) string_noexcept      \
     {                                               \
         return string::npos != find_first(text, seek);  \
     }
@@ -1625,7 +1625,7 @@ split( std17::basic_string_view<CharT> text
         lhs = rhs;
     }
 
-    return std::move( result );
+    return result;
 }
 
 } // namespace detail
@@ -1679,55 +1679,55 @@ split_right(                                                                    
 
 // defined in namespace nonstd
 
-#define string_MK_COMPARE( CharT )          \
-    string_nodiscard inline int             \
-    compare( std17::basic_string_view<CharT> lhs, std17::basic_string_view<CharT> rhs )     \
-    {                                       \
-        return lhs.compare( rhs );          \
+#define string_MK_COMPARE( CharT )                  \
+    string_nodiscard inline string_constexpr14 int  \
+    compare( std17::basic_string_view<CharT> lhs, std17::basic_string_view<CharT> rhs ) string_noexcept \
+    {                                               \
+        return lhs.compare( rhs );                  \
     }
 
 // defined in namespace nonstd::string::std17
 
-#define string_MK_COMPARE_EQ( CharT )       \
-    string_nodiscard inline bool            \
+#define string_MK_COMPARE_EQ( CharT )               \
+    string_nodiscard inline string_constexpr14 bool \
     operator==( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )  \
-    {                                       \
-        return compare( lhs, rhs ) == 0;    \
+    {                                               \
+        return compare( lhs, rhs ) == 0;            \
     }
 
-#define string_MK_COMPARE_NE( CharT )       \
-    string_nodiscard inline bool            \
+#define string_MK_COMPARE_NE( CharT )               \
+    string_nodiscard inline string_constexpr14 bool \
     operator!=( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )  \
-    {                                       \
-        return compare( lhs, rhs ) != 0;    \
+    {                                               \
+        return compare( lhs, rhs ) != 0;            \
     }
 
-#define string_MK_COMPARE_LT( CharT )       \
-    string_nodiscard inline bool            \
+#define string_MK_COMPARE_LT( CharT )               \
+    string_nodiscard inline string_constexpr14 bool \
     operator<( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )   \
-    {                                       \
-        return compare( lhs, rhs ) < 0;     \
+    {                                               \
+        return compare( lhs, rhs ) < 0;             \
     }
 
-#define string_MK_COMPARE_LE( CharT )       \
-    string_nodiscard inline bool            \
+#define string_MK_COMPARE_LE( CharT )               \
+    string_nodiscard inline string_constexpr14 bool \
     operator<=( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )  \
-    {                                       \
-        return compare( lhs, rhs ) <= 0;    \
+    {                                               \
+        return compare( lhs, rhs ) <= 0;            \
     }
 
-#define string_MK_COMPARE_GE( CharT )       \
-    string_nodiscard inline bool            \
+#define string_MK_COMPARE_GE( CharT )               \
+    string_nodiscard inline string_constexpr14 bool \
     operator>=( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )  \
-    {                                       \
-        return compare( lhs, rhs ) >= 0;    \
+    {                                               \
+        return compare( lhs, rhs ) >= 0;            \
     }
 
-#define string_MK_COMPARE_GT( CharT )       \
-    string_nodiscard inline bool            \
+#define string_MK_COMPARE_GT( CharT )               \
+    string_nodiscard inline string_constexpr14 bool \
     operator>( basic_string_view<CharT> lhs, basic_string_view<CharT> rhs )   \
-    {                                       \
-        return compare( lhs, rhs ) > 0;     \
+    {                                               \
+        return compare( lhs, rhs ) > 0;             \
     }
 
 //
