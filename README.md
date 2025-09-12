@@ -10,8 +10,6 @@ For now, have a look at section [Documentation of *string bare*](#syn-doc) and s
 
 In general, functions take `string_view`s and thereby `char const *`, `std::string` and `std::string_view` ([note 1](#note-1)) as arguments en produce (return) a `bool`, `size_t`, `std::string` or a collection of `string_view`s.
 
-Initially writing code for `char` type strings, followed by generalising and enabling selecting `char`, `wchar_t`, `char8_t`, `char16_t`, `char32_t` insofar feasible and sensible.
-
 <a id="note-1"></a>Note 1: to support use of `string_view`s with C++ versions earlier than C++17, `string_view`s may be accessed as `nonstd::string::std17::string_view`, supplying a local `string_view` class or `std::string_view` if present.
 
 **Contents**  
