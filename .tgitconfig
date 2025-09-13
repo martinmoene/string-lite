@@ -1,4 +1,4 @@
 [bugtraq]
-	url = https://github.com/martinmoene/string-bare/issues/%BUGID%
+	url = https://github.com/martinmoene/string-lite/issues/%BUGID%
 	number = true
 	logregex = "(\\s*(,|and)?\\s*#\\d+)+\n(\\d+)"

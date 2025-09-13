@@ -1,6 +1,6 @@
-# string bare: string facilities for C++11 and later (In Progress)
+# string lite: string facilities for C++11 and later (In Progress)
 
-[![Language](https://img.shields.io/badge/C%2B%2B-11/14/17/20/23-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-BSL-blue.svg)](https://opensource.org/licenses/BSL-1.0) [![Build Status](https://github.com/martinmoene/string-bare/actions/workflows/ci.yml/badge.svg)](https://github.com/martinmoene/string-bare/actions/workflows/ci.yml) [![Version](https://badge.fury.io/gh/martinmoene%2Fstring-bare.svg)](https://github.com/martinmoene/string-bare/releases) [![download](https://img.shields.io/badge/latest-download-blue.svg)](https://github.com/martinmoene/string-bare/blob/master/include/nonstd/string.hpp) <!-- [![Conan](https://img.shields.io/badge/on-conan-blue.svg)](https://conan.io/center/string-bare) -->[![Try it on wandbox](https://img.shields.io/badge/on-wandbox-blue.svg)](https://wandbox.org/permlink/lPob3Qz2o4S3hKpj) [![Try it on godbolt online](https://img.shields.io/badge/on-godbolt-blue.svg)](https://godbolt.org/z/6a5GWY8dP)
+[![Language](https://img.shields.io/badge/C%2B%2B-11/14/17/20/23-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-BSL-blue.svg)](https://opensource.org/licenses/BSL-1.0) [![Build Status](https://github.com/martinmoene/string-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/martinmoene/string-lite/actions/workflows/ci.yml) [![Version](https://badge.fury.io/gh/martinmoene%2Fstring-lite.svg)](https://github.com/martinmoene/string-lite/releases) [![download](https://img.shields.io/badge/latest-download-blue.svg)](https://github.com/martinmoene/string-lite/blob/master/include/nonstd/string.hpp) <!-- [![Conan](https://img.shields.io/badge/on-conan-blue.svg)](https://conan.io/center/string-lite) -->[![Try it on wandbox](https://img.shields.io/badge/on-wandbox-blue.svg)](https://wandbox.org/permlink/lPob3Qz2o4S3hKpj) [![Try it on godbolt online](https://img.shields.io/badge/on-godbolt-blue.svg)](https://godbolt.org/z/bW7TYP7xv)
 
 **Note**: this library was previously named *string-bare*, the original *string-lite* has been renamed to [*string-non-lite*](https://github.com/martinmoene/string-non-lite).
 
@@ -8,7 +8,7 @@ Another attempt at a hopefully generally useful C++ string algorithm library.
 
 I'm still pondering to add functions that take a regular expression, as `std::regex`and as string (using `*_re()` function names), and the API to use for that.
 
-For now, have a look at section [Documentation of *string bare*](#syn-doc) and section [*string-bare* test specification](#a2) for the functions envisioned / implemented (at the moment). The in-place modification class of functions is decidedly absent.
+For now, have a look at section [Documentation of *string lite*](#syn-doc) and section [*string-lite* test specification](#a2) for the functions envisioned / implemented (at the moment). The in-place modification class of functions is decidedly absent.
 
 In general, functions take `string_view`s and thereby `char const *`, `std::string` and `std::string_view` ([note 1](#note-1)) as arguments en produce (return) a `bool`, `size_t`, `std::string` or a collection of `string_view`s.
 
@@ -69,32 +69,32 @@ prompt> g++ -std=c++11 -Wall -I../include -o 01-basic.exe 01-basic.cpp && 01-bas
 
 ## In a nutshell
 
-**string bare** is a single-file header-only library to provide various string algorithms. Firstly meant to get you up and running easily, not necessarily to provide everything that might be useful and in the most efficient manner.
+**string lite** is a single-file header-only library to provide various string algorithms. Firstly meant to get you up and running easily, not necessarily to provide everything that might be useful and in the most efficient manner.
 
-Creating *string bare* I've had a look at the [C++ standard](https://eel.is/c++draft/#strings), [Boost](https://www.boost.org/doc/libs/1_60_0/doc/html/string_algo.html), [Facebook Folly](https://github.com/facebook/folly/blob/master/folly/String.h), the [Python standard library](https://docs.python.org/3/library/string.html), the [proposal for `std::split()`](http://wg21.link/n3593) and several algorithms I created over time.
+Creating *string lite* I've had a look at the [C++ standard](https://eel.is/c++draft/#strings), [Boost](https://www.boost.org/doc/libs/1_60_0/doc/html/string_algo.html), [Facebook Folly](https://github.com/facebook/folly/blob/master/folly/String.h), the [Python standard library](https://docs.python.org/3/library/string.html), the [proposal for `std::split()`](http://wg21.link/n3593) and several algorithms I created over time.
 
-**Features and properties of string bare** are ease of installation (single header), freedom of dependencies other than the standard library.
+**Features and properties of string lite** are ease of installation (single header), freedom of dependencies other than the standard library.
 
 ## License
 
-*string bare* is distributed under the [Boost Software License](https://github.com/martinmoene/bit-bare/blob/master/LICENSE.txt).
+*string lite* is distributed under the [Boost Software License](https://github.com/martinmoene/bit-lite/blob/master/LICENSE.txt).
 
 ## Dependencies
 
-*string bare* has no other dependencies than the [C++ standard library](http://en.cppreference.com/w/cpp/header).
+*string lite* has no other dependencies than the [C++ standard library](http://en.cppreference.com/w/cpp/header).
 
 ## Installation and use
 
-*string bare* is a single-file header-only library. Put `string.hpp` in the [include](include) folder directly into the project source tree or somewhere reachable from your project.
+*string lite* is a single-file header-only library. Put `string.hpp` in the [include](include) folder directly into the project source tree or somewhere reachable from your project.
 
 ## Synopsis
 
 **Contents**  
-[Documentation of *string bare*](#documentation-of-string-bare)  
+[Documentation of *string lite*](#documentation-of-string-lite)  
 [Configuration](#configuration)  
 
 <a id="syn-doc"></a>
-### Documentation of *string bare*
+### Documentation of *string lite*
 
 The following table presents types, values and simplified, short prototypes of the functions in _string-bare_'s `nonstd` namespace.
 
@@ -176,7 +176,7 @@ The following table presents types, values and simplified, short prototypes of t
 
 #### Tweak header
 
-If the compiler supports [`__has_include()`](https://en.cppreference.com/w/cpp/preprocessor/include), *string bare* supports the [tweak header](https://vector-of-bool.github.io/2020/10/04/lib-configuration.html) mechanism. Provide your *tweak header* as `nonstd/string.tweak.hpp` in a folder in the include-search-path. In the tweak header, provide definitions as documented below, like `#define string_CPLUSPLUS 201103L`.
+If the compiler supports [`__has_include()`](https://en.cppreference.com/w/cpp/preprocessor/include), *string lite* supports the [tweak header](https://vector-of-bool.github.io/2020/10/04/lib-configuration.html) mechanism. Provide your *tweak header* as `nonstd/string.tweak.hpp` in a folder in the include-search-path. In the tweak header, provide definitions as documented below, like `#define string_CPLUSPLUS 201103L`.
 
 #### Provided character types
 
@@ -222,10 +222,10 @@ TBD
 <a id="a1"></a>
 ### A.1 Compile-time information
 
-In the test runner, the version of *string-bare* is available via tag `[.version]`. The following tags are available for information on the compiler and on the C++ standard library used: `[.compiler]`, `[.stdc++]`, `[.stdlanguage]` and `[.stdlibrary]`.
+In the test runner, the version of *string-lite* is available via tag `[.version]`. The following tags are available for information on the compiler and on the C++ standard library used: `[.compiler]`, `[.stdc++]`, `[.stdlanguage]` and `[.stdlibrary]`.
 
 <a id="a2"></a>
-### A.2 *string-bare* test specification
+### A.2 *string-lite* test specification
 
 <!-- string-main.t.exe -l @ | cut --delimiter=: -f 1 |sort |uniq |clip -->
 <!-- string-main.t.exe -l |grep -v _re |grep -v regex |clip -->

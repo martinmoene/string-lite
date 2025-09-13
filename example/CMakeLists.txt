@@ -1,6 +1,6 @@
 # Copyright 2025-2025 by Martin Moene
 #
-# https://github.com/martinmoene/span-bare
+# https://github.com/martinmoene/span-lite
 #
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -12,7 +12,7 @@ endif()
 project( example LANGUAGES CXX )
 
 # unit_name provided by toplevel CMakeLists.txt
-set( PACKAGE   ${unit_name}-bare )
+set( PACKAGE   ${unit_name}-lite )
 
 message( STATUS "Subproject '${PROJECT_NAME}'")
 
