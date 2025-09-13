@@ -109,10 +109,12 @@ CASE( "Compiler version" "[.compiler]" )
 CASE( "presence of C++ language features" "[.stdlanguage]" )
 {
     string_PRESENT( string_HAVE_CONSTEXPR_11 );
+    string_PRESENT( string_HAVE_CONSTEXPR_14 );
     string_PRESENT( string_HAVE_DEFAULT_FN_TPL_ARGS );
     string_PRESENT( string_HAVE_EXPLICIT_CONVERSION );
     string_PRESENT( string_HAVE_NODISCARD );
     string_PRESENT( string_HAVE_NOEXCEPT );
+    string_PRESENT( string_HAVE_NULLPTR );
 }
 
 CASE( "presence of C++ library features" "[.stdlibrary]" )
@@ -122,6 +124,14 @@ CASE( "presence of C++ library features" "[.stdlibrary]" )
 #else
     string_ABSENT(  _HAS_CPP0X );
 #endif
+    string_PRESENT( string_HAVE_CHAR8_T );
+    string_PRESENT( string_HAVE_CHAR16_T );
+    string_PRESENT( string_HAVE_CHAR32_T );
+    string_PRESENT( string_HAVE_FREE_CBEGIN );
+    string_PRESENT( string_HAVE_FREE_SIZE );
+    string_PRESENT( string_HAVE_REGEX );
+    string_PRESENT( string_HAVE_STRING_VIEW );
+    string_PRESENT( string_HAVE_TYPE_TRAITS );
 }
 
 int main( int argc, char * argv[] )
