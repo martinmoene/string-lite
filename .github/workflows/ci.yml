@@ -1,7 +1,7 @@
 name: CI
 
 env:
-  PROJECT: STRING_BARE
+  PROJECT: STRING_LITE
 
 on:
   push:
