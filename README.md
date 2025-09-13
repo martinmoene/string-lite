@@ -205,8 +205,6 @@ Define this macro to override the auto-detection of the supported C++ standard, 
 
 #### Disable exceptions
 
-TODO: compilation without exceptions not yet available.
-
 -D<b>string_CONFIG_NO_EXCEPTIONS</b>=0  
 Define this to 1 if you want to compile without exceptions. If not defined, the header tries and detect if exceptions have been disabled (e.g. via `-fno-exceptions`). Default is undefined.
 
