@@ -10,7 +10,7 @@ I'm still pondering to add functions that take a regular expression, as `std::re
 
 For now, have a look at section [Documentation of *string lite*](#syn-doc) and section [*string-lite* test specification](#a2) for the functions envisioned / implemented (at the moment). The in-place modification class of functions is decidedly absent.
 
-In general, functions take `string_view`s and thereby `char const *`, `std::string` and `std::string_view` ([note 1](#note-1)) as arguments en produce (return) a `bool`, `size_t`, `std::string` or a collection of `string_view`s.
+In general, functions take `string_view`s and thereby `char const *`, `std::string` and `std::string_view` ([note 1](#note-1)) as arguments and produce (return) a `bool`, `size_t`, `std::string` or a collection of `string_view`s.
 
 <a id="note-1"></a>Note 1: to support use of `string_view`s with C++ versions earlier than C++17, `string_view`s may be accessed as `nonstd::string::std17::string_view`, supplying a local `string_view` class or `std::string_view` if present.
 
