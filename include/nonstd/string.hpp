@@ -300,9 +300,6 @@ using std::basic_string_view;
 # if string_CONFIG_PROVIDE_CHAR32_T
     using std::u32string_view;
 # endif
-# if string_CONFIG_PROVIDE_CHAR_T
-    using std::u32string_view;
-# endif
 
 #else // string_HAVE_STRING_VIEW
 
