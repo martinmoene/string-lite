@@ -1116,7 +1116,7 @@ find_first(
         if ( size( look ) > size( text ) )          \
         {                                           \
             return false;                           \
-    }                                               \
+        }                                           \
         return std::equal( look.rbegin(), look.rend(), text.rbegin() ); \
     }
 #endif
@@ -1243,8 +1243,6 @@ string_nodiscard std::basic_string<CharT> to_case( std::basic_string<CharT> text
     }
 
 // to_lowercase(), to_uppercase()
-
-// template string_nodiscard std::basic_string<CharT> to_lowercase( std17::basic_string_view<CharT> text ) string_noexcept;
 
 #define string_MK_TO_CASE_CHAR(CharT, Function)                 \
     string_nodiscard inline CharT to_ ## Function( CharT chr )  \
