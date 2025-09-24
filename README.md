@@ -1,6 +1,6 @@
 # string lite: string algorithms for C++11 and later
 
-[![Language](https://img.shields.io/badge/C%2B%2B-11/14/17/20/23-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-BSL-blue.svg)](https://opensource.org/licenses/BSL-1.0) [![Build Status](https://github.com/martinmoene/string-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/martinmoene/string-lite/actions/workflows/ci.yml) [![Version](https://badge.fury.io/gh/martinmoene%2Fstring-lite.svg)](https://github.com/martinmoene/string-lite/releases) [![download](https://img.shields.io/badge/latest-download-blue.svg)](https://github.com/martinmoene/string-lite/blob/master/include/nonstd/string.hpp) <!-- [![Conan](https://img.shields.io/badge/on-conan-blue.svg)](https://conan.io/center/string-lite) -->[![Try it on wandbox](https://img.shields.io/badge/on-wandbox-blue.svg)](https://wandbox.org/permlink/merJtbaTAIq2lE9s) [![Try it on godbolt online](https://img.shields.io/badge/on-godbolt-blue.svg)](https://godbolt.org/z/bW7TYP7xv)
+[![Language](https://img.shields.io/badge/C%2B%2B-11/14/17/20/23-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-BSL-blue.svg)](https://opensource.org/licenses/BSL-1.0) [![Build Status](https://github.com/martinmoene/string-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/martinmoene/string-lite/actions/workflows/ci.yml) [![Version](https://badge.fury.io/gh/martinmoene%2Fstring-lite.svg)](https://github.com/martinmoene/string-lite/releases) [![download](https://img.shields.io/badge/latest-download-blue.svg)](https://github.com/martinmoene/string-lite/blob/master/include/nonstd/string.hpp) [![Vcpkg](https://img.shields.io/badge/on-vcpkg-blue.svg)](https://vcpkg.link/ports/string-lite) [![Try it on wandbox](https://img.shields.io/badge/on-wandbox-blue.svg)](https://wandbox.org/permlink/merJtbaTAIq2lE9s) [![Try it on godbolt online](https://img.shields.io/badge/on-godbolt-blue.svg)](https://godbolt.org/z/bW7TYP7xv)
 
 **Note**: this library was previously named *string-bare*, the original *string-lite* has been renamed to [*string-non-lite*](https://github.com/martinmoene/string-non-lite).
 
@@ -8,11 +8,7 @@ Another attempt at a hopefully generally useful C++ string algorithm library.
 
 I'm still pondering to add functions that take a regular expression, as `std::regex`and as string (using `*_re()` function names), and the API to use for that.
 
-For now, have a look at section [Documentation of *string lite*](#syn-doc) and section [*string-lite* test specification](#a2) for the functions envisioned / implemented (at the moment). The in-place modification class of functions is decidedly absent.
-
-In general, functions take `string_view`s and thereby `char const *`, `std::string` and `std::string_view` ([note 1](#note-1)) as arguments and produce (return) a `bool`, `size_t`, `std::string` or a collection of `string_view`s.
-
-<a id="note-1"></a>Note 1: to support use of `string_view`s with C++ versions earlier than C++17, `string_view`s may be accessed as `nonstd::string::std17::string_view`, supplying a local `string_view` class or `std::string_view` if present.
+For now, have a look at section [Documentation of *string lite*](#syn-doc) and section [*string-lite* test specification](#a2) for the functions envisioned / implemented. The in-place modification class of functions is decidedly absent.
 
 **Contents**  
 
@@ -72,6 +68,10 @@ prompt> g++ -std=c++11 -Wall -I../include -o 01-basic.exe 01-basic.cpp && 01-bas
 **string lite** is a single-file header-only library to provide various string algorithms. Firstly meant to get you up and running easily, not necessarily to provide everything that might be useful and in the most efficient manner.
 
 Creating *string lite* I've had a look at the [C++ standard](https://eel.is/c++draft/#strings), [Boost](https://www.boost.org/doc/libs/1_60_0/doc/html/string_algo.html), [Facebook Folly](https://github.com/facebook/folly/blob/master/folly/String.h), the [Python standard library](https://docs.python.org/3/library/string.html), the [proposal for `std::split()`](http://wg21.link/n3593) and several algorithms I created over time.
+
+In general, functions take `string_view`s and thereby `char const *`, `std::string` and `std::string_view` ([note 1](#note-1)) as arguments and produce (return) a `bool`, `size_t`, `std::string` or a collection of `string_view`s.
+
+<a id="note-1"></a>Note 1: to support use of `string_view`s with C++ versions earlier than C++17, `string_view`s may be accessed as `nonstd::string::std17::string_view`, supplying a local `string_view` class or `std::string_view` if present.
 
 **Features and properties of string lite** are ease of installation (single header), freedom of dependencies other than the standard library.
 
